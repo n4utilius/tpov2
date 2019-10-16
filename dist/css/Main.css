@@ -1,0 +1,163 @@
+
+.tpo_active{
+    background:rgba(0,0,0,0.2);
+    color:#f6f6f6
+}
+.tpo_logos {
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+    background-position: bottom;
+    height: auto;
+    visibility: visible;
+    z-index: 1;
+}
+
+.tpov2_logos {
+    max-width: 100%;
+    height: 106.5px;
+    overflow: hidden;
+}
+
+.tpo_rellenar{
+    background: #333333;
+    height: 106.5px;
+    width: 40%;
+    z-index: -999;
+    position: absolute;
+    float: left;
+    top: 0;
+}
+
+.tpov2_rellenar{
+    background: #333333;
+    height: 100%;
+    top: 0;
+}
+
+.espaciov2{
+    margin-top: 25px;
+}
+
+.tpo_page{
+    margin: 0 auto;
+    max-width: 1000px;
+    overflow: hidden;
+    position: relative;
+    font-weight: lighter;
+    font-family: Arial;
+    font-size: 14px;
+}
+
+.tpo-div-descarga {
+    margin-bottom: 5px; 
+    margin-right: 5px;
+}
+
+.bg-box-black {
+    background: #222d32;
+    text-align: center;
+}
+
+.bg-box-black .body{
+    color: white !important;
+}
+
+.bg-box-black .header{
+    color: white;
+    text-transform: uppercase;
+    border-bottom: 1.5px solid white; 
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.bg-box-black select{
+    width: 100%;
+    margin-top: 4px;
+}
+
+.footer{
+    background: #333333;
+    padding: 15px;
+    color: #444;
+    border-top: 5px solid #337ab7;
+	height: 473px;
+}
+
+.espacio{
+    margin-top: 45px;
+}
+
+.img-footer{
+    display: block;
+    opacity: 0.58;
+}
+
+.a-redes-footer{
+    opacity: 0.58;
+    padding-right: 18px;
+}
+
+.footer  a{
+	font-size: 14px;
+    color: #dfd4ee;
+}
+
+.ainstitucion{
+    padding: 60px 0 35px;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #dfd4ee;
+}
+
+.text-footer > p{
+    color: #d7c9e9;
+    font-size: 14px;
+}
+
+.h3institucion{
+    padding: 20px 0 10px;
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #337ab7;
+}
+
+.h3interes{
+    padding: 34px 0 35px;
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #337ab7;
+}
+
+.brick  li > a{
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    /*background-image: url(../img/arrow-footer.png);*/
+    background-origin: padding-box;
+    background-repeat: no-repeat;
+    background-size: auto auto;
+    background-position: 0 2px;
+    color: #d7c9e9;
+}
+
+.brick  li > a:hover{
+    color: #6cc6ca;
+}
+
+.bottomFooter{
+    color: #80769c;
+    font-size: 12px;
+    padding: 0 15px;
+}
+
+.pleca-footer{
+    height: 1px;
+    background: #80769c;
+    width: 100%;
+    margin: 15px;
+    padding: 0 15px;
+}

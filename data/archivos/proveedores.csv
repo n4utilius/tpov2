@@ -1,0 +1,120 @@
+#,ID,"Personalidad jurídica","Nombre o razón social","Nombre comercial",R.F.C.,Estatus
+1,1,"Persona moral","El Universal Compañía Periodística Nacional, S.A. de C.V.","El Universal / http://www.eluniversal.com.mx",UPN830920KC4,Activo
+2,2,"Persona moral","DEMOS, Desarrollo de Medios, S.A. de C.V.","La Jornada",DDM840626PM2,Activo
+3,3,"Persona moral","La Crónica Diaria, S.A. de C.V.","La Crónica",CDI070111F89,Activo
+4,4,"Persona moral","Milenio Diario, S.A. de C.V.","Milenio Diario",MDI991214A74,Activo
+5,5,"Persona moral","Publicaciones Metropolitanas, S.A. de C.V.",Publimetro,PME051206NG5,Activo
+6,6,"Persona moral","Compañía Periodística el Bravo, S.A. de C.V.","El Bravo",PBR501025RR3,Activo
+7,7,"Persona moral","Comercial Bermam, S. de R.L. de C.V.","El Dictamen",CBE970805KX2,Activo
+8,8,"Persona moral","Compañía Editorial Alpesor, S. de R.L.","Meridiano de Nayarit",EAL890921392,Activo
+9,9,"Persona moral","Compañía Periodística del Panuco, S.A. de C.V.","La Razón",PPA040109JWA,Activo
+10,10,"Persona moral","Compañía Periodística del Sol del Estado de México, S.A. de C.V.","El Sol de Toluca",PSA7906135L6,Activo
+11,11,"Persona moral","Compañía Periodística Sudcaliforniana, S.A. de C.V.","Tribuna de los Cabos",PSU010424NIA,Activo
+12,12,"Persona moral","Editorial Monterrey, S. A.","ABC de Monterrey",EMO801210A56,Activo
+13,13,"Persona moral","Airfactory, S.A. de C.V.",Airfactory,AIR101004AU7,Activo
+14,14,"Persona moral","Alpha Post, S.A. de C.V.","Alpha Post",APO070216I26,Activo
+15,15,"Persona moral","Publicidad Efectiva de León, S.A. de C.V.","AM de Guanajuato / AM El Periódico de los Lagos / Periódico Libre de Celaya / AM de Irapuato",PEL010202B54,Activo
+16,16,"Persona física","Guadalupe Ximena Mora Quitana","Auch TV",MOQG7912132U5,Activo
+17,17,"Persona moral","Rack Star, S.A. de C.V.",Cinemex,RST050531L66,Activo
+18,18,"Persona moral","Comercializadora Publicitaria Tik, S.A. de C.V.",Cinepolis,CPT1409023G9,Activo
+19,19,"Persona moral","CNK Post, S.A. de C.V.",CNK,CPO1208289KA,Activo
+20,20,"Persona moral","Editorial Zeuqram, S.A. de C.V.","Criterio la Verdad Impresa",EZE0310226Z7,Activo
+21,21,"Persona moral","Medios Informativos de Campeche, S.A. de C.V.","Crónica de Campeche",MIC031022RI0,Activo
+22,22,"Persona moral","Novedades de Mérida, S.A. de C.V.","De Peso / Milenio Novedades",NME7911063B0,Activo
+23,23,"Persona moral","Publicaciones del Chuviscar, S.A. de C.V.","Diario de Chihuahua",PCU0004273H2,Activo
+24,24,"Persona moral","Pucoma, S.C.","Diario de Colima",PUC1412174J0,Activo
+25,25,"Persona moral","Publicaciones e Impresos Paso del Norte, S. de R.L. de C.V.","Diario de Juárez",PEI101215GB4,Activo
+26,26,"Persona moral","Editoriales de Morelos, S. A. de C.V.","Diario de Morelos",EMO950208EQ6,Activo
+27,27,"Persona moral","Compañía Tipográfica Yucateca, S.A. de C.V.","Diario de Yucatán",TYU7712304L6,Activo
+28,28,"Persona moral","Editora la Voz del Istmo, S.A. de C.V.","Diario del Istmo",EVI820308IN0,Activo
+29,29,"Persona moral","Editorial Diario del Yaqui, S.A. de C.V.","Diario del Yaqui",EDY5505166A7,Activo
+30,30,"Persona moral","El Diario de Chiapas, S.A. de C.V.","Diario Expresión de Chiapas",DCI060822829,Activo
+31,31,"Persona moral","Organización Editorial del Sureste, S.A. de C.V.","Diario IndependienteTribuna",OES800908BE8,Activo
+32,32,"Persona moral","Empresas el Debate, S.A. de C.V.","El Debate de Culiacán / El Debate de Mazatlán",ED000301QT5,Activo
+33,33,"Persona moral","El Debate, S.A. de C.V.","El Debate de los Mochis",DEB800830RU6,Activo
+34,34,"Persona moral","Operadora y Editora del Bajío, S.A. de C.V.","El Diario Grande de Michoacán Provincia",OEB070613JX8,Activo
+35,35,"Persona moral","Reparto Van Internacional, S.A. de C.V.","El Guardián / Información con Valor Vanguardia",RIN910927DR8,Activo
+36,36,"Persona moral","Impresora y Editorial, S.A. de C.V.","El Imparcial de Sonora",IED551008NR2,Activo
+37,37,"Persona moral","Publicaciones Fernández Pichardo, S.A. de C.V.","El Imparcial del Istmo / El Imparcial, El Mejor Diario de Oaxaca",PFP8705052W6,Activo
+38,38,"Persona moral","Unión Editorialista, S.A. de C.V.","El Informador",UED031111B80,Activo
+39,39,"Persona moral","Servicios Publicitarios Valcle, S.A. de C.V.","El Mexicano Gran Diario Regional / La Segunda",SPV130114FF3,Activo
+40,40,"Persona moral","Sociedad Editora Arroniz, S.A. de C.V.","El Mundo de Tehuacan / El Mundo de Córdova",SEA730407565,Activo
+41,41,"Persona moral","Ediciones del Norte, S.A. de C.V.","El Norte / Reforma",ENO851126RC0,Activo
+42,42,"Persona moral","Editora Zamora Cruz, S.A. de C.V.","El Orbe",EZC890509JV0,Activo
+43,43,"Persona moral","Publicaciones y Publicidad del Sur, S. de R.L. de C.V.","El Popular",PPS0904013W7,Activo
+44,44,"Persona moral","Sistema Informativo de Tabasco, S.A. de C.V.","El Presente Diario del Sureste",SIT01059694,Activo
+45,45,"Persona moral","Editorial Mival, S.A. de C.V.","El Pulso de San Luis Potosí",EMI870826B84,Activo
+46,46,"Persona moral","Organización Editorial Mexicana, S.A. de C.V.","El Sol de Puebla / El Sol de Zacatecas / El Sol de Morelia / El Sol de Tijuana / Heraldo de Chihuahua",OEM800129UU7,Activo
+47,47,"Persona moral","X-Stream Networks, S.A. de C.V.","XSN Group",XGS040524SL1,Activo
+48,48,"Persona moral","Victoria Editores, S.A. de C.V.","Victoria de Durango",VED0102092U3,Activo
+49,49,"Persona moral","IMM Internet Media México, S. de R.L. de C.V.",Twitter,IIM100219CQ9,Activo
+50,50,"Persona moral","Ilumina Medios, S.A. de C.V.","Tren Suburbano",IME130820H86,Activo
+51,51,"Persona moral","Sistema Público de Radiodifusión del Estado Mexicano",SPR,OPM100331UG5,Activo
+52,52,"Persona moral","Proyectos Alternativos de Comunicación, S.A. de C.V.","Revista Zócalo",PAC000704N72,Activo
+53,53,"Persona moral","Editorial Televisa, S.A. de C.V.","Revista TV y Novelas",ETE950324R23,Activo
+54,54,"Persona moral","Notmusa, S.A. de C.V.","Revista TV Notas",NOT011226T29,Activo
+55,55,"Persona moral","Editorial Cruzada, S.A. de C.V.","Revista Siempre",ECR060816SQ4,Activo
+56,56,"Persona moral","Comunicación e Información, S.A. de C.V.","Revista Proceso",CIN7609098V0,Activo
+57,57,"Persona moral","Talento e Inteligencia en Medios, S.A. de C.V.","Revista Emeequis",TEI130327NH8,Activo
+58,58,"Persona moral","Grupo Editorial Vixin, S.A. de C.V.","Revista el Contribuyente",GEV150124QT6,Activo
+59,59,"Persona moral","Revista el Abogado, S.A. de C.V.","Revista del Abogado",RAB9712036T4,Activo
+60,60,"Persona moral","Mac Ediciones y Publicaciones, S.A. de C.V.","Revista Cambio",EPU9812212U5,Activo
+61,61,"Persona moral","Paradin de México, S.A. de C.V.","Revista Vértigo",PME081113K45,Activo
+62,62,"Persona moral","Periódicos Nuevo Día, S.A. de C.V.","Nuevo Día de Nogales",PND020511AV6,Activo
+63,63,"Persona moral","Novedades de Quintana Roo, S.A. de C.V","Novedades de Quintana Roo",NQR811130HN1,Activo
+64,64,"Persona moral","Editora Regional de Noticias, S. de R.L. de C.V.","Noticias Diario Binacional Sin Fronteras",ERN0411105PA,Activo
+65,65,"Persona moral","5M2Andenes, S.A.P.I. de C.V.",Metrobús,MAN0710026M3,Activo
+66,66,"Persona moral","Sociedad Cooperativa de Producción Editora el Mercurio, S. C. L.","Mercurio de Tamaulipas",PEM760204IZ9,Activo
+67,67,"Persona moral","Editora Hora Cero, S.A. de C.V.","Media Hora",EHC050218RR3,Activo
+68,68,"Persona física","Guillermo Aguirre Torres","Matutino Gráfico",AUTG560430C30,Activo
+69,69,"Persona moral","Grupo Creativo Libélula, S.A. de C.V.",Libélula,GCL0803278C5,Activo
+70,70,"Persona moral","La Voz de Michoacán, S.A. de C.V.","La Voz de Michoacán",BMI600516JE7,Activo
+71,71,"Persona moral","Periódico Ruta, S.A. de C.V.","La Ruta",PRU000202GI3,Activo
+72,72,"Persona moral","Editorial Gibb, S.A. de C.V.","La Opinión de Poza Rica",EGI670828GP4,Activo
+73,73,"Persona moral","Ipsos, S.A. de C.V.",Ipsos,BIM850201QI0,Activo
+74,74,"Persona moral","Periódico Digital Sendero, S.A. de C.V.",http://www.sdpnoticias.com,PDS080402H29,Activo
+75,75,"Persona moral","Editorial Animal, S. de R.L. de C.V.",http://www.animalpolitico.com,EAN100408JX9,Activo
+76,76,"Persona física","Moisés Sánchez Limón","http://ww.entresemana.mx / http://sinembargo.mx",SALM541023EM4,Activo
+77,77,"Persona moral","Periódico la Extra, S.A. de C.V.",http://noticracia.com,PEX860211TE5,Activo
+78,78,"Persona moral","Publicaciones Comunitarias, S.A. de C.V.",http://lasillarota.com,PCO080603JS6,Activo
+79,79,"Persona moral","Empresa Editorial de Aguascalientes, S.A. de C.V.","Hidrocálido La Verdad por Delante",EEA840201QI4,Activo
+80,80,"Persona moral","Grupo de Medios 5A, S.A. de C.V.","Grupo de Medios",GMA101210SI6,Activo
+81,81,"Persona moral","Google Operaciones de México, S. de R.L. de C.V.",Google,GOM0809114P5,Activo
+82,82,"Persona moral","Medios y Editorial de Sonora, S.A. de C.V.","Expreso Más Personal",MES041022A51,Activo
+83,83,"Persona moral","El Financiero Marketing, S.A. de C.V.","El Financiero",FMA120905UA6,Activo
+84,84,"Persona moral","El Economista Grupo Editorial, S.A. de C.V.","El Economista",EGE101130F25,Activo
+85,85,"Persona moral","Reporte Indigo de México, S.A. de C.V.","Reporte Indigo",RIM140314IQ7,Activo
+86,86,"Persona moral","Editorial Martinica, S.A. DE C.V.","AM Las noticias como son",EMA150928HCA,Activo
+87,87,"Persona moral","Novedades de Acapulco, S.A. de C.V.","Novedades de Acapulco",NAC830404AJ8,Activo
+88,88,"Persona moral","Ediciones y Publicaciones Siete Junio, S.A. de C.V.","Tribuna de la Bahia",EPS890811JF5,Activo
+89,89,"Persona moral","Editora Offset Color, S.A. de C.V.","Noticias, la verdad de cada mañana",EOC711027AR8,Activo
+90,90,"Persona moral","Editora Argos, S.A. de C.V.","El Mañana de Nuevo Laredo",EAR7510318FA,Activo
+91,91,"Persona moral","Cia. Periodística el Sol de Puebla, S.A. de C.V.","El Sol de Puebla",PSP790613UG9,Activo
+92,92,"Persona moral","Cia. Periodística del Sol de Tlaxcala, S.A. de C.V.","Persona física",PST870924Q71,Activo
+93,93,"Persona moral","Cia. Periodística del Sol de Zacatecas, S.A. de C.V.","Persona física",PSZ100601RY8,Activo
+94,94,"Persona moral","Cia. Periodística del Sol de Pachuca, S.A. de C.V.","El Sol de Hidalgo",PST890724Q71,Activo
+95,95,"Persona moral","Cia. Periodística del Sol de México, S.A. de C.V.","El Sol de México",PSM7911223G1,Activo
+96,96,"Persona moral","Información Integral 24/7, S.A.P.I de C.V.","24 Horas, el diario sin limites",IIN1110125F3,Activo
+97,97,"Persona moral","Unocero Laboratorio Multimedia, S.A. de C.V.",Alfadiario,ULM150722E16,Activo
+98,98,"Persona moral","Grupo Editorial Coahuila, S.A. de C.V.",Vanguardia,GEC930824FH5,Activo
+99,99,"Persona moral","Expansion, S.A. de C.V.",Expansión,EXP6812035X3,Activo
+100,100,"Persona moral","Isa Difusión, S.A. de C.V.","Isa difusión",IDI1202299W3,Activo
+101,101,"Persona moral","AP&H Communication Group, S.A. de C.V.",Teleurban,ACG090929BM2,Activo
+102,102,"Persona moral","Novomedia Soluciones en Comunicación, S.A. de C.V.",Novomedia,NSC1311086G7,Activo
+103,103,"Persona moral","Esfera Audiovisual, S.C.","Esfera Audiovisual",EVI1305304H4,Activo
+104,104,"Persona moral","Universidad Nacional Autónoma de México",UNAM,UNA2907227Y5,Activo
+105,105,"Persona moral","Periodico Excelsior, S.A. de C.V.",Excelsior,PEX051012GW2,Activo
+106,106,"Persona moral","Impresiones Aereas, S.A. de C.V.",Entrepreneur,IAE890608228,Activo
+107,107,"Persona moral","Sima Comunicación Estratégica, S.A. de C.V.",Congresistas,SCE0308273Y8,Activo
+108,108,"Persona moral","Periscopio Media, S.A. de C.V.","Revista Vocero",PME9811184X8,Activo
+109,109,"Persona moral","Revista México Social, S.A. de C.V.","Revista México Social",RMS150731GS8,Activo
+110,110,"Persona moral","Editora Diario Ecos de la Costa, S.A. de C.V.","Diario Ecos de la Costa",EDE080211CF6,Activo
+111,111,"Persona moral","Editora del Correo de Manzanillo, S.A. de C.V.","Correo de Manzanilllo",ECM070209CX1,Activo
+112,112,"Persona moral","Sin Embargo, S. de R.L. de C.V.","Sin Embargo",SEM110428MU5,Activo
+113,113,"Persona moral","TV ZAC, S.A. de C.V.",www.ntrzacatecas.com,TZA050811FB6,Activo
+114,114,"Persona moral","Grupo Impresor Criterio, S.A. de C.V.",www.criteriodehidalgo.com,GIC140523LG9,Activo
+115,115,"Persona física","Marco Antonio Mares García",www.marcomares.com.mx,XXXX12345678XXX,Activo
+116,116,"Persona moral","Agavis Digital, S.C.","Agavis Digital, S.C.",ADI1010297ZA,Activo
+117,117,"Persona moral","Kuaki Media, S.A. de C.V.","Kuaki Media, S.A. de C.V.",KME1310296YA,Activo
+118,118,"Persona moral","Parámetro Consultores, S.C.","Parámetro Consultores",PCO0102067YA,Activo
+119,119,"Persona moral","Nexos-Sociedad, Ciencia y Literatura, S.A. de C.V.",Nexos,NCL900821664,Activo

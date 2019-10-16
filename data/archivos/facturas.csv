@@ -1,0 +1,13 @@
+#,"Número de factura",Proveedor,Contrato,Orden,Ejercicio,Trimestre,Monto,"Archivo factura en PDF (Vínculo al archivo)","Archivo factura en XML (Vínculo al archivo)","Fecha de erogación",Estatus
+1,2019,"Periódico Digital Sendero, S.A. de C.V.","Sin contrato",OS-01-18,2018,enero-marzo,81200.00,OS-01.F.2019.pdf,,2018-02-09,Activo
+2,192202,"Comunicación e Información, S.A. de C.V.","Sin contrato",OS-04-18,2018,enero-marzo,53360.00,,,2018-02-09,Activo
+3,1560,"Proyectos Alternativos de Comunicación, S.A. de C.V.","Sin contrato",OI-02-18,2018,enero-marzo,52200.00,OI-02.F.1560.pdf,,2018-03-13,Activo
+4,1702,"Nexos-Sociedad, Ciencia y Literatura, S.A. de C.V.","Sin contrato",OI-01-18,2018,abril-junio,53046.80,OI-01.F.1702.VP.pdf,,2018-06-04,Activo
+5,601,"Sin Embargo, S. de R.L. de C.V.","Sin contrato",OS-02-18,2018,abril-junio,52200.00,OS-02.F.601.VP.pdf,,2018-04-09,Activo
+6,208621,"El Universal Compañía Periodística Nacional, S.A. de C.V.","Sin contrato",OS-03-18,2018,abril-junio,99999.83,OS-03.F.208621.VP.pdf,,2018-05-21,Activo
+7,1631,"Proyectos Alternativos de Comunicación, S.A. de C.V.","Sin contrato",OI-04-18,2018,abril-junio,52200.00,OI-04.F.1631.VP.pdf,,2018-06-20,Activo
+8,2098,"Periódico Digital Sendero, S.A. de C.V.","Sin contrato",OS-07-18,2018,abril-junio,44631.00,OS-07.F.2098.VP.pdf,,2018-05-04,Activo
+9,864,"Publicaciones Comunitarias, S.A. de C.V.","Sin contrato",OS-08-18,2018,abril-junio,20000.00,OS-08.F.864.VP.pdf,,2018-05-04,Activo
+10,907,"Publicaciones Comunitarias, S.A. de C.V.","Sin contrato",OS-18-18,2018,abril-junio,29000.00,OS-18.F.907.VP.pdf,,2018-06-20,Activo
+11,10137,"X-Stream Networks, S.A. de C.V.","Sin contrato",OS-04-18,2018,enero-marzo,28814.40,OS-05.F.10137.VP.pdf,,2018-04-19,Activo
+12,10138,"X-Stream Networks, S.A. de C.V.","Sin contrato",OS-06-18,2018,enero-marzo,28814.40,OS-06.F.10138.VP.pdf,,2018-04-19,Activo
