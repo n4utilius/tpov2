@@ -45,7 +45,96 @@ class Logo extends CI_Controller
         }
     }
 
+    /**
+     * Redirect with POST data.
+     *
+     * @param string $url URL.
+     * @param array $post_data POST data. Example: array('foo' => 'var', 'id' => 123)
+     * @param array $headers Optional. Extra headers to send.
+     */
+    private function redirect_post($url, array $data, array $headers = null) {
+        $params = array(
+            'http' => array(
+                'method' => 'POST',
+                'content' => http_build_query($data)
+            )
+        );
+        if (!is_null($headers)) {
+            $params['http']['header'] = '';
+            foreach ($headers as $k => $v) {
+                $params['http']['header'] .= "$k: $v\n";
+            }
+        }
+        $ctx = stream_context_create($params);
+        $fp = @fopen($url, 'rb', false, $ctx);
+        if ($fp) {
+            echo @stream_get_contents($fp);
+            die();
+        } else {
+            // Error
+            throw new Exception("Error loading '$url', $php_errormsg");
+        }
+    }
 
+    function entrar_pnt(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken/";
+        $data = array('usuario' => $_POST["user"], 'password' => $_POST["password"] );
+
+        $options = array(
+            'http' => array(
+            'method'  => 'POST',
+            'content' => json_encode( $data ),
+            'header'=>  "Content-Type: application/json\r\n" .
+                        "Accept: application/json\r\n"
+            )
+        );
+
+        $context  = stream_context_create( $options );
+        $result = file_get_contents( $URL, false, $context );
+
+        session_start();
+
+        // Set session variables
+
+        $result = json_decode($result);
+        //$result["mail"] = $_POST["user"];
+
+        //$result += [ "mail" => $_POST['user'] ];
+        $_SESSION["user_pnt"] = $_POST["user"];
+
+        $_SESSION["pnt"] = $result;
+
+        header('Location: http://localhost/tpov2/index.php/tpoadminv1/logo/logo/alta_carga_logo');
+
+    }
+
+
+    function salir_pnt(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken/";
+        $data = array('usuario' => '', 'password' => '' );
+
+        $options = array(
+            'http' => array(
+            'method'  => 'POST',
+            'content' => json_encode( $data ),
+            'header'=>  "Content-Type: application/json\r\n" .
+                        "Accept: application/json\r\n"
+            )
+        );
+
+        $context  = stream_context_create( $options );
+        $result = file_get_contents( $URL, false, $context );
+
+        session_start();
+
+        // Set session variables
+        $result = json_decode($result);
+        $_SESSION["user_pnt"] = false;
+        $_SESSION["pnt"] = $result;
+
+        header('Location: http://localhost/tpov2/index.php/tpoadminv1/logo/logo/alta_carga_logo');
+
+    }
 
     function alta_carga_logo()
     {
@@ -63,8 +152,6 @@ class Logo extends CI_Controller
         $data['subactive'] = 'carga_logo'; // class="active"
         $data['body_class'] = 'skin-blue';
         $data['main_content'] = 'tpoadminv1/logo/carga_logo';
-
-        //$data['campana'] = $this->Campana_model->dame_campana_id($this->session->userdata('id_campana_aviso'));
 
         $data['url_logo'] = base_url() . "data/logo/logotop.png";
         $data['fecha_act'] = $this->Logo_model->dame_fecha_act_manual();

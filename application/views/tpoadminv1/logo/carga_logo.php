@@ -25,6 +25,42 @@
         pointer-events: none;
         cursor: default;
     }
+
+    #login-pnt .form-control {
+        display: inline ;
+        width: 200px ;
+    }
+
+
+    #login-pnt label{
+        margin-left: 45px;
+        margin-right: 5px;
+    }
+
+    .status{
+        font-weight: bolder;
+        display:none;
+    }
+
+    .active{ color: green; }
+
+    .inactive{ color: red; }
+
+    #login-pnt input[type=submit]{
+        margin-left: 25px;
+    }
+
+    .circle {
+        
+        display: inline-flex;
+        width: 15px;
+        color: #5cb85c;
+        height: 15px;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+    }
+
 </style>
 
 
@@ -254,6 +290,8 @@
         </div>
     </div>
 
+
+
     <div class="row">
         <!-- Mostramos los detalles de los grupos de lugares dados de alta -->
         <div class="box box">
@@ -285,47 +323,102 @@
 
     <div class="row">
         <!-- Mostramos los detalles de los grupos de lugares dados de alta -->
-        <div class="box box">
+        <div class="box box-info">
             <div class="box-header">
                <h4 class="modal-title">
-                    <i class="fa fa-info-circle text-primary" data-toggle="tooltip" title="Esta opci&oacute;n te permite entrar a los WEB Services del PNT"></i>  
-                    Conexi&oacute;n a WEB Services PNT
+               <i class="fa fa-info-circle text-primary" data-toggle="tooltip" title="Cuando se ingrese a los servicios del PNT se podrán agregar registros."></i>  
+                Conexión a WEB Services PNT 
                </h4>
             </div>
             <div class="box-body">
-                <!--form role="form" method="post" action="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/actualizar_fecha"-->
-                <form role="form" id="login-pnt" name="login-pnt" action="">
-                    <div class="form-group">
-                        <label>Usuario*</label>
-                        <input type="text" name="usuario" value="" class="form-control">
-                        <label>Contraseña*</label>
-                        <input type="text" name="password" value="" class="form-control">
-                        <!--submit value="" class="form-control"-->
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <i class="fa fa-info-circle text-primary" data-toggle="tooltip" title="Usuario activo de PNT."></i>
+                            Usuario
+                        </th>
 
-                        <input type="submit" value="Entrar al PNT"> 
-                    </div>
-                </form>
+                        <th>
+                            <i class="fa fa-info-circle text-primary" data-toggle="tooltip" title=""></i>
+                            Clave Secreta
+                        </th>
 
-                <!--table class="table table-bordered table-hover">
-                    <tbody style="font-size:16px;">
-                        <tr>
-                        <?php 
-                            if(!isset($grafica) || $grafica->active == 0){
-                                echo "<td width='90%'>La gr&aacute;fica se encuentra actualmente <span id='tdMensaje' class='text-danger'><b>deshabilitada</b></span>.</td>";
-                                echo "<td><button id='btnhabilitar' type='button' class='btn-group btn btn-success btn-sm' data-option='habilitar' onclick=\"habilitarGrafica()\"> <i class='fa fa-check'></i> Habilitar</button></td>";
-                            }else{
-                                echo "<td width='90%'>La gr&aacute;fica se encuentra actualmente <span id='tdMensaje' class='text-success'><b>habilitada</b></span>.</td>";
-                                echo "<td><button id='btnhabilitar' type='button' class='btn-group btn btn-danger btn-sm' data-option='deshabilitar' onclick=\"habilitarGrafica()\"> <i class='fa fa-close'></i> Deshabilitar</button></td>";
+                        <th>
+                            <i class="fa fa-info-circle text-primary" data-toggle="tooltip" title="En activo se habilitan los servicios del PNT, en Inactivo no."></i>
+                            Estatus
+                        </th>
+                        <th> <?php 
+                                if(!isset($recaptcha)){  
+                                    echo "<button type='button' class='btn-group btn btn-primary btn-sm' onclick=\"entrarPNT()\"> <i class='fa fa-edit'></i> Ingresar </button>";
+                                }
+                            ?>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+
+                        $myfile = fopen("/var/www/html/tpov2/data/archivo_conexion.txt", "w") or die("Unable to open file!");
+                     
+
+
+                        echo "<tr>";
+                        if( isset($_SESSION['pnt']) ){
+                            if($_SESSION["pnt"]->success == 1){
+                                echo "<td>" . $_SESSION["user_pnt"] . "<input type='hidden' id='re-user' class='form-control' name='user' value='" . $_SESSION["user_pnt"] . "'> </td>";
+                                echo "<td> <input type='password' id='re-pass' name='re-pass'> </td>";
+                                echo "<td class='active'> <span class='circle' style='background: #3f3'>  </span> Activo </td>";
+                                
+                                echo "<td> <a type='submit' class='btn-group btn btn-success btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/entrar_pnt' id='re-conectar'> Conectar </submit> &nbsp;&nbsp;&nbsp;"; 
+                                echo      "<a type='submit' class='btn-group btn btn-danger btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/salir_pnt'> Desconectar </button> </td>";
+                                echo "</tr></tbody></table>";
+                                echo "</form>";
+                                
+                                $txt = "conexión: " . json_encode($_SESSION["pnt"]->success) . ", mensaje: " . $_SESSION["pnt"]->mensaje;
+                            } else{
+                                $_SESSION["user_pnt"] = "";
+                                echo "<td> </td>";
+                                echo "<td> </td>";
+                                echo "<td class='inactive'> <span class='circle' style='background: #f33'> </span> Inactivo </td>";
+                                echo "<td> </td>";
+                                echo "</tr></tbody> </table>";
+                              
+                                $txt = "conexión: " . json_encode($_SESSION["pnt"]->success) . ", mensaje: " . ( isset($_SESSION["pnt"]->mensaje)? $_SESSION["pnt"]->mensaje : '');
                             }
-                        ?>
-                        </tr>
-                    </tbody>
-                </table-->
+
+                            echo "<div class='box-header'>" . 
+                                        "<h4 class='modal-title'>" . 
+                                            "<i class='fa fa-info-circle text-primary' data-toggle='tooltip' " . 
+                                            "title='En este documento puedes ver los el detalle de tu conexión.'></i>" . 
+                                            "Logs de conexión" . 
+                                        "</h4>" . 
+                                    "</div><div class='box-body'>" . 
+                                    "<table class='table table-bordered table-hover'>" . 
+                                        "<tr>" . 
+                                            "<th> <a href='" . base_url() . "data/archivo_conexion.txt' download> archivo_conexion.txt </a> </th>" . 
+                                            "<th> <a href='" . base_url() . "data/archivo_conexion.txt' download type='submit' class='btn btn-default' type='button'> Descargar </th> " . 
+                                        "</tr> " . 
+                                    "</table>" . 
+                                    "</div>";
+
+                            print_r($_SESSION["pnt"]);
+
+                            fwrite($myfile, $txt);
+                            fclose($myfile);
+                        }else{
+                            echo "<td> </td>";
+                            echo "<td> </td>";
+                            echo "<td class='inactive'> <span class='circle' style='background: #f33'> </span> Inactivo </td>";
+                        }
+
+
+                    ?>
+                </tbody>
+            </table>
             </div>
         </div>
     </div>
-
-
     <!-- MODAL EDITAR FECHA -->
     <div class="modal fade" id="modalEditarFecha" role="dialog">
         <div class="modal-dialog">
@@ -397,7 +490,7 @@
                                     Clave secreta:
                                     <i class="fa fa-info-circle text-primary" data-toggle="tooltip" title="Se debe obtener en Google reCAPTCHA"></i>
                                 </label>
-                                <input type="text" id= "clave" class="form-control" placeholder="Ingresa la clave secreta" name="clave" value="" autocomplete="off">
+                                <input type="password" id= "clave" class="form-control" placeholder="Ingresa la clave secreta" name="clave" value="" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="custom-file-label">
@@ -408,6 +501,45 @@
                                     <option value="1">Activo</option>
                                     <option value="0">Inactivo</option>
                                 </select>
+                            </div>
+                            <div class="box-footer">
+                                <button class="btn btn-primary" type="submit">Guardar</button>
+                                <button class="btn btn-default" type="button" onclick="cerrarModel()">Cerrar</button>
+                            </div>
+                        </div>
+                    </form>                       
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalPNT" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">reCaptcha</h3>
+                </div>
+                <div class="modal-body">
+                    <span>Se deben agregar los datos correctos de la conexión exitosa al WEB services del PNT.</span>
+
+                    <form role="form" method="post" action="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/entrar_pnt">
+                        <input type="hidden" name="id_settings" id="id_settings" value="" />
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label class="custom-file-label">
+                                    Usuario:
+                                    <i class="fa fa-info-circle text-primary" data-toggle="tooltip" title="Usuario del PNT"></i>
+                                </label>
+                                <input type="text" id= "user" class="form-control" placeholder="Ingresa tu usuario del sitio" name="user" value="" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label class="custom-file-label">
+                                    Clave Secreta:
+                                    <i class="fa fa-info-circle text-primary" data-toggle="tooltip" title="Password del PNT"></i>
+                                </label>
+                                <input type="password" id= "password" class="form-control" placeholder="Ingresa la clave secreta" name="password" value="" autocomplete="off">
                             </div>
                             <div class="box-footer">
                                 <button class="btn btn-primary" type="submit">Guardar</button>
@@ -453,46 +585,13 @@
         }
     }
 
-    $("#login-pnt").on("submit", function(e){
+
+    $("a#re-conectar").on("click", function(e){
         e.preventDefault()
-       
-         //console.log( $(this).serializeObject() )
-        /*
-            //data: $(this).serialize(),
-        $.ajax({
-            type: "post",
-            dataType: "jsonp", 
-            url: "http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken/",
-            data: { "usuario":"so.inai@inai.org.mx","password":"P4ssw0rd" },
-            success: function(data) {  console.log(data) },
-            error: function(error){ alert(error) }
-        });
-        /**/
-
-        function logResults(json){
-          console.log(json);
-        }
-
-        $.ajax({
-            url: "http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken/",
-            //dataType: "jsonp", 
-            contentType: "application/json",
-            type: "post",
-            jsonpCallback: "logResults",
-            crossDomain: true,
-            data: { "usuario":"so.inai@inai.org.mx","password":"P4ssw0rd" },
-            success: function(data) {  console.log(data) },
-            error: function(error){ console.log(error) }
-        });
-
-        /*
-        $.post("http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken", $(this).serialize(), 
-            function( data ) {
-                //$( ".result" ).html( data );
-                console.log(data)
-            }
-        );
-        /**/  
+        $.ajaxSetup({ async: false });  
+        $.post( $(this).attr("href"), { 'usuario': $("#re-user").val() , 'password': $("#re-pass").val() }, 
+            function(){ location.reload();  });
+        
     })
 
     var upload_file = function (){
@@ -614,6 +713,13 @@
         $('#modalRecaptcha').find('.modal-title').append('<h3>Agregar reCAPTCHA</h3>');
         $('#modalRecaptcha').modal('show');
     }
+
+    var entrarPNT = function(){
+        $('#modalPNT').find('.modal-title').empty();
+        $('#modalPNT').find('.modal-title').append('<h3>Entrar PNT</h3>');
+        $('#modalPNT').modal('show');
+    }
+
 
     var editarRecaptcha = function(id, recaptcha, clave, estatus){
         console.log('entro');
