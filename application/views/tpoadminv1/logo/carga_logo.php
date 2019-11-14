@@ -5,6 +5,8 @@
  INAI / CARGA LOGO
  */
 
+                        var_dump("/var/www/html/tpov2/data/archivo_conexion.txt");
+                        var_dump(base_url() . "data/archivo_conexion.txt") . "/n";
 ?>
 
 <style>
@@ -358,11 +360,7 @@
                 </thead>
                 <tbody>
                     <?php 
-
-                        $myfile = fopen("/var/www/html/tpov2/data/archivo_conexion.txt", "w") or die("Unable to open file!");
-                     
-
-
+                        $myfile = fopen($_SERVER["DOCUMENT_ROOT"] . "/tpov2/data/archivo_conexion.txt", "w") or die("Unable to open file!");
                         echo "<tr>";
                         if( isset($_SESSION['pnt']) ){
                             if($_SESSION["pnt"]->success == 1){
@@ -401,8 +399,6 @@
                                         "</tr> " . 
                                     "</table>" . 
                                     "</div>";
-
-                            print_r($_SESSION["pnt"]);
 
                             fwrite($myfile, $txt);
                             fclose($myfile);
