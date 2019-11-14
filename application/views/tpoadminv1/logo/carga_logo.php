@@ -4,9 +4,6 @@
 /* 
  INAI / CARGA LOGO
  */
-
-                        var_dump("/var/www/html/tpov2/data/archivo_conexion.txt");
-                        var_dump(base_url() . "data/archivo_conexion.txt") . "/n";
 ?>
 
 <style>
