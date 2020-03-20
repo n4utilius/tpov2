@@ -4,6 +4,8 @@
 /* 
  INAI / CARGA LOGO
  */
+ //var_dump($_SESSION["pnt"]["token"]["token"]);
+//session_destroy();
 ?>
 
 <style>
@@ -360,26 +362,28 @@
                         $myfile = fopen($_SERVER["DOCUMENT_ROOT"] . "/tpov2/data/archivo_conexion.txt", "w") or die("Unable to open file!");
                         echo "<tr>";
                         if( isset($_SESSION['pnt']) ){
-                            if($_SESSION["pnt"]->success == 1){
-                                echo "<td>" . $_SESSION["user_pnt"] . "<input type='hidden' id='re-user' class='form-control' name='user' value='" . $_SESSION["user_pnt"] . "'> </td>";
-                                echo "<td> <input type='password' id='re-pass' name='re-pass'> </td>";
+                            if($_SESSION["pnt"]["success"]){
+                                echo "<td> <input type='input' id='re-user' class='form-control' name='re-user' value='" . $_SESSION["user_pnt"] . "'> </td>";
+                                echo "<td> <input type='password' id='re-pass' class='form-control' name='re-pass'> </td>";
                                 echo "<td class='active'> <span class='circle' style='background: #3f3'>  </span> Activo </td>";
                                 
-                                echo "<td> <a type='submit' class='btn-group btn btn-success btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/entrar_pnt' id='re-conectar'> Conectar </submit> &nbsp;&nbsp;&nbsp;"; 
-                                echo      "<a type='submit' class='btn-group btn btn-danger btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/salir_pnt'> Desconectar </button> </td>";
+                                echo "<td> <a type='submit' class='btn-group btn btn-success btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/entrar_pnt' id='re-conectar'> Conectar </a> &nbsp;&nbsp;&nbsp;"; 
+                                echo      "<a type='submit' class='btn-group btn btn-danger btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/salir_pnt'> Desconectar </a> </td>";
                                 echo "</tr></tbody></table>";
                                 echo "</form>";
                                 
-                                $txt = "conexión: " . json_encode($_SESSION["pnt"]->success) . ", mensaje: " . $_SESSION["pnt"]->mensaje;
+                                $txt = "conexión: " . json_encode($_SESSION["pnt"]["success"]) . ", mensaje: " . $_SESSION["pnt"]["mensaje"];
                             } else{
                                 $_SESSION["user_pnt"] = "";
-                                echo "<td> </td>";
-                                echo "<td> </td>";
+                                echo "<td> <input type='input' id='re-user' class='form-control' name='re-user'>  </td>";
+                                echo "<td> <input type='password' id='re-pass' class='form-control' name='re-pass'> </td>";
                                 echo "<td class='inactive'> <span class='circle' style='background: #f33'> </span> Inactivo </td>";
-                                echo "<td> </td>";
+                                echo "<td> <a type='submit' class='btn-group btn btn-success btn-sm' 
+                                              href='" . base_url() . "index.php/tpoadminv1/logo/logo/entrar_pnt' id='re-conectar'> Conectar </a></td>";
+                                              
                                 echo "</tr></tbody> </table>";
                               
-                                $txt = "conexión: " . json_encode($_SESSION["pnt"]->success) . ", mensaje: " . ( isset($_SESSION["pnt"]->mensaje)? $_SESSION["pnt"]->mensaje : '');
+                                $txt = "conexión: " . json_encode($_SESSION["pnt"]["success"]) . ", mensaje: " . ( isset($_SESSION["pnt"]["mensaje"])? $_SESSION["pnt"]["mensaje"] : '');
                             }
 
                             echo "<div class='box-header'>" . 
@@ -400,13 +404,20 @@
                             fwrite($myfile, $txt);
                             fclose($myfile);
                         }else{
-                            echo "<td> </td>";
-                            echo "<td> </td>";
+                            echo "<td> <input type='input' id='re-user' class='form-control' name='re-user'> </td>";
+                            echo "<td> <input type='password' id='re-pass' class='form-control' name='re-pass'> </td>";
                             echo "<td class='inactive'> <span class='circle' style='background: #f33'> </span> Inactivo </td>";
+                            echo "<td> <a type='submit' class='btn-group btn btn-success btn-sm' 
+                                          href='" . base_url() . "index.php/tpoadminv1/logo/logo/entrar_pnt' id='re-conectar'> Conectar </a></td>";
+                                          
+                            echo "</tr></tbody> </table>";
                         }
 
 
                     ?>
+                    <?php echo "<a type='submit' class='btn-group btn btn-success btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/traer_formatos' id='re-conectar'> Ver Formatos </a>"; ?>
+
+                    
                 </tbody>
             </table>
             </div>
@@ -580,10 +591,14 @@
 
 
     $("a#re-conectar").on("click", function(e){
-        e.preventDefault()
-        $.ajaxSetup({ async: false });  
-        $.post( $(this).attr("href"), { 'usuario': $("#re-user").val() , 'password': $("#re-pass").val() }, 
-            function(){ location.reload();  });
+        //$.ajaxSetup({ async: false });  
+        $.post( $(this).attr("href"), { 'user': $("#re-user").val() , 'password': $("#re-pass").val() }, 
+            function(data){ 
+                location.reload(); 
+            }
+        );
+
+        return false;
         
     })
 

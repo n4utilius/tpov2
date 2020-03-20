@@ -1,20 +1,20 @@
 #,"Categorías del servicio","Subcategorías del servicio",Estatus
 1,Cine,Cine,Activo
-2,Internet,"Medios Digitales",Activo
+2,Internet,"Medios digitales",Activo
 3,Internet,"Otro tipo de difusión por Internet",Activo
 4,Internet,"Redes sociales y buscadores",Activo
-5,"Medios complementarios","Artículos promocionales",Activo
-6,"Medios complementarios",Cenefas,Activo
-7,"Medios complementarios",Dovelas,Activo
-8,"Medios complementarios","Mobiliario urbano",Activo
-9,"Medios complementarios","Muros o bardas",Activo
-10,"Medios complementarios","Otros medios complementarios",Activo
-11,"Medios complementarios",Parabuses,Activo
-12,"Medios complementarios","Publicidad móvil",Activo
-13,"Medios complementarios","Rótulos o anuncios exteriores",Activo
-14,"Medios complementarios","Tarjetas telefónicas",Activo
-15,"Medios complementarios",Vallas,Activo
-16,"Medios complementarios",Videobus,Activo
+5,"Medios Complementarios","Artículos promocionales",Activo
+6,"Medios Complementarios",Cenefas,Activo
+7,"Medios Complementarios",Dovelas,Activo
+8,"Medios Complementarios","Mobiliario urbano",Activo
+9,"Medios Complementarios","Muros o bardas",Activo
+10,"Medios Complementarios","Otros medios complementarios",Activo
+11,"Medios Complementarios",Parabuses,Activo
+12,"Medios Complementarios","Publicidad móvil",Activo
+13,"Medios Complementarios","Rótulos o anuncios exteriores",Activo
+14,"Medios Complementarios","Tarjetas telefónicas",Activo
+15,"Medios Complementarios",Vallas,Activo
+16,"Medios Complementarios",Videobus,Activo
 17,"Medios impresos","Diarios Editados en el D.F.",Activo
 18,"Medios impresos","Diarios Editados en los Estados",Activo
 19,"Medios impresos",Encartes,Activo
@@ -42,5 +42,13 @@
 41,"Producción de contenidos","Otro tipo de servicio de producción",Activo
 42,"Producción de contenidos",Post-Producción,Activo
 43,"Producción de contenidos",Producción,Activo
-44,"Medios complementarios",Espectaculares,Activo
+44,"Medios Complementarios",Espectaculares,Activo
 45,Streaming,Streaming,Activo
+46,"Otros servicios asociados",Edición,Activo
+47,"Otros servicios asociados",Estudio,Activo
+48,"Otros servicios asociados",Locución,Activo
+49,"Otros servicios asociados","Materiales fotográficos",Activo
+50,"Otros servicios asociados",Multicopiado,Activo
+51,"Otros servicios asociados","Renderización material",Activo
+52,"Otros servicios asociados",Streaming,Activo
+53,"Medios digitales",Difusión,Activo

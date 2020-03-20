@@ -1,8 +1,8 @@
 #,"Subcategorías del servicio","Unidades del servicio",Estatus
 1,Cine,"Cine minutos",Activo
 2,Cine,"Otro formato",Activo
-3,"Medios Digitales",Banner,Activo
-4,"Medios Digitales","Otro formato",Activo
+3,"Medios digitales",Banner,Activo
+4,"Medios digitales","Otro formato",Activo
 5,"Otro tipo de difusión por Internet","Unidad aplicable",Activo
 6,"Redes sociales y buscadores","Anuncio de video en YouTube;  Página",Activo
 7,"Redes sociales y buscadores","Contenido o publicación difundida en Facebook",Activo
@@ -168,3 +168,25 @@
 167,Producción,"Prod. spot tv 20 seg",Activo
 168,Producción,"Prod. spot tv 30 seg",Activo
 169,Streaming,Minutos,Activo
+170,Edición,Pieza,Activo
+171,Estudio,Encuesta,Activo
+172,Estudio,"Servicio integral - Grupos Enfoque, Entrevistas a profundidad, Netnografías",Activo
+173,Locución,Pieza,Activo
+174,"Materiales fotográficos",Pieza,Activo
+175,Multicopiado,Pieza,Activo
+176,"Renderización material",Pieza,Activo
+177,Streaming,"Trasmisión y codificación",Activo
+178,Difusión,Billboard,Activo
+179,Difusión,"Video Banner",Activo
+180,Difusión,"Video en read",Activo
+181,Encartes,Banner,Activo
+182,Difusión,"Pauta publicitaria Facebook, Twitter y YouTube",Activo
+183,Difusión,Módulo,Activo
+184,Difusión,Plana,Activo
+185,Difusión,"1/4 de Plana",Activo
+186,Difusión,"1/2 Plana",Activo
+187,Difusión,Inread,Activo
+188,Difusión,"Video Preroll",Activo
+189,Difusión,"Video Box Banner",Activo
+190,Difusión,"Pre-roll en video",Activo
+191,Difusión,"Box Banner",Activo

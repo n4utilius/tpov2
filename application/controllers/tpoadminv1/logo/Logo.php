@@ -78,7 +78,134 @@ class Logo extends CI_Controller
 
     function entrar_pnt(){
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken/";
-        $data = array('usuario' => $_POST["user"], 'password' => $_POST["password"] );
+        //http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken/
+        //$data = array('usuario' => $_POST["user"], 'password' => $_POST["password"] );
+        $data = array(
+            "usuario" => $_POST["user"], 
+            "password" => $_POST["password"] 
+        );
+
+        $options = array(
+            'http' => array(
+            'method'  => 'POST',
+            'content' => json_encode( $data ),
+            'header'=>  "Content-Type: application/json\r\n" .
+                        "Accept: application/json\r\n"
+            )
+        );
+
+        $context  = stream_context_create( $options );
+        $result = file_get_contents( $URL, false, $context );
+        $result = json_decode($result, true);
+
+        
+
+        session_start();
+        $_SESSION["user_pnt"] = $data["usuario"];
+        $_SESSION["pnt"] = $result;
+
+        header('Content-Type: application/json');
+        echo json_encode($result);
+
+        //header('Location: http://localhost/tpov2/index.php/tpoadminv1/logo/logo/alta_carga_logo');
+    }
+
+    function agregar_pnt(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/agrega";
+        
+        $data = array(
+            'idFormato' => $_POST["idFormato"], 
+            'token' => $_POST["token"], 
+            'correoUnidadAdministrativa' => $_POST["correoUnidadAdministrativa"], 
+            'unidadAdministrativa' => $_POST["unidadAdministrativa"], 
+            'SujetoObligado' => $_POST["SujetoObligado"], 
+            'registros' => $_POST["registros"]
+        );
+
+        $options = array(
+            'http' => array(
+                'method'  => 'POST',
+                'content' => json_encode( $data ),
+                'header'=>  "Content-Type: application/json\r\n" .
+                            "Accept: application/json\r\n"
+            )
+        );
+        
+        $context  = stream_context_create( $options );
+        $res = file_get_contents( $URL, false, $context );
+        $result = json_decode( $res, true );
+        //$response = json_encode(json_decode($result));
+
+        if( $result["success"] ){
+            $pntid = $result["mensaje"]["registros"][0]["idRegistro"]; 
+            $stm  = "INSERT INTO rel_pnt_presupuesto( id_presupuesto, id_pnt, estatus_pnt) ";  
+            $stm .= "VALUES(" . $_POST["id_presupuesto"] . ", '" . $pntid . "', 'SUBIDO');";
+
+            $this->db->query($stm);                                                                                                                              
+            $id = $this->db->insert_id();     
+
+            $row = $this->db->get_where('rel_pnt_presupuesto', ['id_tpo' => $id])->row();
+
+            $result['id_pnt'] =  $row->id_pnt;
+            $response = json_encode($result);
+
+            if( $id ){
+                header('Content-Type: application/json');
+                //var_dump(json_encode($result));
+                echo $response;
+                //echo json_encode( json_decode($response) ); 
+            }else{
+                header('Content-Type: application/json');
+                //var_dump(json_encode($result));
+                echo $response;
+                //echo json_encode( json_decode($response) ); 
+            }
+        }
+    }
+
+    function eliminar_pnt(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/elimina";
+        $data = array( 
+            'idFormato' => $_POST["idFormato"],
+            'correoUnidadAdministrativa' => $_POST["correoUnidadAdministrativa"],  
+            'token' => $_POST["token"],  
+            'registros' => $_POST["registros"]
+        );
+        
+        $options = array(
+            'http' => array(
+            'method'  => 'POST',
+            'content' => json_encode( $data ),
+            'header'=>  "Content-Type: application/json\r\n" .
+                        "Accept: app lication/json\r\n"
+            )
+        );
+
+        $context  = stream_context_create( $options );
+        $result = file_get_contents( $URL, false, $context );
+        $response = json_decode($result, true);
+
+        if( $response["success"] ){
+            $stm  = "DELETE FROM rel_pnt_presupuesto WHERE id_pnt = " . $_POST["id_pnt"];
+            $query = $this->db->query($stm);                                                                                                                              
+            $query->result_array();
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($data); 
+    }
+
+    function agregar_pnt2(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimientoAsinc/agrega";
+        
+        $data = array(
+            'idFormato' => $_POST["idFormato"], 
+            'token' => $_POST["token"], 
+            'correoUnidadAdministrativa' => $_POST["correoUnidadAdministrativa"], 
+            'unidadAdministrativa' => $_POST["unidadAdministrativa"], 
+            'SujetoObligado' => $_POST["SujetoObligado"], 
+            'registros' => $_POST["registros"]
+        );
 
         $options = array(
             'http' => array(
@@ -92,21 +219,397 @@ class Logo extends CI_Controller
         $context  = stream_context_create( $options );
         $result = file_get_contents( $URL, false, $context );
 
-        session_start();
+        
+        
+        $manage = json_decode($result, true);
+        /**/
+        if( $manage["success"] ){
+            $stm  = "INSERT INTO rel_pnt_factura( id_factura, id_pnt, estatus_pnt) ";  
+            $stm .= "VALUES(" . $_POST["id_factura"] . ", '" . $manage["mensaje"] . "', 'SUBIDO');";
+            $query = $this->db->query($stm);                                                                                                                              
+            $query->result_array();
+        }
+        
+        header('Content-Type: application/json');
+        echo json_encode($manage); 
+        /**/
 
-        // Set session variables
-
-        $result = json_decode($result);
-        //$result["mail"] = $_POST["user"];
-
-        //$result += [ "mail" => $_POST['user'] ];
-        $_SESSION["user_pnt"] = $_POST["user"];
-
-        $_SESSION["pnt"] = $result;
-
-        header('Location: http://localhost/tpov2/index.php/tpoadminv1/logo/logo/alta_carga_logo');
 
     }
+
+
+    function traer_formatos(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/informacionFormato/obtenerFormatos";
+        $request = array( "token" => strval($_SESSION['pnt']->token->token) );
+
+        // Al parecer no necesita "concentradora" ni "codigoSO" 
+        //$request = array("token" => strval($_SESSION['pnt']->token->token), "concentradora" => 2, "codigoSO" => "INAI" );
+
+        $options = array(
+            'http' => array(
+                'method'  => 'POST',
+                'content' => json_encode($request),
+                'header'=>  "Content-Type: application/json\r\n" . "Accept: application/json\r\n"
+            )
+        );
+        
+        $context  = stream_context_create($options);
+        $result = file_get_contents($URL, false, $context);
+
+        //session_start();
+
+        $data["formatos"] = json_decode($result);
+
+        header('Content-Type: application/json');
+        echo json_encode( $data["formatos"] ); 
+
+        //$this->load->view('/tpoadminv1/logo/ver_formatos', $data);
+
+    }
+
+    function panel_pnt(){
+        $this->load->view('/tpoadminv1/logo/panel_pnt');
+    }
+
+    function traer_campos(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/informacionFormato/camposFormato";
+
+        $idFormato = ( isset($_GET["idFormato"]) )? $_GET["idFormato"] : 22532; /* Quitar valor de prueba*/
+
+        $request = array("token" => strval($_SESSION['pnt']->token->token), "idFormato" => $idFormato );
+
+        $options = array(
+            'http' => array(
+                'method'  => 'POST',
+                'content' => json_encode($request),
+                'header'=>  "Content-Type: application/json\r\n" . "Accept: application/json\r\n"
+            )
+        );
+        
+        $context  = stream_context_create($options);
+        $result = file_get_contents($URL, false, $context);
+
+        //session_start();
+
+        $data["formatos"] = json_decode($result);
+
+        header('Content-Type: application/json');
+        echo json_encode( $data["formatos"] ); 
+    }
+
+    /**/
+    function traer_campo(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/informacionFormato/campoCatalogo";
+
+        $idCampo = ( isset($_GET["idCampo"]) )? $_GET["idCampo"] : 10658; /* Quitar valor de prueba*/
+
+        $request = array("token" => strval($_SESSION['pnt']->token->token), "idCampo" => $idCampo );
+
+        $options = array(
+            'http' => array(
+                'method'  => 'POST',
+                'content' => json_encode($request),
+                'header'=>  "Content-Type: application/json\r\n" . "Accept: application/json\r\n"
+            )
+        );
+        
+        $context  = stream_context_create($options);
+        $result = file_get_contents($URL, false, $context);
+
+        //session_start();
+
+        $data["formatos"] = json_decode($result);
+
+        header('Content-Type: application/json');
+        echo json_encode( $data["formatos"] ); 
+    }
+
+
+    function registros(){
+        $query = $this->db->query("SELECT pnt.id_tpo, pnt.id_pnt, p.id_presupuesto, e.ejercicio, p.fecha_inicio_periodo,
+            p.fecha_termino_periodo, p.denominacion, p.fecha_publicacion, p.file_programa_anual,
+            p.area_responsable, p.fecha_validacion, p.fecha_actualizacion, p.nota, pnt.estatus_pnt
+            FROM tab_presupuestos p
+            JOIN cat_ejercicios e ON p.id_ejercicio = e.id_ejercicio
+            LEFT JOIN rel_pnt_presupuesto pnt ON p.id_presupuesto = pnt.id_presupuesto");
+
+        $rows = $query->result_array();
+
+        header('Content-Type: application/json');
+        echo json_encode( $rows ); 
+    }
+
+    function registros2(){
+        $query = $this->db->query("
+                SELECT pnt.id_tpo 'ID TPO', pnt.id_pnt 'ID PNT', f.id_factura 'ID FACTURA', e.ejercicio 'Ejercicio',
+                    CONCAT(CASE 
+                        WHEN f.id_trimestre = 1 THEN '01/01/'
+                        WHEN f.id_trimestre = 2 THEN '01/04/'
+                        WHEN f.id_trimestre = 3 THEN '01/07/'
+                        WHEN f.id_trimestre = 4 THEN '01/10/'
+                    END, e.ejercicio ) 'Fecha de inicio del periodo que se informa', 
+                    CONCAT(CASE 
+                        WHEN f.id_trimestre = 1 THEN '31/03/'
+                        WHEN f.id_trimestre = 2 THEN '30/06/'
+                        WHEN f.id_trimestre = 3 THEN '30/09/'
+                        WHEN f.id_trimestre = 4 THEN '31/12/'
+                    END, e.ejercicio ) 'Fecha de término del periodo que se informa', 
+                    CONCAT('Sujeto obligado contratante: ', IFNULL(soa.nombre_sujeto_obligado, 'NA'), '<br>',
+                        'Sujeto obligado solicitante: ', IFNULL(sob.nombre_sujeto_obligado, 'NA')
+                    ) 'Función del Sujeto Obligado (catálogo)',
+                    fd.area_administrativa 'Área administrativa Encargada de Solicitar El Servicio o Producto, en su caso',
+                    scla.nombre_servicio_clasificacion 'Clasificación Del(los) Servicios (catálogo)', 
+                    scat.nombre_servicio_categoria 'Tipo de Servicio', sscat.nombre_servicio_subcategoria 'Tipo de Medio (catálogo)',
+                    suni.nombre_servicio_unidad 'Descripción de Unidad', 
+                    ctip.nombre_campana_tipo 'Tipo (catálogo)', cam.nombre_campana_aviso 'Nombre de la Campaña o Aviso Institucional',  
+                    cam.periodo 'Año de la Campaña', ctem.nombre_campana_tema 'Tema de la Campaña o Aviso Institucional', 
+                    cobj.campana_objetivo 'Objetivo Institucional' , cam.objetivo_comunicacion 'Objetivo de Comunicación', 
+                    fd.precio_unitarios 'Costo por unidad',cam.clave_campana 'Clave Única de Indentificación de Campaña', 
+                    cam.autoridad 'Autoridad que proporcionó la Clave', ccob.nombre_campana_cobertura 'Cobertura (catálogo)',
+                    cam.campana_ambito_geo 'Ámbito Geográfico de Cobertura', 
+                    cam.fecha_inicio 'Fecha de inicio de la Campaña o Aviso Institucional', 
+                    cam.fecha_termino 'Fecha de término de la Campaña o Aviso Institucional', sexo.poblacion_sexo 'Sexo (catálogo)', 
+                    lugar.poblaciones 'Lugar de Residencia', edu.nivel_educativo 'Nivel Educativo', edad.rangos_edad 'Grupos de Edad', 
+                    neco.poblacion_nivel 'Nivel Socioeconómico',
+                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'Respecto a los proveedores y su contratación', 
+                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'Respecto a los recursos y presupuesto', 
+                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'Respecto al Contrato y los Montos', 
+                    f.area_responsable 'Área(s) Responsable(s) que generan(n) posee(n), Publica(n) y Actualiza(n) la información',
+                    f.fecha_validacion 'Fecha de Validación', f.fecha_actualizacion 'Fecha de Actualización', f.nota 'Nota', 
+                    pnt.estatus_pnt 'Estatus PNT'
+                FROM tab_facturas f
+                JOIN tab_facturas_desglose fd ON fd.id_factura = f.id_factura
+                JOIN tab_campana_aviso cam ON cam.id_campana_aviso = fd.id_campana_aviso
+                JOIN cat_servicios_clasificacion scla ON scla.id_servicio_clasificacion = fd.id_servicio_clasificacion
+                JOIN cat_servicios_categorias scat ON scat.id_servicio_categoria = fd.id_servicio_categoria 
+                JOIN cat_servicios_subcategorias sscat ON sscat.id_servicio_subcategoria = fd.id_servicio_subcategoria 
+                JOIN cat_servicios_unidades suni ON suni.id_servicio_unidad = fd.id_servicio_unidad 
+                LEFT JOIN cat_campana_tipos ctip ON ctip.id_campana_tipo = cam.id_campana_tipo 
+                JOIN cat_campana_coberturas ccob ON ccob.id_campana_cobertura = cam.id_campana_cobertura
+                JOIN cat_ejercicios e ON e.id_ejercicio = cam.id_ejercicio 
+                JOIN cat_campana_temas ctem ON ctem.id_campana_tema = cam.id_campana_tema 
+                JOIN cat_campana_objetivos cobj ON cobj.id_campana_objetivo = cam.id_campana_objetivo 
+                LEFT JOIN (SELECT reda.id_campana_aviso, GROUP_CONCAT(eda.nombre_poblacion_grupo_edad) rangos_edad
+                    FROM rel_campana_grupo_edad reda
+                    JOIN cat_poblacion_grupo_edad eda ON eda.id_poblacion_grupo_edad = reda.id_poblacion_grupo_edad
+                    GROUP BY reda.id_campana_aviso
+                ) edad ON edad.id_campana_aviso = cam.id_campana_aviso
+                LEFT JOIN (SELECT rsex.id_campana_aviso, GROUP_CONCAT(sex.nombre_poblacion_sexo) poblacion_sexo
+                    FROM rel_campana_sexo rsex
+                    JOIN cat_poblacion_sexo sex ON sex.id_poblacion_sexo = rsex.id_poblacion_sexo
+                    GROUP BY rsex.id_campana_aviso
+                ) sexo ON sexo.id_campana_aviso = cam.id_campana_aviso 
+                LEFT JOIN rel_campana_sexo rsex ON rsex.id_campana_aviso = cam.id_campana_aviso 
+                LEFT JOIN ( SELECT id_campana_aviso, GROUP_CONCAT(poblacion_lugar) poblaciones 
+                    FROM rel_campana_lugar GROUP BY id_campana_aviso) lugar ON lugar.id_campana_aviso = cam.id_campana_aviso
+                LEFT JOIN (SELECT cne.id_campana_aviso, GROUP_CONCAT(ne.nombre_poblacion_nivel_educativo) nivel_educativo 
+                    FROM rel_campana_nivel_educativo cne
+                    JOIN cat_poblacion_nivel_educativo ne ON ne.id_poblacion_nivel_educativo = cne.id_poblacion_nivel_educativo
+                    GROUP BY cne.id_campana_aviso) edu ON edu.id_campana_aviso = cam.id_campana_aviso
+                LEFT JOIN (SELECT cn.id_campana_aviso, GROUP_CONCAT(pn.nombre_poblacion_nivel) poblacion_nivel 
+                    FROM rel_campana_nivel cn
+                    JOIN cat_poblacion_nivel pn ON pn.id_poblacion_nivel = cn.id_poblacion_nivel
+                    GROUP BY cn.id_campana_aviso) neco ON neco.id_campana_aviso = cam.id_campana_aviso
+                LEFT JOIN tab_sujetos_obligados soa ON soa.id_sujeto_obligado = fd.id_so_contratante
+                LEFT JOIN tab_sujetos_obligados sob ON sob.id_sujeto_obligado = fd.id_so_solicitante
+                LEFT JOIN rel_pnt_factura pnt ON pnt.id_factura = f.id_factura
+                ORDER BY pnt.id_pnt");
+
+        $rows = $query->result_array();
+
+        header('Content-Type: application/json');
+        echo json_encode( $rows ); 
+    }
+
+    function registros3(){
+        $query = $this->db->query("SELECT pnt.id_proveedor id_pnt,
+                    pnt.id_proveedor id,
+                    prov.nombre_razon_social,
+                    prov.nombres,
+                    prov.primer_apellido,
+                    prov.segundo_apellido,
+                    prov.nombre_comercial,
+                    prov.rfc,
+                    proc.nombre_procedimiento,
+                    con.fundamento_juridico,
+                    con.descripcion_justificacion
+                    FROM tab_proveedores prov
+                    LEFT JOIN tab_contratos con ON con.id_proveedor = prov.id_proveedor
+                    LEFT JOIN cat_procedimientos proc ON proc.id_procedimiento = con.id_procedimiento
+                    LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor");
+
+        $rows = $query->result_array();
+
+        header('Content-Type: application/json');
+        echo json_encode( $rows ); 
+    }
+
+    function registros4(){
+        $query = $this->db->query("SELECT pnt.id_presupuesto_desglose id_tpo, pnt.id_pnt, pnt.id,
+                    pcon.partida 'Partida Genérica',  pcon.concepto 'Clave del concepto',
+                    pcon.nombre_concepto 'Nombre del concepto',
+                    total.presupuesto 'Presupuesto Asignado por concepto',
+                    total.modificado 'Presupuesto Modificado por concepto',
+                    pcon.denominacion_partida 'Denominacion de cada partida',
+                    pdes.monto_presupuesto 'Presupuesto total asignado a cada partida',
+                    pdes.monto_modificacion 'Presupuesto modificado por partida',
+                    fact.total_ejercido 'Presupuesto ejercido al periodo reportado de cada partida'
+                    FROM tab_presupuestos_desglose pdes
+                    JOIN (SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', 
+                               p.partida, p.denominacion 'denominacion_partida'
+                          FROM (SELECT id_presupesto_concepto, concepto, partida, denominacion FROM cat_presupuesto_conceptos pc
+                              WHERE trim(coalesce(concepto, '')) <> '' AND trim(coalesce(partida, '')) <> '' ) p 
+                          JOIN (SELECT concepto, denominacion FROM cat_presupuesto_conceptos
+                              WHERE trim(coalesce(concepto, '')) <>'' AND trim(coalesce(partida, '')) = '') c
+                          ON c.concepto = p.concepto) pcon 
+                    ON pcon.id_presupesto_concepto = pdes.id_presupuesto_concepto
+                    JOIN (
+                        ( SELECT pcon.id_presupesto_concepto, pcon.concepto, 
+                                  SUM(pdes.monto_presupuesto) presupuesto, SUM(pdes.monto_modificacion) modificado
+                           FROM tab_presupuestos_desglose pdes
+                           JOIN (SELECT id_presupesto_concepto, p.concepto
+                                 FROM (SELECT id_presupesto_concepto, concepto FROM cat_presupuesto_conceptos pc
+                                     WHERE trim(coalesce(concepto, '')) <> '' AND trim(coalesce(partida, '')) <> '' ) p 
+                                 JOIN (SELECT concepto FROM cat_presupuesto_conceptos
+                                     WHERE trim(coalesce(concepto, '')) <>'' AND trim(coalesce(partida, '')) = '') c
+                                 ON c.concepto = p.concepto) pcon 
+                           ON pcon.id_presupesto_concepto = pdes.id_presupuesto_concepto
+                           GROUP BY pcon.concepto, pcon.id_presupesto_concepto)
+                    ) total ON total.id_presupesto_concepto = pdes.id_presupuesto_concepto
+                    LEFT JOIN (SELECT numero_partida, SUM(cantidad) total_ejercido 
+                               FROM tab_facturas_desglose GROUP BY numero_partida) fact 
+                         ON fact.numero_partida = pcon.partida 
+                    LEFT JOIN rel_pnt_presupuesto_desglose pnt ON pnt.id_presupuesto_desglose = pdes.id_presupuesto_desglose");
+
+        $rows = $query->result_array();
+
+        header('Content-Type: application/json');
+        echo json_encode( $rows ); 
+    }
+
+    function registros5(){
+        $query = $this->db->query("SELECT cont.fecha_celebracion 'Fecha de firma del contrato',
+                cont.numero_contrato 'Número o referencia de identificación del contrato',
+                cont.objeto_contrato 'Objeto del contrato',
+                vcon.`Archivo contrato en PDF (Vinculo al archivo)` 'Hipervínculo al contrato firmado',
+                vcmod.`Archivo convenio en PDF (Vinculo al archivo)` 'Hipervínculo al convenio modificatorio en su caso',
+                vcon.`Monto original del contrato` 'Monto total del contrato',
+                vcon.`Monto pagado a la fecha` 'Monto pagado al periodo publicado',
+                vcon.`Fecha inicio` 'Fecha de inicio de los servicios contratados',
+                vcon.`Fecha fin` 'Fecha de término de los servicios contratados',
+                f.numeros_factura 'Números de factura', f.files_factura_pdf 'Hipervínculos a la factura'
+                FROM tab_contratos cont
+                LEFT JOIN vout_contratos vcon ON vcon.`ID (Número de contrato)` = cont.id_contrato
+                LEFT JOIN vout_convenios_modificatorios vcmod ON vcmod.`ID (Número de contrato)` = cont.id_contrato
+                LEFT JOIN (SELECT f.id_contrato, GROUP_CONCAT(f.numero_factura) numeros_factura, 
+                                  GROUP_CONCAT(f.file_factura_pdf) files_factura_pdf
+                           FROM tab_facturas f GROUP BY f.id_contrato) f ON f.id_contrato = cont.id_contrato");
+
+        $rows = $query->result_array();
+
+        header('Content-Type: application/json');
+        echo json_encode( $rows ); 
+    }
+
+    function registros6(){
+        $query = $this->db->query("SELECT ej.ejercicio 'Ejercicio', 
+                cam.fecha_inicio_periodo 'Fecha de inicio del periodo que se informa',
+                cam.fecha_termino_periodo 'Fecha de termino del periodo que se informa',
+                so.nombre_sujeto_obligado 'Sujeto obligado al que se le proporcionó el servicio/permiso',
+                ctip.nombre_campana_tipo 'Tipo (catálogo)',
+                -- 'Medio de comunicación (catálogo)'
+                -- 'Descripción de unidad por ejemplo: spot de 30 segundos (radio); mensaje en TV 20 segundos'
+                cam.nombre_campana_aviso 'Concepto o campaña',
+                cam.clave_campana 'Clave única de identificación de campaña o aviso institucional en su caso',
+                cam.autoridad  'Autoridad que proporcionó la clave única de identificación de campaña o aviso institucional',
+                ccob.nombre_campana_cobertura 'Cobertura (catálogo)',
+                cam.campana_ambito_geo 'Ámbito geográfico de cobertura',
+                sex.nombre_poblacion_sexo 'Sexo (catálogo)',
+                lug.nombre_poblacion_lugar 'Lugar de residencia',
+                edu.nombre_poblacion_nivel_educativo 'Nivel educativo', 
+                eda.nombre_poblacion_grupo_edad 'Grupo de edad',
+                niv.nombre_poblacion_nivel 'Nivel económico',
+                -- 'Concesionario responsable de publicar la campaña o la comunicación correspondiente (razón social)'
+                -- 'Distintivo y/o nombre comercial del concesionario responsable de publicar la campaña o comunicación'
+                -- 'Descripción breve de las razones que justifican la elección del proveedor'
+                -- 'Monto total del tiempo de Estado o tiempo fiscal consumidos'
+                -- 'Área administrativa encargada de solicitar la difusión del mensaje o producto en su caso'
+                cam.fecha_inicio 'Fecha de inicio de difusión del concepto o campaña',
+                cam.fecha_termino 'Fecha de término de difusión del concepto o campaña',
+                -- 'Presupuesto total asignado y ejercido de cada partida', 'Número de factura en su caso'
+                cam.area_responsable 'Área(s) responsable(s) que genera(n) posee(n) publica(n) y actualizan la información',
+                cam.fecha_validacion 'Fecha de validación',
+                cam.fecha_actualizacion 'Fecha de Actualización',
+                cam.nota 'Nota'
+                FROM tab_campana_aviso cam
+                JOIN cat_ejercicios ej ON ej.id_ejercicio = cam.id_ejercicio
+                JOIN tab_sujetos_obligados so ON so.id_sujeto_obligado = cam.id_so_solicitante
+                JOIN cat_campana_tipos ctip ON ctip.id_campana_tipo = cam.id_campana_tipo
+                JOIN cat_campana_coberturas ccob ON ccob.id_campana_cobertura = cam.id_campana_cobertura
+                JOIN (SELECT csex.id_campana_aviso, sex.nombre_poblacion_sexo
+                      FROM rel_campana_sexo csex
+                      JOIN cat_poblacion_sexo sex ON sex.id_poblacion_sexo = csex.id_poblacion_sexo) sex 
+                ON sex.id_campana_aviso = cam.id_campana_aviso
+                LEFT JOIN (SELECT clug.id_campana_aviso, lug.nombre_poblacion_lugar
+                      FROM rel_campana_lugar clug
+                      JOIN cat_poblacion_lugar lug ON lug.id_poblacion_lugar = clug.id_campana_lugar) lug
+                ON lug.id_campana_aviso = cam.id_campana_aviso
+                LEFT JOIN (SELECT cedu.id_campana_aviso, edu.nombre_poblacion_nivel_educativo
+                      FROM rel_campana_nivel_educativo cedu
+                      JOIN cat_poblacion_nivel_educativo edu ON edu.id_poblacion_nivel_educativo = cedu.id_rel_campana_nivel_educativo) edu
+                ON edu.id_campana_aviso = cam.id_campana_aviso
+                LEFT JOIN (SELECT ceda.id_campana_aviso, eda.nombre_poblacion_grupo_edad
+                      FROM rel_campana_grupo_edad ceda
+                      JOIN cat_poblacion_grupo_edad eda ON eda.id_poblacion_grupo_edad = ceda.id_rel_campana_grupo_edad) eda
+                ON eda.id_campana_aviso = cam.id_campana_aviso
+                JOIN (SELECT cniv.id_campana_aviso, GROUP_CONCAT(niv.nombre_poblacion_nivel) nombre_poblacion_nivel
+                      FROM rel_campana_nivel cniv
+                      JOIN cat_poblacion_nivel niv ON niv.id_poblacion_nivel = cniv.id_poblacion_nivel
+                      GROUP BY cniv.id_campana_aviso) niv ON niv.id_campana_aviso = cam.id_campana_aviso
+                ;");
+
+        $rows = $query->result_array();
+
+        header('Content-Type: application/json');
+        echo json_encode( $rows ); 
+    }
+   /*
+    function registros7(){
+
+        Denominación de la partida
+        Presupuesto total asignado a cada partida
+        Presupuesto ejercido al periodo reportado de cada partida
+        $query = $this->db->query("");
+
+        $rows = $query->result_array();
+
+        header('Content-Type: application/json');
+        echo json_encode( $rows ); 
+    }
+    */
+    
+    function test(){
+        $_array = array ('id' => $this->input->get() );
+        header('Content-Type: application/json');
+        echo json_encode( $_array ); 
+    }
+
+    function pnt(){
+          $data['hola'] = 'hola';
+        $this->load->view('tpoadminv1/logo/pnt1', $data);
+    }
+
+     function pnt2(){
+          $data['hola'] = 'hola';
+        $this->load->view('tpoadminv1/logo/pnt2', $data);
+    }
+
+     function pnt3(){
+          $data['hola'] = 'hola';
+        $this->load->view('tpoadminv1/logo/pnt3', $data);
+    }
+
+
 
 
     function salir_pnt(){
@@ -136,8 +639,7 @@ class Logo extends CI_Controller
 
     }
 
-    function alta_carga_logo()
-    {
+    function alta_carga_logo(){
 
         //Validamos que el usuario tenga acceso
         $this->permiso_administrador();
@@ -185,10 +687,10 @@ class Logo extends CI_Controller
                                     
                                     "$.fn.datepicker.dates['es'] = {" .
                                         "days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']," .
-		                                "daysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],".
-		                                "daysMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do']," .
-		                                "months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],".
-		                                "monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],".
+                                        "daysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],".
+                                        "daysMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do']," .
+                                        "months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],".
+                                        "monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],".
                                         "today: 'Hoy'," .
                                         "};" .
                                     "setTimeout(function() { " .
@@ -209,7 +711,7 @@ class Logo extends CI_Controller
         
         $this->load->model('tpoadminv1/logo/Logo_model');
         $this->load->library('form_validation');
-		
+        
         $this->form_validation->set_rules('fecha_act', 'Fecha de actualizaci&oacute;n ', 'trim|required');
        // $this->form_validation->set_rules('comentario_act', 'Nombre(s)', 'trim|required|min_length[3]');
         
@@ -253,10 +755,10 @@ class Logo extends CI_Controller
                                     
                                     "$.fn.datepicker.dates['es'] = {" .
                                         "days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']," .
-		                                "daysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],".
-		                                "daysMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do']," .
-		                                "months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],".
-		                                "monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],".
+                                        "daysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],".
+                                        "daysMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do']," .
+                                        "months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],".
+                                        "monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],".
                                         "today: 'Hoy'," .
                                         "};" .
                                     "$('.datepicker').datepicker({ " .
@@ -319,7 +821,7 @@ class Logo extends CI_Controller
                     $config['upload_path'] = './data/logo';
                     $config['allowed_types']        = '*';
                     $config['detect_mime']          = false;
-                    $config['max_size']	= '20000';
+                    $config['max_size'] = '20000';
                     $config['max_width']  = '150';
                     $config['max_height']  = '90';
                     $config['overwrite']  = TRUE;

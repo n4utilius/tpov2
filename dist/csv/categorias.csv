@@ -3,9 +3,19 @@
 2,"Servicios de difusión en medios de comunicación",Televisión,TV,#699DB3,Activo
 3,"Servicios de difusión en medios de comunicación",Cine,Cine,#756EA0,Activo
 4,"Servicios de difusión en medios de comunicación","Medios impresos",Medios,#13B6E3,Activo
-5,"Servicios de difusión en medios de comunicación","Medios complementarios",Complementarios,#1287C1,Activo
+5,"Servicios de difusión en medios de comunicación","Medios Complementarios",Complementarios,#1287C1,Activo
 6,"Servicios de difusión en medios de comunicación",Internet,Internet,#81CEF3,Activo
 7,"Otros servicios asociados a la comunicación ","Producción de contenidos",Contenidos,#08AFBC,Activo
 8,"Otros servicios asociados a la comunicación ","Análisis, estudios y métricas",Estudios,#BBE4E7,Activo
 9,"Otros servicios asociados a la comunicación ",Impresiones,Impresiones,#51B27C,Activo
 10,"Otros servicios asociados a la comunicación ",Streaming,Streaming,#A2CCAE,Activo
+11,"Servicios de difusión en medios de comunicación",Espectaculares,Espectaculares,#ACACAC,Activo
+12,"Otros servicios asociados a la comunicación ",Espectaculares,Espectaculares,#ACACAC,Activo
+13,"Erogación de recursos por contratación de servicios de impresión, difusión y publicidad",Espectaculares,Espectaculares,#ACACAC,Activo
+14,"Utilización de tiempos oficiales: Tiempo de estado y Tiempo Fiscal",Espectaculares,Espectaculares,#ACACAC,Activo
+15,"Servicios de difusión en medios de comunicación","Medios digitales","Medios digitales",#ACACAC,Activo
+19,"Servicios de difusión en medios de comunicación",Otros,Otros,#ACACAC,Activo
+20,"Otros servicios asociados a la comunicación ",Otros,Otros,#ACACAC,Activo
+21,"Erogación de recursos por contratación de servicios de impresión, difusión y publicidad",Otros,Otros,#ACACAC,Activo
+22,"Utilización de tiempos oficiales: Tiempo de estado y Tiempo Fiscal",Otros,Otros,#ACACAC,Activo
+24,"Otros servicios asociados a la comunicación ","Otros servicios asociados","Otros servicios asociados",#ACACAC,Activo
