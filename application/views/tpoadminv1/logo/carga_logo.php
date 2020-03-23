@@ -359,7 +359,7 @@
                 </thead>
                 <tbody>
                     <?php 
-                        $myfile = fopen($_SERVER["DOCUMENT_ROOT"] . "/tpov2/data/archivo_conexion.txt", "w") or die("Unable to open file!");
+                        //$myfile = fopen($_SERVER["DOCUMENT_ROOT"] . "/tpov2/data/archivo_conexion.txt", "w") or die("Unable to open file!");
                         echo "<tr>";
                         if( isset($_SESSION['pnt']) ){
                             if($_SESSION["pnt"]["success"]){
@@ -395,14 +395,14 @@
                                     "</div><div class='box-body'>" . 
                                     "<table class='table table-bordered table-hover'>" . 
                                         "<tr>" . 
-                                            "<th> <a href='" . base_url() . "data/archivo_conexion.txt' download> archivo_conexion.txt </a> </th>" . 
-                                            "<th> <a href='" . base_url() . "data/archivo_conexion.txt' download type='submit' class='btn btn-default' type='button'> Descargar </th> " . 
+                                            "<!--th> <a href='" . base_url() . "data/archivo_conexion.txt' download> archivo_conexion.txt </a> </th-->" . 
+                                            "<!--th> <a href='" . base_url() . "data/archivo_conexion.txt' download type='submit' class='btn btn-default' type='button'> Descargar </th-->" . 
                                         "</tr> " . 
                                     "</table>" . 
                                     "</div>";
 
-                            fwrite($myfile, $txt);
-                            fclose($myfile);
+                            //fwrite($myfile, $txt);
+                            //fclose($myfile);
                         }else{
                             echo "<td> <input type='input' id='re-user' class='form-control' name='re-user'> </td>";
                             echo "<td> <input type='password' id='re-pass' class='form-control' name='re-pass'> </td>";
@@ -412,8 +412,6 @@
                                           
                             echo "</tr></tbody> </table>";
                         }
-
-
                     ?>
                     <?php echo "<a type='submit' class='btn-group btn btn-success btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/traer_formatos' id='re-conectar'> Ver Formatos </a>"; ?>
 
