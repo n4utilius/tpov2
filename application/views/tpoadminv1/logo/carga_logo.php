@@ -589,27 +589,25 @@
 
 
     $("a#re-conectar").on("click", function(e){
-        //$.ajaxSetup({ async: false });  
+        $.ajaxSetup({ async: false });  
+        e.preventDefault()
         $.post( $(this).attr("href"), { 'user': $("#re-user").val() , 'password': $("#re-pass").val() }, 
             function(data){ 
+                console.log(data)
                 location.reload(); 
             }
         );
-
-        return false;
-        
     })
 
-    $("a#re-conectar").on("click", function(e){
+    $("a#desconectar").on("click", function(e){
         //$.ajaxSetup({ async: false });  
+        e.preventDefault()
         $.post( $(this).attr("href"), {  }, 
             function(data){ 
+                console.log(data)
                 location.reload(); 
             }
         );
-
-        return false;
-        
     })
 
     var upload_file = function (){

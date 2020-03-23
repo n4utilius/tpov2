@@ -104,10 +104,10 @@ class Logo extends CI_Controller
         $_SESSION["user_pnt"] = $data["usuario"];
         $_SESSION["pnt"] = $result;
 
+        //header('Location: http://localhost/tpov2/index.php/tpoadminv1/logo/logo/alta_carga_logo');
         header('Content-Type: application/json');
         echo json_encode($result);
 
-        //header('Location: http://localhost/tpov2/index.php/tpoadminv1/logo/logo/alta_carga_logo');
     }
 
      function salir_pnt(){
@@ -130,9 +130,10 @@ class Logo extends CI_Controller
         session_start();
 
         // Set session variables
-        $_SESSION["user_pnt"] = false;
-        $_SESSION["pnt"] = $result;
+        unset( $_SESSION["user_pnt"]);
+        unset( $_SESSION["pnt"]);
 
+        header('Location: http://localhost/tpov2/index.php/tpoadminv1/logo/logo/alta_carga_logo');
         header('Content-Type: application/json');
         echo json_encode($result);
 
