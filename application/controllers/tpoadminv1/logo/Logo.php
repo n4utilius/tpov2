@@ -98,9 +98,6 @@ class Logo extends CI_Controller
         $result = file_get_contents( $URL, false, $context );
         $result = json_decode($result, true);
 
-        
-
-        session_start();
         $_SESSION["user_pnt"] = $data["usuario"];
         $_SESSION["pnt"] = $result;
 
@@ -125,15 +122,12 @@ class Logo extends CI_Controller
 
         $context  = stream_context_create( $options );
         $result = file_get_contents( $URL, false, $context );
-        $result = json_decode($result);
-
-        session_start();
+        $result = json_decode($result, true);
 
         // Set session variables
         unset( $_SESSION["user_pnt"]);
         unset( $_SESSION["pnt"]);
 
-        header('Location: http://localhost/tpov2/index.php/tpoadminv1/logo/logo/alta_carga_logo');
         header('Content-Type: application/json');
         echo json_encode($result);
 
