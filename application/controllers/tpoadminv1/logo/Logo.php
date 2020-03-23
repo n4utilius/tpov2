@@ -110,6 +110,34 @@ class Logo extends CI_Controller
         //header('Location: http://localhost/tpov2/index.php/tpoadminv1/logo/logo/alta_carga_logo');
     }
 
+     function salir_pnt(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken/";
+        $data = array('usuario' => '', 'password' => '' );
+
+        $options = array(
+            'http' => array(
+            'method'  => 'POST',
+            'content' => json_encode( $data ),
+            'header'=>  "Content-Type: application/json\r\n" .
+                        "Accept: application/json\r\n"
+            )
+        );
+
+        $context  = stream_context_create( $options );
+        $result = file_get_contents( $URL, false, $context );
+        $result = json_decode($result);
+
+        session_start();
+
+        // Set session variables
+        $_SESSION["user_pnt"] = false;
+        $_SESSION["pnt"] = $result;
+
+        header('Content-Type: application/json');
+        echo json_encode($result);
+
+    }
+
     function agregar_pnt(){
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/agrega";
         
@@ -612,32 +640,7 @@ class Logo extends CI_Controller
 
 
 
-    function salir_pnt(){
-        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken/";
-        $data = array('usuario' => '', 'password' => '' );
-
-        $options = array(
-            'http' => array(
-            'method'  => 'POST',
-            'content' => json_encode( $data ),
-            'header'=>  "Content-Type: application/json\r\n" .
-                        "Accept: application/json\r\n"
-            )
-        );
-
-        $context  = stream_context_create( $options );
-        $result = file_get_contents( $URL, false, $context );
-
-        session_start();
-
-        // Set session variables
-        $result = json_decode($result);
-        $_SESSION["user_pnt"] = false;
-        $_SESSION["pnt"] = $result;
-
-        header('Location: http://localhost/tpov2/index.php/tpoadminv1/logo/logo/alta_carga_logo');
-
-    }
+   
 
     function alta_carga_logo(){
 

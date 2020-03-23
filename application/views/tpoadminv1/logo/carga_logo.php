@@ -368,11 +368,11 @@
                                 echo "<td class='active'> <span class='circle' style='background: #3f3'>  </span> Activo </td>";
                                 
                                 echo "<td> <a type='submit' class='btn-group btn btn-success btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/entrar_pnt' id='re-conectar'> Conectar </a> &nbsp;&nbsp;&nbsp;"; 
-                                echo      "<a type='submit' class='btn-group btn btn-danger btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/salir_pnt'> Desconectar </a> </td>";
+                                echo      "<a type='submit' class='btn-group btn btn-danger btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/salir_pnt'  id='desconectar'> Desconectar </a> </td>";
                                 echo "</tr></tbody></table>";
                                 echo "</form>";
                                 
-                                $txt = "conexión: " . json_encode($_SESSION["pnt"]["success"]) . ", mensaje: " . $_SESSION["pnt"]["mensaje"];
+                                //$txt = "conexión: " . json_encode($_SESSION["pnt"]["success"]) . ", mensaje: " . $_SESSION["pnt"]["mensaje"];
                             } else{
                                 $_SESSION["user_pnt"] = "";
                                 echo "<td> <input type='input' id='re-user' class='form-control' name='re-user'>  </td>";
@@ -383,9 +383,9 @@
                                               
                                 echo "</tr></tbody> </table>";
                               
-                                $txt = "conexión: " . json_encode($_SESSION["pnt"]["success"]) . ", mensaje: " . ( isset($_SESSION["pnt"]["mensaje"])? $_SESSION["pnt"]["mensaje"] : '');
+                                //$txt = "conexión: " . json_encode($_SESSION["pnt"]["success"]) . ", mensaje: " . ( isset($_SESSION["pnt"]["mensaje"])? $_SESSION["pnt"]["mensaje"] : '');
                             }
-
+                            /*
                             echo "<div class='box-header'>" . 
                                         "<h4 class='modal-title'>" . 
                                             "<i class='fa fa-info-circle text-primary' data-toggle='tooltip' " . 
@@ -401,8 +401,8 @@
                                     "</table>" . 
                                     "</div>";
 
-                            //fwrite($myfile, $txt);
-                            //fclose($myfile);
+                            fwrite($myfile, $txt);
+                            fclose($myfile); */
                         }else{
                             echo "<td> <input type='input' id='re-user' class='form-control' name='re-user'> </td>";
                             echo "<td> <input type='password' id='re-pass' class='form-control' name='re-pass'> </td>";
@@ -591,6 +591,18 @@
     $("a#re-conectar").on("click", function(e){
         //$.ajaxSetup({ async: false });  
         $.post( $(this).attr("href"), { 'user': $("#re-user").val() , 'password': $("#re-pass").val() }, 
+            function(data){ 
+                location.reload(); 
+            }
+        );
+
+        return false;
+        
+    })
+
+    $("a#re-conectar").on("click", function(e){
+        //$.ajaxSetup({ async: false });  
+        $.post( $(this).attr("href"), {  }, 
             function(data){ 
                 location.reload(); 
             }
