@@ -139,6 +139,9 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + JSON.stringify(row) + "'> <img src='<?php echo base_url(); ?>plugins/img/erase.png'></a>"
 				      		return response
 				      	}else{
+				      		response += "<a class='tpo_btn crear invisible' href='#' data='"
+				      		response += JSON.stringify(row) + "'> <img width='24' src='<?php echo base_url(); ?>plugins/img/upload.png'> </a>"
+
 				      		response += "<img src='<?php echo base_url(); ?>plugins/img/correct.png'>"
 				      		response += "<a class='tpo_btn eliminar' href='#' data='" + JSON.stringify(row) + "'> <img src='<?php echo base_url(); ?>plugins/img/erase.png'></a>"
 					      	return response
@@ -203,17 +206,16 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    			tr.children("td").eq(1).text(res.id_pnt)
 	    			tr.children("td").eq(13).children("a.eliminar").removeClass("invisible")
 	    			tr.children("td").eq(13).children("img.check").removeClass("invisible")
-	    			tr.children("td").eq(13).children("a.crear").remove()
+	    			tr.children("td").eq(13).children("a.crear").addClass("invisible")
 	    		} else {
 	    			console.log("No se pudo insertar el elemento correctamente")
 	    			a.css("display", "block")
 	    		}
 
     			td.children("img.loading").remove("")
-    			if(tr.hasClass("odd"))
-    				tr.css("background-color", "#f9f9f9")
-    			else
-    				tr.css("background-color", "#fff")
+    			
+    			if(tr.hasClass("odd")) tr.css("background-color", "#f9f9f9")
+    			else tr.css("background-color", "#fff")
 
 	    	})
 	    });
@@ -222,26 +224,51 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 		$(document).on("click","a.eliminar",function(e){ 
 	    	e.preventDefault();
+
+	    	var a = $(this)
+		      , tr = a.parents("tr")
+		      , td = a.parents("td")
+
+		    a.css("display", "none")
+		    a.siblings().css("display", "none")
+		    tr.css("background-color", "rgba(255,0,0, 0.2)")
+		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
+
+		    var id_pnt = tr.children("td").eq(1).text()
+
 	    	var data = JSON.parse( $(this).attr("data")  )
 			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
 
-			formato = {
+			var formato = {
 				"idFormato": 43322, 
 				"correoUnidadAdministrativa": "so.inai@inai.org.mx",
 				"token": token,
-				"registros":[ { "numeroRegistro":1, "idRegistro": parseInt(data.id_pnt) } ],
-				"id_pnt": parseInt(data.id_pnt)
+				"registros":[ { "numeroRegistro":1, "idRegistro": data.id_pnt || id_pnt } ],
+				"id_pnt": data.id_pnt || id_pnt
 			}
-
-			console.log(formato)
 
 			var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
 
-	    	$.post(url, formato, function(data){
-	    		console.log(data)
+	    	$.post(url, formato, function(res, error){
+	    		//if(res.success) location.reload(); 
+	    		if(res && res.success) {
+	    			tr.children("td").eq(1).html("<label class='btn'> <small> SIN SUBIR </small></label>")
+	    			tr.children("td").eq(13).children("a.eliminar").addClass("invisible")
+	    			tr.children("td").eq(13).children("img.check").addClass("invisible")
+	    			tr.children("td").eq(13).children("a.crear").css("display", "block")
+	    		} else {
+	    			console.log("No se pudo eliminar el elemento correctamente")
+	    			a.css("display", "block")
+	    			a.siblings().css("display", "block")
+	    		}
+
+    			td.children("img.loading").remove("")
+    			if(tr.hasClass("odd"))
+    				tr.css("background-color", "#f9f9f9")
+    			else
+    				tr.css("background-color", "#fff")
 	    	})
 
-	    	return false
 	    })
 	  
 	})

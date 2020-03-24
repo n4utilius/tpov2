@@ -119,7 +119,7 @@ class Logo extends CI_Controller
                         "Accept: application/json\r\n"
             )
         );
-
+ 
         $context  = stream_context_create( $options );
         $result = file_get_contents( $URL, false, $context );
         $result = json_decode($result, true);
@@ -186,37 +186,44 @@ class Logo extends CI_Controller
         }
     }
 
+
+
     function eliminar_pnt(){
+        //http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/elimina 
+        // https://wssipotmx2.inai.org.mx/sipot-web/spring/mantenimientoAsinc/elimina
+
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/elimina";
         $data = array( 
-            'idFormato' => $_POST["idFormato"],
-            'correoUnidadAdministrativa' => $_POST["correoUnidadAdministrativa"],  
-            'token' => $_POST["token"],  
-            'registros' => $_POST["registros"]
+            "idFormato" => $_POST["idFormato"],
+            "correoUnidadAdministrativa" => $_POST["correoUnidadAdministrativa"],  
+            "token" => $_POST["token"],  
+            "registros" => $_POST["registros"]
         );
         
         $options = array(
             'http' => array(
-            'method'  => 'POST',
-            'content' => json_encode( $data ),
-            'header'=>  "Content-Type: application/json\r\n" .
-                        "Accept: app lication/json\r\n"
+                'method'  => 'POST',
+                'content' => json_encode( $data ),
+                'header'=>  "Content-Type: application/json\r\n" .
+                            "Accept: application/json\r\n"
             )
         );
 
         $context  = stream_context_create( $options );
-        $result = file_get_contents( $URL, false, $context );
-        $response = json_decode($result, true);
+        $res = file_get_contents( $URL, false, $context );
+        $result = json_decode( $res, true );
 
-        if( $response["success"] ){
-            $stm  = "DELETE FROM rel_pnt_presupuesto WHERE id_pnt = " . $_POST["id_pnt"];
-            $query = $this->db->query($stm);                                                                                                                              
-            $query->result_array();
+        if( $result["success"] ){
+            $stm  = "DELETE FROM rel_pnt_presupuesto WHERE id_pnt = '" . $_POST["id_pnt"] . "'";
+            $this->db->query($stm);                                                                                                                              
         }
 
         header('Content-Type: application/json');
-        echo json_encode($data); 
+        echo json_encode($result);
+        
     }
+
+
 
     function agregar_pnt2(){
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimientoAsinc/agrega";
