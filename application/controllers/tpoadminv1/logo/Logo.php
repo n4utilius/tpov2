@@ -656,7 +656,7 @@ class Logo extends CI_Controller
 
         $this->load->model('tpoadminv1/logo/Logo_model');
 
-        $data['title'] = "Enlace a PNT";
+        $data['title'] = "Plataforma Nacional de Transparencia";
         $data['heading'] = $this->session->userdata('usuario_nombre');
         $data['mensaje'] = "";
         $data['job'] = $this->session->userdata('usuario_rol_nombre');
