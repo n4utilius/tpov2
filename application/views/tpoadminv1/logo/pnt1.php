@@ -165,7 +165,6 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		$(document).on("click","a.crear",function(e){ 
 	    	e.preventDefault();
 		    var data = JSON.parse( $(this).attr("data") )
-			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
 			  , url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
 			
 			var a = $(this)
@@ -179,10 +178,10 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		    var formato = {
 				"idFormato": 43322, // Programa Anual de Comunicación Social o equivalente
 				"IdRegistro": "",
-				"token": token,
-				"correoUnidadAdministrativa": "so.inai@inai.org.mx",
-				"unidadAdministrativa": "Dirección General de Comunicación Social y Difusión",
-				"SujetoObligado": "INAI",
+				"token": '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>',
+				"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,
+				"unidadAdministrativa": '<?php echo $_SESSION["unidad_administrativa"]; ?>',
+				"SujetoObligado": '<?php echo $_SESSION["sujeto_obligado"]; ?>',
 				"registros": [{
 				    "numeroRegistro": 10,
 				    "campos": [

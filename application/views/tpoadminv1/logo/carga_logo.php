@@ -591,23 +591,27 @@
     $("a#re-conectar").on("click", function(e){
         //$.ajaxSetup({ async: false });  
         e.preventDefault()
+       $(".active").prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
         $.post( $(this).attr("href"), { 'user': $("#re-user").val() , 'password': $("#re-pass").val() }, 
             function(data){ 
-                console.log(data)
+                $(".inactive").children(".loading").remove()
                 location.reload(); 
             }
         );
+        $(".inactive").children(".loading").remove()
     })
 
     $("a#desconectar").on("click", function(e){
         //$.ajaxSetup({ async: false });  
         e.preventDefault()
+        $(".active").prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
         $.post( $(this).attr("href"), {  }, 
             function(data){ 
-                console.log(data)
+                $(".active").children(".loading").remove()
                 location.reload(); 
             }
         );
+        $(".active").children(".loading").remove()   
     })
 
     var upload_file = function (){

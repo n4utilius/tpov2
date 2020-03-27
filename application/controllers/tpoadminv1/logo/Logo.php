@@ -98,10 +98,19 @@ class Logo extends CI_Controller
         $result = file_get_contents( $URL, false, $context );
         $result = json_decode($result, true);
 
-        $_SESSION["user_pnt"] = $data["usuario"];
-        $_SESSION["pnt"] = $result;
+        if( $result["success"] ){
+            $_SESSION["user_pnt"] = $data["usuario"];
+            $_SESSION["pnt"] = $result;
 
-        //header('Location: http://localhost/tpov2/index.php/tpoadminv1/logo/logo/alta_carga_logo');
+
+            $stm  = "SELECT nombre_sujeto_obligado, nombre_unidad_administrativa 
+                FROM unidades_so WHERE correo_unidad_administrativa = 'so.inai@inai.org.mx'";
+            $query = $this->db->query($stm);
+
+            $_SESSION["sujeto_obligado"] = $query->row()->nombre_sujeto_obligado;
+            $_SESSION["unidad_administrativa"] = $query->row()->nombre_unidad_administrativa;
+         }
+
         header('Content-Type: application/json');
         echo json_encode($result);
 
@@ -127,76 +136,13 @@ class Logo extends CI_Controller
         // Set session variables
         unset( $_SESSION["user_pnt"]);
         unset( $_SESSION["pnt"]);
+        unset( $_SESSION["unidad_administrativa"]);
+        unset( $_SESSION["sujeto_obligado"]);
 
         header('Content-Type: application/json');
         echo json_encode($result);
 
     }
-    /*
-    function agregar_pnt(){
-        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/agrega";
-        
-        $data = array(
-            'idFormato' => $_POST["idFormato"], 
-            'token' => $_POST["token"], 
-            'correoUnidadAdministrativa' => $_POST["correoUnidadAdministrativa"], 
-            'unidadAdministrativa' => $_POST["unidadAdministrativa"], 
-            'SujetoObligado' => $_POST["SujetoObligado"], 
-            'registros' => $_POST["registros"]
-        );
-
-        $options = array(
-            'http' => array(
-                'method'  => 'POST',
-                'content' => json_encode( $data ),
-                'header'=>  "Content-Type: application/json\r\n" .
-                            "Accept: application/json\r\n"
-            )
-        );
-        
-        $context  = stream_context_create( $options );
-        $res = file_get_contents( $URL, false, $context );
-        $result = json_decode( $res, true );
-
-        if( $result["success"] ){
-            $pntid = $result["mensaje"]["registros"][0]["idRegistro"]; 
-
-            $table = "";
-            $nombre_id_interno = "";
-
-            switch ($_POST["idFormato"]) {
-                case 43322:
-                    $table = "rel_pnt_presupuesto";
-                    $nombre_id_interno = "id_presupuesto";
-                    break;
-                case 43320:
-                    $table = "rel_pnt_factura";
-                    $nombre_id_interno = "id_factura";
-                    break;
-            }
-
-            $stm  = "INSERT INTO " . $table . "( " . $nombre_id_interno . ", id_pnt, estatus_pnt) ";  
-            $stm .= "VALUES(" . $_POST["_id_interno"] . ", '" . $pntid . "', 'SUBIDO');";
-
-            $this->db->query($stm);                                                                                                                              
-            $id = $this->db->insert_id();     
-
-            $row = $this->db->get_where('rel_pnt_presupuesto', ['id_tpo' => $id])->row();
-
-            $result['id_pnt'] =  $row->id_pnt;
-            $response = json_encode($result);
-
-            if( $id ){
-                header('Content-Type: application/json');
-                echo $response;
-            }else{
-                header('Content-Type: application/json');
-                echo $response;
-            }
-        }
-    }
-    */
-
 
 
     function agregar_pnt(){

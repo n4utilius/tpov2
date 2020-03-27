@@ -37,42 +37,42 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	<table id="grid" class="dataTable stripe hover order-column row-border cell-border compact">
 		<thead>
 	        <tr>
-	            <th>ID TPO</th>
-				<th>ID PNT</th>
-				<th>ID FACTURA</th>
-				<th>Ejercicio</th>
-				<th>Fecha de inicio del periodo que se informa</th>
-				<th>Fecha de término del periodo que se informa</th>
-				<th>Función del Sujeto Obligado (catálogo)</th>
-				<th>Área administrativa Encargada de Solicitar El Servicio o Producto, en su caso</th>
-				<th>Clasificación Del(los) Servicios (catálogo)</th>
-				<th>Tipo de Servicio</th> 
-				<th>Tipo de Medio(catálogo)<th/>
-				<th>Descripción de Unidad</th>
-				<th>Tipo (catálogo)</th>
-				<th>Nombre de la Campaña o Aviso Institucional</th>
-				<th>Año de la Campaña</th>
-				<th>Tema de la Campaña o Aviso Institucional</th>
-				<th>Objetivo Institucional</th>
-				<th>Objetivo de Comunicación</th>
-				<th>Costo por unidad</th>
-				<th>Clave Única de Indentificación de Campaña</th>
-				<th>Autoridad que proporcionó la Clave</th>
-				<th>Cobertura (catálogo)</th>
-				<th>Ámbito Geográfico de Cobertura</th>
-				<th>Fecha de inicio de la Campaña o Aviso Institucional</th>
-				<th>Fecha de término de la Campaña o Aviso Institucional</th>
-				<th>Sexo (catálogo)</th>
-				<th>Lugar de Residencia</th>
-				<th>Nivel Educativo</th>
-				<th>Grupos de Edad</th>
-				<th>Nivel Socioeconómico</th>
-				<th>Respecto a los proveedores y su contratación</th>
-				<th>Área(s) Responsable(s) que generan(n) posee(n), Publica(n) y Actualiza(n) la información</th>
-				<th>Fecha de Validación</th>
-				<th>Fecha de Actualización</th>
-				<th>Nota</th>
-				<th>Estatus PNT</th>
+	           	<th> ID TPO </th>
+				<th> ID PNT </th>
+				<th> ID FACTURA </th>
+				<th> Ejercicio </th>
+				<th> Fecha de inicio del periodo que se informa </th>
+				<th> Fecha de término del periodo que se informa </th>
+				<th> Función del Sujeto Obligado (catálogo) </th>
+				<th> Área administrativa Encargada de Solicitar El Servicio o Producto, en su caso </th>
+				<th> Clasificación Del(los) Servicios (catálogo) </th>
+				<th> Tipo de Servicio </th>
+				<th> Tipo de Medio(catálogo) </th>
+				<th> Descripción de Unidad </th>
+				<th> Tipo (catálogo) </th>
+				<th> Nombre de la Campaña o Aviso Institucional </th>
+				<th> Año de la Campaña </th>
+				<th> Tema de la Campaña o Aviso Institucional </th>
+				<th> Objetivo Institucional </th>
+				<th> Objetivo de Comunicación </th>
+				<th> Costo por unidad </th>
+				<th> Clave Única de Indentificación de Campaña </th>
+				<th> Autoridad que proporcionó la Clave </th>
+				<th> Cobertura (catálogo) </th>
+				<th> Ámbito Geográfico de Cobertura </th>
+				<th> Fecha de inicio de la Campaña o Aviso Institucional </th>
+				<th> Fecha de término de la Campaña o Aviso Institucional </th>
+				<th> Sexo (catálogo) </th>
+				<th> Lugar de Residencia </th>
+				<th> Nivel Educativo </th>
+				<th> Grupos de Edad </th>
+				<th> Nivel Socioeconómico </th>
+				<th> Respecto a los proveedores y su contratación </th>
+				<th> Área(s) Responsable(s) que generan(n) posee(n), Publica(n) y Actualiza(n) la información </th>
+				<th> Fecha de Validación </th>
+				<th> Fecha de Actualización </th>
+				<th> Nota </th>
+				<th> Estatus PNT </th>
 	        </tr>
 	    </thead>
 	    <tbody>
@@ -150,7 +150,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: 36,
+				    targets: 35,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	var response = ""
@@ -187,18 +187,11 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		$(document).on("click","a.crear",function(e){ 
 	    	e.preventDefault();
 		    var data = JSON.parse( $(this).attr("data") )
-			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
-			  //, url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_test";
 			  , url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
 			
 			var a = $(this)
 		      , tr = a.parents("tr")
 		      , td = a.parents("td")
-
-		      /*
-				{"id":0,"success":true,"mensaje":{"registros":[{"numeroRegistro":1,"idRegistro":"0B647755AE2D5473FA728A84684867DE","campos":null}]},"totalRegistros":1,"totalRegistrosSecundarios":0,"id_pnt":25}
-		
-		      */
 
 		    a.css("display", "none")
 		    tr.css("background-color", "rgba(0,255,0, 0.2)")
@@ -207,10 +200,10 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		    formato = {
 				"idFormato": 43320, /*"Contratación de servicios de publicidad oficial"*/
 				"IdRegistro": "",
-				"token": token,
-				"correoUnidadAdministrativa": "so.inai@inai.org.mx",
-				"unidadAdministrativa": "Dirección General de Comunicación Social y Difusión",
-				"SujetoObligado": "INAI",
+				"token": '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>',
+				"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,
+				"unidadAdministrativa": '<?php echo $_SESSION["unidad_administrativa"]; ?>',
+				"SujetoObligado": '<?php echo $_SESSION["sujeto_obligado"]; ?>',
 				"registros": [{
 				    "numeroRegistro": 1,
 				    "campos": [
@@ -291,9 +284,9 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    	$.post(url, formato, function(res, error){
     			if(res && res.success) {
 	    			tr.children("td").eq(1).text(res.id_pnt)
-	    			tr.children("td").eq(36).children("a.eliminar").removeClass("invisible")
-	    			tr.children("td").eq(36).children("img.check").removeClass("invisible")
-	    			tr.children("td").eq(36).children("a.crear").addClass("invisible")
+	    			tr.children("td").eq(35).children("a.eliminar").removeClass("invisible")
+	    			tr.children("td").eq(35).children("img.check").removeClass("invisible")
+	    			tr.children("td").eq(35).children("a.crear").addClass("invisible")
 	    		} else {
 	    			console.log("No se pudo insertar el elemento correctamente")
 	    			a.css("display", "block")
@@ -306,13 +299,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 	    	})
 			/**/
-
-			
-    			
 	    });
-
-	   
-
 		$(document).on("click","a.eliminar",function(e){ 
 	    	e.preventDefault();
 
