@@ -77,42 +77,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    </thead>
 	    <tbody>
 	        <tr>
-	            <th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
+	           
 	        </tr>
 	    </tbody>
 	</table>
@@ -185,7 +150,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: 35,
+				    targets: 36,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	var response = ""
@@ -197,6 +162,9 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + JSON.stringify(row) + "'> <img src='<?php echo base_url(); ?>plugins/img/erase.png'></a>"
 				      		return response
 				      	}else{
+				      		response += "<a class='tpo_btn crear invisible' href='#' data='"
+				      		response += JSON.stringify(row) + "'> <img width='24' src='<?php echo base_url(); ?>plugins/img/upload.png'> </a>"
+
 				      		response += "<img src='<?php echo base_url(); ?>plugins/img/correct.png'>"
 				      		response += "<a class='tpo_btn eliminar' href='#' data='" + JSON.stringify(row) + "'> <img src='<?php echo base_url(); ?>plugins/img/erase.png'></a>"
 					      	return response
@@ -219,37 +187,43 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		$(document).on("click","a.crear",function(e){ 
 	    	e.preventDefault();
 		    var data = JSON.parse( $(this).attr("data") )
-			  , token = "NzdhOGQ1MGY2YzdhZmZmNnNvLmluYWlAaW5haS5vcmcubXhTdW4gTWFyIDIyIDEzOjIyOjUwIENTVCAyMDIwc2lwb3RbQkA2MGFhMjhlYg=="
+			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
+			  //, url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_test";
 			  , url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
 			
 			var a = $(this)
 		      , tr = a.parents("tr")
 		      , td = a.parents("td")
 
+		      /*
+				{"id":0,"success":true,"mensaje":{"registros":[{"numeroRegistro":1,"idRegistro":"0B647755AE2D5473FA728A84684867DE","campos":null}]},"totalRegistros":1,"totalRegistrosSecundarios":0,"id_pnt":25}
+		
+		      */
+
 		    a.css("display", "none")
 		    tr.css("background-color", "rgba(0,255,0, 0.2)")
 		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
 
 		    formato = {
-				"idFormato": "43320", /*"Contratación de servicios de publicidad oficial"*/
+				"idFormato": 43320, /*"Contratación de servicios de publicidad oficial"*/
 				"IdRegistro": "",
-				"token": "NjQzNDM2MTIyOGU5NmEzMnNvLmluYWlAaW5haS5vcmcubXhTdW4gTWFyIDA4IDE1OjUxOjA2IENTVCAyMDIwc2lwb3RbQkAzZTI5OWQ1OQ==",
+				"token": token,
 				"correoUnidadAdministrativa": "so.inai@inai.org.mx",
 				"unidadAdministrativa": "Dirección General de Comunicación Social y Difusión",
 				"SujetoObligado": "INAI",
 				"registros": [{
-				    "numeroRegistro": 30,
+				    "numeroRegistro": 1,
 				    "campos": [
 				    	{"idCampo": 333943, "valor": data["Ejercicio"] },
-						{"idCampo": 333963, "valor": data["Fecha de inicio del periodo que se informa"]},
-						{"idCampo": 333964, "valor": data["Fecha de término del periodo que se informa"]},
-						{"idCampo": 333962, "valor": data["Función del Sujeto Obligado (catálogo)"]},
+						{"idCampo": 333963, "valor": ( data["Fecha de inicio del periodo que se informa"] != null )? data["Fecha de inicio del periodo que se informa"].split('-').reverse().join('/') : '' },
+						{"idCampo": 333964, "valor": ( data["Fecha de término del periodo que se informa"] != null )? data["Fecha de término del periodo que se informa"].split('-').reverse().join('/') : '' },
+						{"idCampo": 333962, "valor": parseInt(data["Función del Sujeto Obligado (catálogo)"]) },
 						{"idCampo": 333950, "valor": data["Área administrativa Encargada de Solicitar El Servicio o Producto, en su caso"]},
 						{"idCampo": 333968, "valor": data["Clasificación Del(los) Servicios (catálogo)"]},
 						{"idCampo": 333940, "valor": data["Tipo de Servicio<"]},
-						{"idCampo": 333969, "valor": data["Tipo de Medio(catálogo)"]},
+						{"idCampo": 333969, "valor": data["Tipo de Medio(catálogo)"] },
 						{"idCampo": 333970, "valor": data["Descripción de Unidad"]},
-						{"idCampo": 333956, "valor": data["Tipo (catálogo)"]},
+						{"idCampo": 333956, "valor": parseInt(data["Tipo (catálogo)"]) },
 						{"idCampo": 333947, "valor": data["Nombre de la Campaña o Aviso Institucional"]},
 						{"idCampo": 333942, "valor": data["Año de la Campaña"]},
 						{"idCampo": 333948, "valor": data["Tema de la Campaña o Aviso Institucional"]},
@@ -258,15 +232,17 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 						{"idCampo": 333972, "valor": data["Costo por unidad"]},
 						{"idCampo": 333944, "valor": data["Clave Única de Indentificación de Campaña"]},
 						{"idCampo": 333973, "valor": data["Autoridad que proporcionó la Clave"]},
-						{"idCampo": 333955, "valor": data["Cobertura (catálogo)"]},
+						{"idCampo": 333955, "valor": parseInt(data["Cobertura (catálogo)"]) },
 						{"idCampo": 333971, "valor": data["Ámbito Geográfico de Cobertura"]},
-						{"idCampo": 333952, "valor": data["Fecha de inicio de la Campaña o Aviso Institucional"]},
-						{"idCampo": 333953, "valor": data["Fecha de término de la Campaña o Aviso Institucional"]},
-						{"idCampo": 333965, "valor": data["Sexo (catálogo)"]},
+						{"idCampo": 333952, "valor": ( data["Fecha de inicio de la Campaña o Aviso Institucional"] != null )? data["Fecha de inicio de la Campaña o Aviso Institucional"].split('-').reverse().join('/') : '' },
+						{"idCampo": 333953, "valor": ( data["Fecha de término de la Campaña o Aviso Institucional"] != null )? data["Fecha de término de la Campaña o Aviso Institucional"].split('-').reverse().join('/') : '' },
+						{"idCampo": 333965, "valor": parseInt(data["Sexo (catálogo)"]) },
 						{"idCampo": 333946, "valor": data["Lugar de Residencia"]},
 						{"idCampo": 333941, "valor": data["Nivel Educativo"]},
 						{"idCampo": 333945, "valor": data["Grupos de Edad"]},
 						{"idCampo": 333974, "valor": data["Nivel Socioeconómico"]},
+
+						//(data.fecha_termino_periodo != null)? data.fecha_termino_periodo.split('-').reverse().join('/') : ''
 						/* {"idCampo": 333957, "valor": "Respecto a los proveedores y su contratación"}, */
 						/*
 						{"idCampo": 43256, "valor": "Razón social"},
@@ -303,22 +279,78 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 						{"idCampo": 43285, "valor": "Hipervínculo a la factura"},
 						*/
 						{"idCampo": 333967, "valor": data["Área(s) Responsable(s) que generan(n) posee(n), Publica(n) y Actualiza(n) la información"]},
-						{"idCampo": 333954, "valor": data["Fecha de Validación"]},
-						{"idCampo": 333961, "valor": data["Fecha de Actualización"]},
+						{"idCampo": 333954, "valor": (data["Fecha de Validación"] != null )? data["Fecha de Validación"].split('-').reverse().join('/') : '' },
+						{"idCampo": 333961, "valor": (data["Fecha de Actualización"] != null )? data["Fecha de Actualización"].split('-').reverse().join('/') : '' },
 						{"idCampo": 333966, "valor": data["Nota"]}//
 				    ]
 				}],
-			  "id_factura": data["ID FACTURA"]
+			  "_id_interno": data["ID FACTURA"]
 			}
+
+			/**/
 	    	$.post(url, formato, function(res, error){
-	    		if(res && res.success) {
+    			if(res && res.success) {
 	    			tr.children("td").eq(1).text(res.id_pnt)
-	    			tr.children("td").eq(13).children("a.eliminar").removeClass("invisible")
-	    			tr.children("td").eq(13).children("img.check").removeClass("invisible")
-	    			tr.children("td").eq(13).children("a.crear").remove()
+	    			tr.children("td").eq(36).children("a.eliminar").removeClass("invisible")
+	    			tr.children("td").eq(36).children("img.check").removeClass("invisible")
+	    			tr.children("td").eq(36).children("a.crear").addClass("invisible")
 	    		} else {
-	    			console.log("No se pudo insertar el elemento correctamenteb lñaksdsjdksa")
+	    			console.log("No se pudo insertar el elemento correctamente")
 	    			a.css("display", "block")
+	    		}
+
+    			td.children("img.loading").remove("")
+    			
+    			if(tr.hasClass("odd")) tr.css("background-color", "#f9f9f9")
+    			else tr.css("background-color", "#fff")
+
+	    	})
+			/**/
+
+			
+    			
+	    });
+
+	   
+
+		$(document).on("click","a.eliminar",function(e){ 
+	    	e.preventDefault();
+
+	    	var a = $(this)
+		      , tr = a.parents("tr")
+		      , td = a.parents("td")
+
+		    a.css("display", "none")
+		    a.siblings().css("display", "none")
+		    tr.css("background-color", "rgba(255,0,0, 0.2)")
+		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
+
+		    var id_pnt = tr.children("td").eq(1).text()
+
+	    	var data = JSON.parse( $(this).attr("data")  )
+			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
+
+			var formato = {
+				"idFormato": 43320, 
+				"correoUnidadAdministrativa": "so.inai@inai.org.mx",
+				"token": token,
+				"registros":[ { "numeroRegistro":1, "idRegistro": data.id_pnt || id_pnt } ],
+				"id_pnt": data.id_pnt || id_pnt
+			}
+
+			var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
+
+	    	$.post(url, formato, function(res, error){
+	    		//if(res.success) location.reload(); 
+	    		if(res && res.success) {
+	    			tr.children("td").eq(1).html("<label class='btn'> <small> SIN SUBIR </small></label>")
+	    			tr.children("td").eq(13).children("a.eliminar").addClass("invisible")
+	    			tr.children("td").eq(13).children("img.check").addClass("invisible")
+	    			tr.children("td").eq(13).children("a.crear").css("display", "block")
+	    		} else {
+	    			console.log("No se pudo eliminar el elemento correctamente")
+	    			a.css("display", "block")
+	    			a.siblings().css("display", "block")
 	    		}
 
     			td.children("img.loading").remove("")
@@ -326,34 +358,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
     				tr.css("background-color", "#f9f9f9")
     			else
     				tr.css("background-color", "#fff")
-
-	    	})
-	    });
-
-	   
-
-		$(document).on("click","a.eliminar",function(e){ 
-	    	e.preventDefault();
-	    	data = JSON.parse( $(this).attr("data")  )
-			token = "MWQxMzIxM2UxMjM0NTJiNnNvLmluYWlAaW5haS5vcmcubXhGcmkgTWFyIDIwIDE5OjA3OjIyIENTVCAyMDIwc2lwb3RbQkA1OWU2YzE0Yw=="
-
-			formato = {
-				"idFormato": 43322, 
-				"correoUnidadAdministrativa": "so.inai@inai.org.mx",
-				"token": token,
-				"registros":[ { "numeroRegistro":1, "idRegistro": parseInt(data.id_pnt) } ],
-				"id_pnt": parseInt(data.id_pnt)
-			}
-
-			console.log(formato)
-
-			var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt2"
-
-	    	$.post(url, formato, function(data){
-	    		console.log(data)
 	    	})
 
-	    	return false
 	    })
 
 	  

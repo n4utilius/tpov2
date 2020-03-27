@@ -1,0 +1,63 @@
+{
+    "id": 99,
+    "success": false,
+    "mensaje": {
+        "registros": [
+            {
+                "numeroRegistro": 1,
+                "idRegistro": null,
+                "campos": [
+                    {
+                        "tag": "Cobertura (catálogo)",
+                        "idCampo": 333955,
+                        "valor": "Nacional"
+                        "error": "En el campo 333955, existe un error genérico. "
+                    },
+                    {
+                        "tag": "Tipo (catálogo)",
+                        "idCampo": 333956,
+                        "valor": "Campa\u00f1a"
+                        "error": "En el campo 333956, existe un error genérico. "
+                    },
+
+                    {
+                        "tag": "Función del Sujeto Obligado (catálogo)",
+                        "idCampo": 333962,
+                        "valor": "Ambos"
+                        "error": "En el campo 333962, existe un error genérico. "
+                    },
+                    {
+                        "tag": "Sexo (catálogo),
+                        "idCampo": 333965,
+                        "valor": "Femenino y masculino"
+                        "error": "En el campo 333965, existe un error genérico. "
+                    },
+                    null
+                ]
+            },
+            {
+                "numeroRegistro": 0,
+                "idRegistro": null,
+                "campos": [
+                    {
+                        "idCampo": 0,
+                        "valor": [
+                            {
+                                "numeroRegistro": 0,
+                                "idRegistro": null,
+                                "campos": [
+                                    {
+                                        "idCampo": null,
+                                        "valor": "Error: Al eliminar el archivo DAT del directorio de procesamiento."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "totalRegistros": 0,
+    "totalRegistrosSecundarios": 0
+}

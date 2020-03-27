@@ -132,7 +132,7 @@ class Logo extends CI_Controller
         echo json_encode($result);
 
     }
-
+    /*
     function agregar_pnt(){
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/agrega";
         
@@ -157,12 +157,26 @@ class Logo extends CI_Controller
         $context  = stream_context_create( $options );
         $res = file_get_contents( $URL, false, $context );
         $result = json_decode( $res, true );
-        //$response = json_encode(json_decode($result));
 
         if( $result["success"] ){
             $pntid = $result["mensaje"]["registros"][0]["idRegistro"]; 
-            $stm  = "INSERT INTO rel_pnt_presupuesto( id_presupuesto, id_pnt, estatus_pnt) ";  
-            $stm .= "VALUES(" . $_POST["id_presupuesto"] . ", '" . $pntid . "', 'SUBIDO');";
+
+            $table = "";
+            $nombre_id_interno = "";
+
+            switch ($_POST["idFormato"]) {
+                case 43322:
+                    $table = "rel_pnt_presupuesto";
+                    $nombre_id_interno = "id_presupuesto";
+                    break;
+                case 43320:
+                    $table = "rel_pnt_factura";
+                    $nombre_id_interno = "id_factura";
+                    break;
+            }
+
+            $stm  = "INSERT INTO " . $table . "( " . $nombre_id_interno . ", id_pnt, estatus_pnt) ";  
+            $stm .= "VALUES(" . $_POST["_id_interno"] . ", '" . $pntid . "', 'SUBIDO');";
 
             $this->db->query($stm);                                                                                                                              
             $id = $this->db->insert_id();     
@@ -174,24 +188,107 @@ class Logo extends CI_Controller
 
             if( $id ){
                 header('Content-Type: application/json');
-                //var_dump(json_encode($result));
                 echo $response;
-                //echo json_encode( json_decode($response) ); 
             }else{
                 header('Content-Type: application/json');
-                //var_dump(json_encode($result));
                 echo $response;
-                //echo json_encode( json_decode($response) ); 
             }
+        }
+    }
+    */
+
+
+
+    function agregar_pnt(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/agrega";
+        
+        $data = array(
+            'idFormato' => $_POST["idFormato"], 
+            'token' => $_POST["token"], 
+            'correoUnidadAdministrativa' => $_POST["correoUnidadAdministrativa"], 
+            'unidadAdministrativa' => $_POST["unidadAdministrativa"], 
+            'SujetoObligado' => $_POST["SujetoObligado"], 
+            'registros' => $_POST["registros"]
+        );
+
+        $options = array(
+            'http' => array(
+                'method'  => 'POST',
+                'content' => json_encode( $data ),
+                'header'=>  "Content-Type: application/json\r\n" .
+                            "Accept: application/json\r\n"
+            )
+        );
+
+        $context  = stream_context_create( $options );
+        $res = file_get_contents( $URL, false, $context );
+        $result = json_decode( $res, true );
+
+        if( $result["success"] ){
+            $pntid = $result["mensaje"]["registros"][0]["idRegistro"]; 
+
+            $table = "";
+            $nombre_id_interno = "";
+
+            switch ($_POST["idFormato"]) {
+                case 43322:
+                    $table = "rel_pnt_presupuesto";
+                    $nombre_id_interno = "id_presupuesto";
+                    break;
+                case 43320:
+                    $table = "rel_pnt_factura";
+                    $nombre_id_interno = "id_factura";
+                    break;
+            }
+
+            $post_data = array();
+            $post_data[ $nombre_id_interno ] = $_POST["_id_interno"];
+            $post_data['id_pnt'] = $pntid;
+            $post_data['estatus_pnt'] ='SUBIDO';
+
+            $this->db->insert($table, $post_data);
+            $result['id_tpo'] =  $this->db->insert_id();
+            $result['id_pnt'] =   $pntid;
+
+            $response = json_encode($result);
+
+            header('Content-Type: application/json');
+            echo  $response; 
         }
     }
 
 
 
-    function eliminar_pnt(){
-        //http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/elimina 
-        // https://wssipotmx2.inai.org.mx/sipot-web/spring/mantenimientoAsinc/elimina
+     function agregar_test(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/agrega";
+        
+        $data = array(
+            'idFormato' => $_POST["idFormato"], 
+            'token' => $_POST["token"], 
+            'correoUnidadAdministrativa' => $_POST["correoUnidadAdministrativa"], 
+            'unidadAdministrativa' => $_POST["unidadAdministrativa"], 
+            'SujetoObligado' => $_POST["SujetoObligado"], 
+            'registros' => $_POST["registros"]
+        );
 
+        /*
+        $options = array(
+            'http' => array(
+                'method'  => 'POST',
+                'content' => json_encode( $data ),
+                'header'=>  "Content-Type: application/json\r\n" .
+                            "Accept: application/json\r\n"
+            )
+        );
+        
+        */
+        header('Content-Type: application/text');
+        echo json_encode($data);
+    }
+
+
+
+    function eliminar_pnt(){
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/elimina";
         $data = array( 
             "idFormato" => $_POST["idFormato"],
@@ -213,8 +310,17 @@ class Logo extends CI_Controller
         $res = file_get_contents( $URL, false, $context );
         $result = json_decode( $res, true );
 
+         switch ($_POST["idFormato"]) {
+            case 43322:
+                $table = "rel_pnt_presupuesto";
+                break;
+            case 43320:
+                $table = "rel_pnt_factura";
+                break;
+        }
+
         if( $result["success"] ){
-            $stm  = "DELETE FROM rel_pnt_presupuesto WHERE id_pnt = '" . $_POST["id_pnt"] . "'";
+            $stm  = "DELETE FROM " . $table . " WHERE id_pnt = '" . $_POST["id_pnt"] . "'";
             $this->db->query($stm);                                                                                                                              
         }
 
@@ -225,47 +331,7 @@ class Logo extends CI_Controller
 
 
 
-    function agregar_pnt2(){
-        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimientoAsinc/agrega";
-        
-        $data = array(
-            'idFormato' => $_POST["idFormato"], 
-            'token' => $_POST["token"], 
-            'correoUnidadAdministrativa' => $_POST["correoUnidadAdministrativa"], 
-            'unidadAdministrativa' => $_POST["unidadAdministrativa"], 
-            'SujetoObligado' => $_POST["SujetoObligado"], 
-            'registros' => $_POST["registros"]
-        );
-
-        $options = array(
-            'http' => array(
-            'method'  => 'POST',
-            'content' => json_encode( $data ),
-            'header'=>  "Content-Type: application/json\r\n" .
-                        "Accept: application/json\r\n"
-            )
-        );
-
-        $context  = stream_context_create( $options );
-        $result = file_get_contents( $URL, false, $context );
-
-        
-        
-        $manage = json_decode($result, true);
-        /**/
-        if( $manage["success"] ){
-            $stm  = "INSERT INTO rel_pnt_factura( id_factura, id_pnt, estatus_pnt) ";  
-            $stm .= "VALUES(" . $_POST["id_factura"] . ", '" . $manage["mensaje"] . "', 'SUBIDO');";
-            $query = $this->db->query($stm);                                                                                                                              
-            $query->result_array();
-        }
-        
-        header('Content-Type: application/json');
-        echo json_encode($manage); 
-        /**/
-
-
-    }
+    
 
 
     function traer_formatos(){
@@ -384,21 +450,38 @@ class Logo extends CI_Controller
                         WHEN f.id_trimestre = 3 THEN '30/09/'
                         WHEN f.id_trimestre = 4 THEN '31/12/'
                     END, e.ejercicio ) 'Fecha de término del periodo que se informa', 
-                    CONCAT('Sujeto obligado contratante: ', IFNULL(soa.nombre_sujeto_obligado, 'NA'), '<br>',
-                        'Sujeto obligado solicitante: ', IFNULL(sob.nombre_sujeto_obligado, 'NA')
-                    ) 'Función del Sujeto Obligado (catálogo)',
+                    (CASE 
+                        WHEN ( (fd.id_so_contratante IS NOT NULL) && (fd.id_so_solicitante IS NOT NULL) ) THEN 2
+                        WHEN ( (fd.id_so_contratante IS NOT NULL) && (fd.id_so_solicitante IS NULL) ) THEN 0
+                        WHEN ( (fd.id_so_contratante IS NULL) && (fd.id_so_solicitante IS NOT NULL) ) THEN 1
+                    END) 'Función del Sujeto Obligado (catálogo)',
                     fd.area_administrativa 'Área administrativa Encargada de Solicitar El Servicio o Producto, en su caso',
-                    scla.nombre_servicio_clasificacion 'Clasificación Del(los) Servicios (catálogo)', 
+                    fd.id_servicio_clasificacion 'Clasificación Del(los) Servicios (catálogo)', 
                     scat.nombre_servicio_categoria 'Tipo de Servicio', sscat.nombre_servicio_subcategoria 'Tipo de Medio (catálogo)',
-                    suni.nombre_servicio_unidad 'Descripción de Unidad', 
-                    ctip.nombre_campana_tipo 'Tipo (catálogo)', cam.nombre_campana_aviso 'Nombre de la Campaña o Aviso Institucional',  
+                    suni.nombre_servicio_unidad 'Descripción de Unidad',
+                    (CASE 
+                        WHEN cam.id_campana_tipo = 1 THEN 1
+                        WHEN cam.id_campana_tipo = 2 THEN 0
+                    END) 'Tipo (catálogo)',
+                    cam.nombre_campana_aviso 'Nombre de la Campaña o Aviso Institucional',  
                     cam.periodo 'Año de la Campaña', ctem.nombre_campana_tema 'Tema de la Campaña o Aviso Institucional', 
                     cobj.campana_objetivo 'Objetivo Institucional' , cam.objetivo_comunicacion 'Objetivo de Comunicación', 
                     fd.precio_unitarios 'Costo por unidad',cam.clave_campana 'Clave Única de Indentificación de Campaña', 
-                    cam.autoridad 'Autoridad que proporcionó la Clave', ccob.nombre_campana_cobertura 'Cobertura (catálogo)',
+                    cam.autoridad 'Autoridad que proporcionó la Clave', 
+                    (CASE 
+                        WHEN ccob.id_campana_cobertura = 1 THEN 3
+                        WHEN ccob.id_campana_cobertura = 2 THEN 2
+                        WHEN ccob.id_campana_cobertura = 3 THEN 1
+                        WHEN ccob.id_campana_cobertura = 4 THEN 0
+                    END) 'Cobertura (catálogo)', 
                     cam.campana_ambito_geo 'Ámbito Geográfico de Cobertura', 
                     cam.fecha_inicio 'Fecha de inicio de la Campaña o Aviso Institucional', 
-                    cam.fecha_termino 'Fecha de término de la Campaña o Aviso Institucional', sexo.poblacion_sexo 'Sexo (catálogo)', 
+                    cam.fecha_termino 'Fecha de término de la Campaña o Aviso Institucional', 
+                    (CASE 
+                        WHEN sexo.poblacion_sexo = 1 THEN 1
+                        WHEN sexo.poblacion_sexo = 2 THEN 0
+                        WHEN sexo.poblacion_sexo = 3 THEN 2
+                    END) 'Sexo (catálogo)', 
                     lugar.poblaciones 'Lugar de Residencia', edu.nivel_educativo 'Nivel Educativo', edad.rangos_edad 'Grupos de Edad', 
                     neco.poblacion_nivel 'Nivel Socioeconómico',
                     CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'Respecto a los proveedores y su contratación', 
@@ -414,7 +497,6 @@ class Logo extends CI_Controller
                 JOIN cat_servicios_categorias scat ON scat.id_servicio_categoria = fd.id_servicio_categoria 
                 JOIN cat_servicios_subcategorias sscat ON sscat.id_servicio_subcategoria = fd.id_servicio_subcategoria 
                 JOIN cat_servicios_unidades suni ON suni.id_servicio_unidad = fd.id_servicio_unidad 
-                LEFT JOIN cat_campana_tipos ctip ON ctip.id_campana_tipo = cam.id_campana_tipo 
                 JOIN cat_campana_coberturas ccob ON ccob.id_campana_cobertura = cam.id_campana_cobertura
                 JOIN cat_ejercicios e ON e.id_ejercicio = cam.id_ejercicio 
                 JOIN cat_campana_temas ctem ON ctem.id_campana_tema = cam.id_campana_tema 
@@ -424,7 +506,7 @@ class Logo extends CI_Controller
                     JOIN cat_poblacion_grupo_edad eda ON eda.id_poblacion_grupo_edad = reda.id_poblacion_grupo_edad
                     GROUP BY reda.id_campana_aviso
                 ) edad ON edad.id_campana_aviso = cam.id_campana_aviso
-                LEFT JOIN (SELECT rsex.id_campana_aviso, GROUP_CONCAT(sex.nombre_poblacion_sexo) poblacion_sexo
+                LEFT JOIN (SELECT rsex.id_campana_aviso, GROUP_CONCAT(sex.id_poblacion_sexo) poblacion_sexo
                     FROM rel_campana_sexo rsex
                     JOIN cat_poblacion_sexo sex ON sex.id_poblacion_sexo = rsex.id_poblacion_sexo
                     GROUP BY rsex.id_campana_aviso
@@ -440,8 +522,6 @@ class Logo extends CI_Controller
                     FROM rel_campana_nivel cn
                     JOIN cat_poblacion_nivel pn ON pn.id_poblacion_nivel = cn.id_poblacion_nivel
                     GROUP BY cn.id_campana_aviso) neco ON neco.id_campana_aviso = cam.id_campana_aviso
-                LEFT JOIN tab_sujetos_obligados soa ON soa.id_sujeto_obligado = fd.id_so_contratante
-                LEFT JOIN tab_sujetos_obligados sob ON sob.id_sujeto_obligado = fd.id_so_solicitante
                 LEFT JOIN rel_pnt_factura pnt ON pnt.id_factura = f.id_factura
                 ORDER BY pnt.id_pnt");
 

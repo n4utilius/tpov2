@@ -198,7 +198,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    	{ "idCampo": 333993, "valor": data.nota},
 				    ]
 				}],
-			  "id_presupuesto": data.id_presupuesto
+			  "_id_interno": data.id_presupuesto
 			}
 
 	    	$.post(url, formato, function(res, error){
