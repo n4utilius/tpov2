@@ -5,11 +5,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 }
 ?>
 
-<!--link href="<?php echo base_url(); ?>plugins/jquery-bootgrid/jquery.bootgrid.min.css" rel="stylesheet" type="text/css" /-->
-<!--link href="http://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" /-->
 <link href="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.css" rel="stylesheet" type="text/css" />
-<!--link href="<?php echo base_url(); ?>plugins/DataTables2/DataTables-1.10.18/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo base_url(); ?>plugins/DataTables2/DataTables-1.10.18/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" /-->
 
 <style type="text/css">
 	
@@ -59,21 +55,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	        </tr>
 	    </thead>
 	    <tbody>
-	        <tr>
-	            <td> </td>
-	            <td> </td>
-	            <td> </td>
-	            <td> </td>
-	            <td> </td>
-	            <td> </td>
-	            <td> </td>
-	            <td> </td>
-	            <td> </td>
-	            <td> </td>
-	            <td> </td>
-	            <td> </td>
-	            <td> </td>
-	        </tr>
+	        <tr>  </tr>
 	    </tbody>
 	    <tfoot></tfoot>
 	</table>
@@ -81,7 +63,6 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 
 <script type="text/javascript" src="<?php echo base_url(); ?>plugins/jQuery/jQuery-3.3.1.js"></script>
-<!--script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" type="text/javascript" ></script-->
 <script src="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.js" type="text/javascript" ></script>
 <script type="text/javascript">
 
@@ -271,5 +252,4 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    })
 	  
 	})
-
 </script>

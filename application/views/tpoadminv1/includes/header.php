@@ -329,12 +329,19 @@ header('Expires: 0'); // Proxies.
                     </li>
                     <li class=" <?php if($active == 'facturas') { echo ' active'; } ?>">
                         <a href="<?php echo base_url(); ?>index.php/tpoadminv1/capturista/facturas/busqueda_facturas">
-                            <i class="fa fa-file-o"></i> Facturas
-                        </a>
+                            <i class="fa ffile-o"></i> Facturas
+                        </a>a-
                     </li>
-                    <?php }
-                    ?>
+                    <?php } ?>
                     
+                    <?php if(isset($_SESSION['pnt']) AND isset($_SESSION["pnt"]["success"]) AND $_SESSION["pnt"]["success"] ){?>
+                        <!--li class=" <?php if($active == 'logo') { echo ' active'; } ?>"-->
+                        <li class="">
+                            <a href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt">
+                                 <i class="fa ffile-o"></i></i>  SIPOT
+                            </a>
+                        </li>
+                    <?php } ?>
 
                     <?php
                     

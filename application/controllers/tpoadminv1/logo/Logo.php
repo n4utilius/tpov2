@@ -651,6 +651,76 @@ class Logo extends CI_Controller
     }
 
     function pnt(){
+        //Validamos que el usuario tenga acceso
+        $this->permiso_administrador();
+
+        $this->load->model('tpoadminv1/logo/Logo_model');
+
+        $data['title'] = "Enlace a PNT";
+        $data['heading'] = $this->session->userdata('usuario_nombre');
+        $data['mensaje'] = "";
+        $data['job'] = $this->session->userdata('usuario_rol_nombre');
+        $data['active'] = 'pnt'; // solo active 
+        $data['subactive'] = 'carga_pnt'; // class="active"
+        $data['body_class'] = 'skin-blue';
+
+        $formato = 1;
+
+        if( isset($_GET["formato"]) ){
+            //if($formato)
+            $formato = $_GET["formato"];
+        }
+
+        $data['main_content'] = 'tpoadminv1/logo/pnt' . $formato;
+
+        $data['url_logo'] = base_url() . "data/logo/logotop.png";
+        $data['fecha_act'] = $this->Logo_model->dame_fecha_act_manual();
+
+        $data['recaptcha'] = $this->Logo_model->get_registro_recaptcha();
+        $data['grafica'] = $this->Logo_model->get_registro_grafica_presupuesto();
+        
+        $data['registro'] = array(
+            'fecha_dof' => '',
+            'name_file_imagen' => '',
+        );
+
+        // poner true para ocultar los botones
+        $data['control_update'] = array (
+            'file_by_save' => false,
+            'file_saved' => true,
+            'file_see' => true,
+            'file_load' => true, 
+            "mensaje_file" => 'Formatos permitidos PNG.'
+        );
+
+        $data['scripts'] = "<script type='text/javascript'>" .
+                                "$(function () {" .
+                                    
+                                    "jQuery.datetimepicker.setLocale('es');". 
+                                    "jQuery('input[name=\"fecha_act\"]').datetimepicker({ " .
+                                        "timepicker:false," .
+                                        "format:'Y-m-d'," .
+                                        "scrollInput: false" .
+                                    "});" .
+                                    
+                                    "$.fn.datepicker.dates['es'] = {" .
+                                        "days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']," .
+                                        "daysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],".
+                                        "daysMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do']," .
+                                        "months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],".
+                                        "monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],".
+                                        "today: 'Hoy'," .
+                                        "};" .
+                                    "setTimeout(function() { " .
+                                        "$('.alert').alert('close');" .
+                                    "}, 3000);" .
+                                    
+                                "});" .
+                            "</script>";
+        
+        $this->load->view('tpoadminv1/includes/template', $data);
+    }
+    function pnt1(){
           $data['hola'] = 'hola';
         $this->load->view('tpoadminv1/logo/pnt1', $data);
     }
