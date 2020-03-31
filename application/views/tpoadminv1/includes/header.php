@@ -87,22 +87,32 @@ header('Expires: 0'); // Proxies.
                                 </li>
                                 <!-- Menu Body -->
                                 <li class="user-body">
-                                    <!--<div class="col-xs-4 text-center">
-                                        <a href="#">Followers</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Sales</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Friends</a>
-                                    </div>-->
-                                </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
                                     <div class="pull-right">
                                         <a href="<?php echo base_url() . 'index.php/tpoadminv1/securecms/logout'; ?>" class="btn btn-default btn-flat">Salir</a>
                                     </div>
+                                    <?php if( ( isset($_SESSION['pnt']) ) and 
+                                        ( isset($_SESSION["pnt"]["success"]) ) and ( $_SESSION["pnt"]["success"] ) ){ ?>
+                                        <div class="col-xs-8">
+                                            <div class="pull-right"> 
+                                                <b> Usuario PNT: <?php echo $_SESSION["user_pnt"]; ?>  </b> 
+                                                <a type='submit' class='btn-group btn btn-danger btn-sm' 
+                                                    href='<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/salir_pnt' 
+                                                    id='desconectar_pnt'> Desconectar PNT </a> 
+                                            </div>
+                                        </div>
+
+                                    <?php } ?>
                                 </li>
+                                <li class="user-footer"> </li>
+                                <!-- Menu Footer-->
+
+                                <script type="text/javascript">
+                                    $("a#desconectar_pnt").on("click", function(e){
+                                        e.preventDefault()
+                                        $.post( $(this).attr("href"), {},  function(data){ location.reload(); } );
+                                    })
+                                </script>
+
                             </ul>
                         </li>
                     </ul>

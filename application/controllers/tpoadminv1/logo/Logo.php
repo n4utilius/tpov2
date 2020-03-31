@@ -78,8 +78,6 @@ class Logo extends CI_Controller
 
     function entrar_pnt(){
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken/";
-        //http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken/
-        //$data = array('usuario' => $_POST["user"], 'password' => $_POST["password"] );
         $data = array(
             "usuario" => $_POST["user"], 
             "password" => $_POST["password"] 
@@ -102,9 +100,8 @@ class Logo extends CI_Controller
             $_SESSION["user_pnt"] = $data["usuario"];
             $_SESSION["pnt"] = $result;
 
-
             $stm  = "SELECT nombre_sujeto_obligado, nombre_unidad_administrativa 
-                FROM unidades_so WHERE correo_unidad_administrativa = 'so.inai@inai.org.mx'";
+                FROM unidades_so WHERE correo_unidad_administrativa = '" . $data["usuario"] . "'";
             $query = $this->db->query($stm);
 
             $_SESSION["sujeto_obligado"] = $query->row()->nombre_sujeto_obligado;
@@ -116,7 +113,26 @@ class Logo extends CI_Controller
 
     }
 
-     function salir_pnt(){
+    function modificar_sujeto(){
+        $stm  = "UPDATE unidades_so SET nombre_sujeto_obligado = '" . $_POST["sujeto_obligado"] . "', " .
+                "nombre_unidad_administrativa  = '" . $_POST["unidad_administrativa"] . "' " . 
+                "WHERE correo_unidad_administrativa = '" . $_SESSION["user_pnt"] . "'";
+        
+        $query = $this->db->query($stm);
+
+        if ($query){
+            $_SESSION["sujeto_obligado"] = $_POST["sujeto_obligado"];
+            $_SESSION["unidad_administrativa"] = $_POST["unidad_administrativa"];
+
+            header('Content-Type: application/json');
+            echo json_encode($query);
+        }else{
+             header('Content-Type: application/json');
+            echo json_encode(false);
+        }
+    }
+
+    function salir_pnt(){
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/generaToken/";
         $data = array('usuario' => '', 'password' => '' );
 
@@ -204,36 +220,6 @@ class Logo extends CI_Controller
     }
 
 
-
-     function agregar_test(){
-        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/agrega";
-        
-        $data = array(
-            'idFormato' => $_POST["idFormato"], 
-            'token' => $_POST["token"], 
-            'correoUnidadAdministrativa' => $_POST["correoUnidadAdministrativa"], 
-            'unidadAdministrativa' => $_POST["unidadAdministrativa"], 
-            'SujetoObligado' => $_POST["SujetoObligado"], 
-            'registros' => $_POST["registros"]
-        );
-
-        /*
-        $options = array(
-            'http' => array(
-                'method'  => 'POST',
-                'content' => json_encode( $data ),
-                'header'=>  "Content-Type: application/json\r\n" .
-                            "Accept: application/json\r\n"
-            )
-        );
-        
-        */
-        header('Content-Type: application/text');
-        echo json_encode($data);
-    }
-
-
-
     function eliminar_pnt(){
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/elimina";
         $data = array( 
@@ -274,10 +260,6 @@ class Logo extends CI_Controller
         echo json_encode($result);
         
     }
-
-
-
-    
 
 
     function traer_formatos(){
@@ -478,17 +460,11 @@ class Logo extends CI_Controller
     }
 
     function registros3(){
-        $query = $this->db->query("SELECT pnt.id_proveedor id_pnt,
-                    pnt.id_proveedor id,
-                    prov.nombre_razon_social,
-                    prov.nombres,
-                    prov.primer_apellido,
-                    prov.segundo_apellido,
-                    prov.nombre_comercial,
-                    prov.rfc,
-                    proc.nombre_procedimiento,
-                    con.fundamento_juridico,
-                    con.descripcion_justificacion
+        $query = $this->db->query("SELECT pnt.id_proveedor id_pnt, pnt.id_proveedor id,
+                    prov.nombre_razon_social, prov.nombres, prov.primer_apellido,
+                    prov.segundo_apellido, prov.nombre_comercial, prov.rfc,
+                    proc.nombre_procedimiento, con.fundamento_juridico,
+                    con.descripcion_justificacion, pnt.estatus_pnt
                     FROM tab_proveedores prov
                     LEFT JOIN tab_contratos con ON con.id_proveedor = prov.id_proveedor
                     LEFT JOIN cat_procedimientos proc ON proc.id_procedimiento = con.id_procedimiento
@@ -672,6 +648,7 @@ class Logo extends CI_Controller
         }
 
         $data['main_content'] = 'tpoadminv1/logo/pnt' . $formato;
+        $data['formato'] = $formato;
 
         $data['url_logo'] = base_url() . "data/logo/logotop.png";
         $data['fecha_act'] = $this->Logo_model->dame_fecha_act_manual();

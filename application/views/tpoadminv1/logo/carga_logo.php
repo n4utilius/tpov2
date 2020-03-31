@@ -322,6 +322,7 @@
         </div>
     </div>
 
+
     <div class="row">
         <!-- Mostramos los detalles de los grupos de lugares dados de alta -->
         <div class="box box-info">
@@ -413,14 +414,47 @@
                             echo "</tr></tbody> </table>";
                         }
                     ?>
-                    <?php echo "<a type='submit' class='btn-group btn btn-success btn-sm' href='" . base_url() . "index.php/tpoadminv1/logo/logo/traer_formatos' id='re-conectar'> Ver Formatos </a>"; ?>
-
-                    
                 </tbody>
             </table>
             </div>
+
+            <?php if( ( isset($_SESSION['pnt']) ) and ( isset($_SESSION["pnt"]["success"]) ) and ( $_SESSION["pnt"]["success"] ) ){ ?>
+                <div class="box-body"><table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <i class="fa fa-info-circle text-primary" data-toggle="tooltip" title="Usuario activo de PNT."></i>
+                                Unidad Administrativa
+                            </th>
+
+                            <th>
+                                <i class="fa fa-info-circle text-primary" data-toggle="tooltip" title=""></i>
+                                Sujeto Obligado
+                            </th>
+                            <th> 
+                                
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php 
+                        echo "  <tr>";
+                        echo "    <form>";
+                        echo "    <td> <input type='input' id='unidad_administrativa' class='form-control' name='unidad_administrativa' value='" . $_SESSION["unidad_administrativa"] . "'> </td>";
+                        echo "    <td> <input type='input' id='sujeto_obligado' class='form-control' name='sujeto_obligado' value='" . $_SESSION["sujeto_obligado"] . "'> </td>";
+                        echo "    <td> <a type='button' id='modificar_sujeto' href='" . base_url() . "index.php/tpoadminv1/logo/logo/modificar_sujeto' 
+                                            class='btn-group btn btn-primary btn-sm'> <i class='fa fa-edit'></i> Actualizar datos de Sujeto Obligado </a> </td>"; 
+                        echo "    </form>";
+                        echo "  </tr>";
+                    ?>
+                    </tbody>
+                </table> </div>
+            <?php  } ?>
         </div>
     </div>
+
+   
+
     <!-- MODAL EDITAR FECHA -->
     <div class="modal fade" id="modalEditarFecha" role="dialog">
         <div class="modal-dialog">
@@ -600,6 +634,21 @@
         );
         $(".inactive").children(".loading").remove()
     })
+
+     $("a#modificar_sujeto").on("click", function(e){
+        e.preventDefault()
+        if ( confirm( "El cambio de estos parámetros podría afectar el uso del módulo de PNT" + 
+            "¿Esta seguro que quiere modificarlo? ") ){
+
+            $.post( $(this).attr("href"), { 'sujeto_obligado': $("#sujeto_obligado").val(), 
+                'unidad_administrativa': $("#unidad_administrativa").val() }, function(data){  
+                    if(data) location.reload();
+                    else console.log(data)
+                }
+            );
+        }
+    })
+
 
     $("a#desconectar").on("click", function(e){
         //$.ajaxSetup({ async: false });  

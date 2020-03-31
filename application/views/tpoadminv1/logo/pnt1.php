@@ -15,9 +15,16 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	.items-formato { margin-left:0; padding: 0 }
 	.items-formato li{ list-style: none; float: left; margin-right:20px;}
 	.items-formato li a{ width: 140px; background-color: #cc33ff; border-color: #cc33ff; font-weight: bolder;}
+	.here{ 
+		background-color: #0277bd !important;
+		border-color: #0277bd !important;
+	}
 </style>
 
 <!-- Main content -->
+
+<!-- Main content -->
+<section class="content">
 <section class="content">
 	<h4>Ejercicios</h4>
 	<select>
@@ -37,12 +44,12 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	<br><br>
 
 	<h4>Formatos</h4>
+
 	<ul class="items-formato">
-		<li> <a class="btn-group btn btn-info btn-sm" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=1"> 70FXXIIIA </a> </li>
-		<li> <a class="btn-group btn btn-info btn-sm" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=2"> 70FXXIIIB </a> </li>
-		<li> <a class="btn-group btn btn-info btn-sm" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=3"> 70FXXIIIC </a> </li>
-		<li> <a class="btn-group btn btn-info btn-sm" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=4"> 70FXXIIID </a> </li>
-	</ul>
+		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 1)? 'here': '' ?>" id="formato_1" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=1"> 70FXXIIIA </a> </li>
+		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 2)? 'here': '' ?>" id="formato_2" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=2"> 70FXXIIIB </a> </li>
+		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 3)? 'here': '' ?>" id="formato_3" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=3"> 70FXXIIIC </a> </li>
+		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 4)? 'here': '' ?>" id="formato_4" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=4"> 70FXXIIID </a> <	</ul>
 
 	<br><br>
 	<table id="grid1" class="dataTable stripe hover order-column row-border cell-border compact" >
@@ -77,6 +84,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 <script type="text/javascript">
 $(document).ready(function(){
+	$("#formato_<?php echo $formato?>").css("background-color:", "#0277bd")
 	/**/
     $('#grid1').DataTable({
     	ajax: {
