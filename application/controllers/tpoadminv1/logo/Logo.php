@@ -114,22 +114,36 @@ class Logo extends CI_Controller
     }
 
     function modificar_sujeto(){
-        $stm  = "UPDATE unidades_so SET nombre_sujeto_obligado = '" . $_POST["sujeto_obligado"] . "', " .
-                "nombre_unidad_administrativa  = '" . $_POST["unidad_administrativa"] . "' " . 
-                "WHERE correo_unidad_administrativa = '" . $_SESSION["user_pnt"] . "'";
+        $_SESSION["unidad_administrativa"] = $_POST["unidad_administrativa"];
+        $_SESSION["sujeto_obligado"] = $_POST["sujeto_obligado"];
+        $query = false;
         
-        $query = $this->db->query($stm);
+        $this->db->select('nombre_sujeto_obligado');
+        $this->db->from('unidades_so');
+        $this->db->where('correo_unidad_administrativa', $_SESSION["user_pnt"] );
+        $q1 = $this->db->get();
 
-        if ($query){
-            $_SESSION["sujeto_obligado"] = $_POST["sujeto_obligado"];
-            $_SESSION["unidad_administrativa"] = $_POST["unidad_administrativa"];
 
-            header('Content-Type: application/json');
-            echo json_encode($query);
+
+        if ( $q1->num_rows() > 0 ){
+            $stm  = "UPDATE unidades_so SET nombre_sujeto_obligado = '" . $_POST["sujeto_obligado"] . "', " .
+                    "nombre_unidad_administrativa  = '" . $_POST["unidad_administrativa"] . "' " . 
+                    "WHERE correo_unidad_administrativa = '" . $_SESSION["user_pnt"] . "'";
+            
+            $query = $this->db->query($stm);
+
         }else{
-             header('Content-Type: application/json');
-            echo json_encode(false);
+            $post_data = array(); 
+            $post_data['nombre_sujeto_obligado'] = "'" . $_POST["sujeto_obligado"] . "'";
+            $post_data['nombre_unidad_administrativa'] = "'" . $_POST["unidad_administrativa"] . "'";
+            $post_data['correo_unidad_administrativa'] = "'" . $_SESSION["user_pnt"] . "'";
+
+            $this->db->insert('unidades_so', $post_data);
+            $query =  $this->db->insert_id();
         }
+
+        header('Content-Type: application/json');
+        echo json_encode($query);
     }
 
     function salir_pnt(){

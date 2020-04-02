@@ -50,7 +50,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 4)? 'here': '' ?>" id="formato_4" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=4"> 70FXXIIID </a> <	</ul>
 
 	<br><br>
-
+	<h2> Respecto a los proveedores y su contratación </h2>
 	<table id="grid" class="dataTable stripe hover order-column row-border cell-border compact">
 		<thead>
 	        <tr>
