@@ -144,7 +144,7 @@ $(document).ready(function(){
 			      		response += "<a class='tpo_btn crear invisible' href='#' data='"
 			      		response += JSON.stringify(row) + "'> <img width='24' src='<?php echo base_url(); ?>plugins/img/upload.png'> </a>"
 
-			      		response += "<img src='<?php echo base_url(); ?>plugins/img/correct.png'>"
+			      		response += "<img class='check' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
 			      		response += "<a class='tpo_btn eliminar' href='#' data='" + JSON.stringify(row) + "'> <img src='<?php echo base_url(); ?>plugins/img/erase.png'></a>"
 				      	return response
 
@@ -185,7 +185,7 @@ $(document).ready(function(){
 			"unidadAdministrativa": '<?php echo $_SESSION["unidad_administrativa"]; ?>',
 			"SujetoObligado": '<?php echo $_SESSION["sujeto_obligado"]; ?>',
 			"registros": [{
-			    "numeroRegistro": 10,
+			    "numeroRegistro": 1,
 			    "campos": [
 			    	{ "idCampo": 333986, "valor": data.ejercicio},
 			    	{ "idCampo": 333990, "valor": (data.fecha_inicio_periodo != null)? data.fecha_inicio_periodo.split('-').reverse().join('/') : ''},

@@ -45,31 +45,27 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	<ul class="items-formato">
 		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 1)? 'here': '' ?>" id="formato_1" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=1"> 70FXXIIIA </a> </li>
 		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 2)? 'here': '' ?>" id="formato_2" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=2"> 70FXXIIIB </a> </li>
-		<li> 
-			<a class="btn-group btn btn-info btn-sm <?php echo ($formato == 3)? 'here': '' ?>" id="formato_3" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=3"> 70FXXIIIC </a> 
-			<ul class="subitems">
-				<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 31)? 'here': '' ?>" id="formato_31" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=31"> 70FXXIIIB1 </a> </li>
-			</ul>
-		</li>
+		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 3)? 'here': '' ?>" id="formato_3" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=3"> 70FXXIIIC </a> </li>
 		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 4)? 'here': '' ?>" id="formato_4" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=4"> 70FXXIIID </a> </li>
 
 	<br><br>
-	<h2> Utilización de los tiempos oficiales en radio y tv </h2>
+	<h2> Hipervínculo a la información de tiempos oficiales en radio y televisión </h2>
 	<table id="grid" class="dataTable stripe hover order-column row-border cell-border compact">
 		<thead>
 	        <tr>
-	            <th>id_proveedor</th>
+	            <th>id_tpo</th>
+	            <th>id_pnt</th>
 	            <th>id</th>
-				<th>Razón Social</th>
-				<th>Nombre(s)</th>
-				<th>Primer Apellido</th>
-				<th>Segundo Apellido</th>
-				<th>Nombre de los Proveedores y/o responsables</th>
-				<th>Registro Federal de contribuyentes</th>
-				<th>Procedimiento de contratación</th>
-				<th>Fundamento juridicos</th> 
-				<th>Descripcion breve de las razones que justifican<th/>
-				<th>Estatus<th/>
+	            <th>Ejercicio</th>
+	            <th>Fecha de inicio del periodo que se informa</th>
+				<th>Fecha de término del periodo que se informa</th>
+				<th>Mensaje</th>
+				<!--th>Hipervínculo que dirija a la información relativa a la utilización de los Tiempos oficiales </th-->
+				<th>Área(s) responsable(s) que genera(n) posee(n) publica(n) y actualizan la información</th>
+				<th>Fecha de validación</th>
+				<th>Fecha de actualización</th>
+				<th>Nota</th>
+				<th>Estatus</th>
 	        </tr>
 	    </thead>
 	    <tbody></tbody>
@@ -86,21 +82,22 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 	    $('#grid').DataTable({
 	    	ajax: {
-	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros3",
+	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros4",
 	    		dataSrc: ''
 	    	},
 	    	columns: [
-	    		{ data: 'id_proveedor' },
-	    		{ data: 'id' },
-				{ data: 'nombre_razon_social' },
-				{ data: 'nombres' },
-				{ data: 'primer_apellido' },
-				{ data: 'segundo_apellido' },
-				{ data: 'nombre_comercial' },
-				{ data: 'rfc' },
-				{ data: 'nombre_procedimiento' },
-				{ data: 'fundamento_juridico' },
-				{ data: 'descripcion_justificacion' },
+	    		{ data: 'id_tpo'},
+	    		{ data: 'id_pnt'},
+				{ data: 'id' },
+	    		{ data: 'ejercicio' },
+				{ data: 'fecha_inicio_periodo' },
+				{ data: 'fecha_termino_periodo' },
+				{ data: 'mensajeTO' },
+				//{ data: 'Hipervínculo' },
+				{ data: 'fecha_validacion' },
+				{ data: 'fecha_actualizacion' },
+				{ data: 'area_responsable' },
+				{ data: 'nota' },
 				{ data: 'estatus_pnt' }
 			],
 			columnDefs: [ 
@@ -113,7 +110,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: 12,
+				    targets: 11,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	var response = ""
@@ -137,7 +134,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: [0,1,2,3,4,5,6,7,8,9,10,11, 12],
+				    targets: [0,1,2,3,4,5,6,7,8,9,10,11],
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	if(!data) return "<label class='btn'> <small> N/D </small></label>"
@@ -160,7 +157,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
 
 		    formato = {
-				"idFormato": 43360, /*"Contratación de servicios de publicidad oficial"*/
+				"idFormato": 43321, //"Hipervínculo a información de tiempos oficiales en radio y televisió"
 				"IdRegistro": "",
 				"token": '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>',
 				"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,
@@ -169,19 +166,30 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				"registros": [{
 				    "numeroRegistro": 1,
 				    "campos": [
-				    	{"idCampo": 333943, "valor": data["Ejercicio"] }
+						{ "idCampo": 333975, "valor": data['id_tpo'] }, 
+						{ "idCampo": 333975, "valor": data['id_pnt'] }, 
+						{ "idCampo": 333975, "valor": data['id'] }, 
+						{ "idCampo": 333975, "valor": data['ejercicio'] }, 
+						{ "idCampo": 333975, "valor": data['fecha_inicio_periodo'] }, 
+						{ "idCampo": 333975, "valor": data['fecha_termino_periodo'] }, 
+						{ "idCampo": 333975, "valor": data['mensajeTO'] }, 
+						//"idCampo": 333975, "valor": { da[: 'Hipervínculo'] }, 
+						{ "idCampo": 333975, "valor": data['fecha_validacion'] }, 
+						{ "idCampo": 333975, "valor": data['fecha_actualizacion'] }, 
+						{ "idCampo": 333975, "valor": data['area_responsable'] }, 
+						{ "idCampo": 333975, "valor": data['nota'] }, 
+						{ "idCampo": 333975, "valor": data['estatus_pnt'] }
 				    ]
 				}],
-			  "_id_interno": data["ID FACTURA"]
+			  "_id_interno": data['id_campana_aviso']
 			}
 
-			/**/
 	    	$.post(url, formato, function(res, error){
     			if(res && res.success) {
 	    			tr.children("td").eq(1).text(res.id_pnt)
-	    			tr.children("td").eq(12).children("a.eliminar").removeClass("invisible")
-	    			tr.children("td").eq(12).children("img.check").removeClass("invisible")
-	    			tr.children("td").eq(12).children("a.crear").addClass("invisible")
+	    			tr.children("td").eq(10).children("a.eliminar").removeClass("invisible")
+	    			tr.children("td").eq(10).children("img.check").removeClass("invisible")
+	    			tr.children("td").eq(10).children("a.crear").addClass("invisible")
 	    		} else {
 	    			console.log("No se pudo insertar el elemento correctamente")
 	    			a.css("display", "block")
@@ -193,8 +201,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
     			else tr.css("background-color", "#fff")
 
 	    	})
-			/**/
 	    });
+		
 
 		$(document).on("click","a.eliminar",function(e){ 
 	    	e.preventDefault();
@@ -206,7 +214,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		    a.css("display", "none")
 		    a.siblings().css("display", "none")
 		    tr.css("background-color", "rgba(255,0,0, 0.2)")
-		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
+		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/i´´mg/loading.gif'>")
 
 		    var id_pnt = tr.children("td").eq(1).text()
 
@@ -214,7 +222,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
 
 			var formato = {
-				"idFormato": 43360, 
+				"idFormato": 43321, 
 				"correoUnidadAdministrativa": "so.inai@inai.org.mx",
 				"token": token,
 				"registros":[ { "numeroRegistro":1, "idRegistro": data.id_pnt || id_pnt } ],
@@ -227,10 +235,11 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    		//if(res.success) location.reload(); 
 	    		if(res && res.success) {
 	    			tr.children("td").eq(1).html("<label class='btn'> <small> SIN SUBIR </small></label>")
-	    			tr.children("td").eq(12).children("a.eliminar").addClass("invisible")
-	    			tr.children("td").eq(12).children("img.check").addClass("invisible")
-	    			tr.children("td").eq(12).children("a.crear").css("display", "block")
+	    			tr.children("td").eq(10).children("a.eliminar").addClass("invisible")
+	    			tr.children("td").eq(10).children("img.check").addClass("invisible")
+	    			tr.children("td").eq(10).children("a.crear").css("display", "block")
 	    		} else {
+	    			console.log(res, error)
 	    			console.log("No se pudo eliminar el elemento correctamente")
 	    			a.css("display", "block")
 	    			a.siblings().css("display", "block")

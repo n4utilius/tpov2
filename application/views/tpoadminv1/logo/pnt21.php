@@ -58,46 +58,21 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	</ul>
 
 	<br><br>
-	<h2> Contratación de Servicios en Publicidad Oficial </h2>
+	<h2> Respecto a los proveedores y su contratación </h2>
 	<table id="grid" class="dataTable stripe hover order-column row-border cell-border compact">
 		<thead>
 	        <tr>
-	           	<th> ID TPO </th>
-				<th> ID PNT </th>
-				<th> ID FACTURA </th>
-				<th> Ejercicio </th>
-				<th> Fecha de inicio del periodo que se informa </th>
-				<th> Fecha de término del periodo que se informa </th>
-				<th> Función del Sujeto Obligado (catálogo) </th>
-				<th> Área administrativa Encargada de Solicitar El Servicio o Producto, en su caso </th>
-				<th> Clasificación Del(los) Servicios (catálogo) </th>
-				<th> Tipo de Servicio </th>
-				<th> Tipo de Medio(catálogo) </th>
-				<th> Descripción de Unidad </th>
-				<th> Tipo (catálogo) </th>
-				<th> Nombre de la Campaña o Aviso Institucional </th>
-				<th> Año de la Campaña </th>
-				<th> Tema de la Campaña o Aviso Institucional </th>
-				<th> Objetivo Institucional </th>
-				<th> Objetivo de Comunicación </th>
-				<th> Costo por unidad </th>
-				<th> Clave Única de Indentificación de Campaña </th>
-				<th> Autoridad que proporcionó la Clave </th>
-				<th> Cobertura (catálogo) </th>
-				<th> Ámbito Geográfico de Cobertura </th>
-				<th> Fecha de inicio de la Campaña o Aviso Institucional </th>
-				<th> Fecha de término de la Campaña o Aviso Institucional </th>
-				<th> Sexo (catálogo) </th>
-				<th> Lugar de Residencia </th>
-				<th> Nivel Educativo </th>
-				<th> Grupos de Edad </th>
-				<th> Nivel Socioeconómico </th>
-				<th> Respecto a los proveedores y su contratación </th>
-				<th> Área(s) Responsable(s) que generan(n) posee(n), Publica(n) y Actualiza(n) la información </th>
-				<th> Fecha de Validación </th>
-				<th> Fecha de Actualización </th>
-				<th> Nota </th>
-				<th> Estatus PNT </th>
+	           	<th>id_pnt</th>
+	           	<th>id</th>
+	           	<th>Razón social</th>
+				<th>Nombre(s)</th>
+				<th>Primer apellido</th>
+				<th>Segundo apellido</th>
+				<th>Nombre(s) de los proveedores y/o responsables</th>
+				<th>Registro Federal de Contribuyente</th>
+				<th>Procedimiento de contratación</th>
+				<th>Fundamento jurídico del proceso de contratación</th>
+				<th>Descripción breve de las razones que justifican</th>
 	        </tr>
 	    </thead>
 	    <tbody> <tr> </tr> </tbody>
@@ -116,48 +91,23 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 	    $('#grid').DataTable({
 	    	ajax: {
-	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros2",
+	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros21",
 	    		dataSrc: ''
 	    	},
     		scrollY: true,
 	    	scrollX: true,
 			columns: [
-				{ data: 'ID TPO' },
-				{ data: 'ID PNT' },
-				{ data: 'ID FACTURA' },
-				{ data: 'Ejercicio' },
-				{ data: 'Fecha de inicio del periodo que se informa' },
-				{ data: 'Fecha de término del periodo que se informa' },
-				{ data: 'Función del Sujeto Obligado (catálogo)' },
-				{ data: 'Área administrativa Encargada de Solicitar El Servicio o Producto, en su caso' },
-				{ data: 'Clasificación Del(los) Servicios (catálogo)' },
-				{ data: 'Tipo de Servicio' },
-				{ data: 'Tipo de Medio(catálogo)' },
-				{ data: 'Descripción de Unidad' },
-				{ data: 'Tipo (catálogo)' },
-				{ data: 'Nombre de la Campaña o Aviso Institucional' },
-				{ data: 'Año de la Campaña' },
-				{ data: 'Tema de la Campaña o Aviso Institucional' },
-				{ data: 'Objetivo Institucional' },
-				{ data: 'Objetivo de Comunicación' },
-				{ data: 'Costo por unidad' },
-				{ data: 'Clave Única de Indentificación de Campaña' },
-				{ data: 'Autoridad que proporcionó la Clave' },
-				{ data: 'Cobertura (catálogo)' },
-				{ data: 'Ámbito Geográfico de Cobertura' },
-				{ data: 'Fecha de inicio de la Campaña o Aviso Institucional' },
-				{ data: 'Fecha de término de la Campaña o Aviso Institucional' },
-				{ data: 'Sexo (catálogo)' },
-				{ data: 'Lugar de Residencia' },
-				{ data: 'Nivel Educativo' },
-				{ data: 'Grupos de Edad' },
-				{ data: 'Nivel Socioeconómico' },
-				{ data: 'Respecto a los proveedores y su contratación' },
-				{ data: 'Área(s) Responsable(s) que generan(n) posee(n), Publica(n) y Actualiza(n) la información' },
-				{ data: 'Fecha de Validación' },
-				{ data: 'Fecha de Actualización' },
-				{ data: 'Nota' },
-				{ data: 'Estatus PNT' }
+				{ data: 'id_pnt' },
+				{ data: 'id' },
+				{ data: 'nombre_razon_social' },
+				{ data: 'nombres' },
+				{ data: 'primer_apellido' },
+				{ data: 'segundo_apellido' },
+				{ data: 'nombre_comercial' },
+				{ data: 'rfc' },
+				{ data: 'nombre_procedimiento' },
+				{ data: 'fundamento_juridico' },
+				{ data: 'estatus_pnt' }
 			],
 			columnDefs: [ 
 				{
@@ -169,7 +119,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: 35,
+				    targets: 10,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	var response = ""
@@ -193,7 +143,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34],
+				    targets: [0,1,2,3,4,5,6,7,8,9,10],
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	if(!data) return "<label class='btn'> <small> N/D </small></label>"
@@ -202,6 +152,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				}
 			]
 	    });
+		/*
 
 		$(document).on("click","a.crear",function(e){ 
 	    	e.preventDefault();
@@ -217,7 +168,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
 
 		    formato = {
-				"idFormato": 43320, /*"Contratación de servicios de publicidad oficial"*/
+				"idFormato": 43320, //"Contratación de servicios de publicidad oficial"
 				"IdRegistro": "",
 				"token": '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>',
 				"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,
@@ -255,57 +206,55 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 						{"idCampo": 333974, "valor": data["Nivel Socioeconómico"]},
 
 						//(data.fecha_termino_periodo != null)? data.fecha_termino_periodo.split('-').reverse().join('/') : ''
-						/* {"idCampo": 333957, "valor": "Respecto a los proveedores y su contratación"}, */
-						/*
-						{"idCampo": 43256, "valor": "Razón social"},
-						{"idCampo": 43257, "valor": "Nombre(s)"},
-						{"idCampo": 43258, "valor": "Primer apellido"},
-						{"idCampo": 43259, "valor": "Segundo apellido"},
-						{"idCampo": 43260, "valor": "Registro Federal de Contribuyente"},
-						{"idCampo": 43261, "valor": "Procedimiento de contratación"},
-						{"idCampo": 43262, "valor": "Fundamento jurídico del proceso de contratación"},
-						{"idCampo": 43263, "valor": "Descripción breve del las razones que justifican"},
-						{"idCampo": 43264, "valor": "Nombre(s) de los proveedores y/o responsables"},
-						{"idCampo": 333958, "valor": "Respecto a los recursos y el presupuesto"},
-						{"idCampo": 43265, "valor": "Partida genérica"},
-						{"idCampo": 43266, "valor": "Clave del concepto"},
-						{"idCampo": 43267, "valor": "Nombre del concepto"},
-						{"idCampo": 43268, "valor": "Presupuesto asignado por concepto"},
-						{"idCampo": 43269, "valor": "Presupuesto ejercido al periodo reportado de cada partida"},
-						{"idCampo": 43270, "valor": "presupuesto total ejercido por concepto"},
-						{"idCampo": 43271, "valor": "Denominación de cada partida"},
-						{"idCampo": 43272, "valor": "Presupuesto total asignado a cada partida"},
-						{"idCampo": 43273, "valor": "Presupuesto modificado por partida"},
-						{"idCampo": 43274, "valor": "Presupuesto modificado por concepto"},
-						{"idCampo": 333959, "valor": "Respecto al contrato y los montos"},
-						{"idCampo": 43275, "valor": "Fecha de firma del contrato"},
-						{"idCampo": 43276, "valor": "Número o referencia de identificación del contrato"},
-						{"idCampo": 43277, "valor": "Objeto del contrato"},
-						{"idCampo": 43278, "valor": "Hipervínculo al contrato firmado"},
-						{"idCampo": 43279, "valor": "hipervínculo al convenio modificatorio, en su caso"},
-						{"idCampo": 43280, "valor": "Monto total del contrato"},
-						{"idCampo": 43281, "valor": "Monto pagado al periodo publicado"},
-						{"idCampo": 43282, "valor": "Fecha de inicio de los servicios contratados"},
-						{"idCampo": 43283, "valor": "Fecha de término de los servicios contratados"},
-						{"idCampo": 43284, "valor": "Número de factura"},
-						{"idCampo": 43285, "valor": "Hipervínculo a la factura"},
-						*/
+						//{"idCampo": 333957, "valor": "Respecto a los proveedores y su contratación"}, 
+						
+						//{"idCampo": 43256, "valor": "Razón social"},
+						//{"idCampo": 43257, "valor": "Nombre(s)"},
+						//{"idCampo": 43258, "valor": "Primer apellido"},
+						//{"idCampo": 43259, "valor": "Segundo apellido"},
+						//{"idCampo": 43260, "valor": "Registro Federal de Contribuyente"},
+						//{"idCampo": 43261, "valor": "Procedimiento de contratación"},
+						//{"idCampo": 43262, "valor": "Fundamento jurídico del proceso de contratación"},
+						//{"idCampo": 43263, "valor": "Descripción breve del las razones que justifican"},
+						//{"idCampo": 43264, "valor": "Nombre(s) de los proveedores y/o responsables"},
+						//{"idCampo": 333958, "valor": "Respecto a los recursos y el presupuesto"},
+						//{"idCampo": 43265, "valor": "Partida genérica"},
+						//{"idCampo": 43266, "valor": "Clave del concepto"},
+						//{"idCampo": 43267, "valor": "Nombre del concepto"},
+						//{"idCampo": 43268, "valor": "Presupuesto asignado por concepto"},
+						//{"idCampo": 43269, "valor": "Presupuesto ejercido al periodo reportado de cada partida"},
+						//{"idCampo": 43270, "valor": "presupuesto total ejercido por concepto"},
+						//{"idCampo": 43271, "valor": "Denominación de cada partida"},
+						//{"idCampo": 43272, "valor": "Presupuesto total asignado a cada partida"},
+						//{"idCampo": 43273, "valor": "Presupuesto modificado por partida"},
+						//{"idCampo": 43274, "valor": "Presupuesto modificado por concepto"},
+						//{"idCampo": 333959, "valor": "Respecto al contrato y los montos"},
+						//{"idCampo": 43275, "valor": "Fecha de firma del contrato"},
+						//{"idCampo": 43276, "valor": "Número o referencia de identificación del contrato"},
+						//{"idCampo": 43277, "valor": "Objeto del contrato"},
+						//{"idCampo": 43278, "valor": "Hipervínculo al contrato firmado"},
+						//{"idCampo": 43279, "valor": "hipervínculo al convenio modificatorio, en su caso"},
+						//{"idCampo": 43280, "valor": "Monto total del contrato"},
+						//{"idCampo": 43281, "valor": "Monto pagado al periodo publicado"},
+						//{"idCampo": 43282, "valor": "Fecha de inicio de los servicios contratados"},
+						//{"idCampo": 43283, "valor": "Fecha de término de los servicios contratados"},
+						//{"idCampo": 43284, "valor": "Número de factura"},
+						//{"idCampo": 43285, "valor": "Hipervínculo a la factura"}, 
 						{"idCampo": 333967, "valor": data["Área(s) Responsable(s) que generan(n) posee(n), Publica(n) y Actualiza(n) la información"]},
 						{"idCampo": 333954, "valor": (data["Fecha de Validación"] != null )? data["Fecha de Validación"].split('-').reverse().join('/') : '' },
 						{"idCampo": 333961, "valor": (data["Fecha de Actualización"] != null )? data["Fecha de Actualización"].split('-').reverse().join('/') : '' },
-						{"idCampo": 333966, "valor": data["Nota"]}//
+						{"idCampo": 333966, "valor": data["Nota"]}
 				    ]
 				}],
 			  "_id_interno": data["ID FACTURA"]
 			}
 
-			/**/
 	    	$.post(url, formato, function(res, error){
     			if(res && res.success) {
 	    			tr.children("td").eq(1).text(res.id_pnt)
-	    			tr.children("td").eq(35).children("a.eliminar").removeClass("invisible")
-	    			tr.children("td").eq(35).children("img.check").removeClass("invisible")
-	    			tr.children("td").eq(35).children("a.crear").addClass("invisible")
+	    			tr.children("td").eq(10).children("a.eliminar").removeClass("invisible")
+	    			tr.children("td").eq(10).children("img.check").removeClass("invisible")
+	    			tr.children("td").eq(10).children("a.crear").addClass("invisible")
 	    		} else {
 	    			console.log("No se pudo insertar el elemento correctamente")
 	    			a.css("display", "block")
@@ -317,7 +266,6 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
     			else tr.css("background-color", "#fff")
 
 	    	})
-			/**/
 	    });
 
 		$(document).on("click","a.eliminar",function(e){ 
@@ -351,9 +299,9 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    		//if(res.success) location.reload(); 
 	    		if(res && res.success) {
 	    			tr.children("td").eq(1).html("<label class='btn'> <small> SIN SUBIR </small></label>")
-	    			tr.children("td").eq(35).children("a.eliminar").addClass("invisible")
-	    			tr.children("td").eq(35).children("img.check").addClass("invisible")
-	    			tr.children("td").eq(35).children("a.crear").css("display", "block")
+	    			tr.children("td").eq(10).children("a.eliminar").addClass("invisible")
+	    			tr.children("td").eq(10).children("img.check").addClass("invisible")
+	    			tr.children("td").eq(10).children("a.crear").css("display", "block")
 	    		} else {
 	    			console.log("No se pudo eliminar el elemento correctamente")
 	    			a.css("display", "block")
@@ -369,6 +317,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 	    })
 
+		/**/
 	  	
 
 	})

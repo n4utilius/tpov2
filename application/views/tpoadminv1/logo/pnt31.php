@@ -54,7 +54,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 4)? 'here': '' ?>" id="formato_4" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=4"> 70FXXIIID </a> </li>
 
 	<br><br>
-	<h2> Utilización de los tiempos oficiales en radio y tv </h2>
+	<h2> Presupuesto total asignado y ejercido de cada partida </h2>
 	<table id="grid" class="dataTable stripe hover order-column row-border cell-border compact">
 		<thead>
 	        <tr>
@@ -160,7 +160,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
 
 		    formato = {
-				"idFormato": 43360, /*"Contratación de servicios de publicidad oficial"*/
+				"idFormato": 43369, /*"Contratación de servicios de publicidad oficial"*/
 				"IdRegistro": "",
 				"token": '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>',
 				"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,
@@ -214,7 +214,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
 
 			var formato = {
-				"idFormato": 43360, 
+				"idFormato": 43320, 
 				"correoUnidadAdministrativa": "so.inai@inai.org.mx",
 				"token": token,
 				"registros":[ { "numeroRegistro":1, "idRegistro": data.id_pnt || id_pnt } ],

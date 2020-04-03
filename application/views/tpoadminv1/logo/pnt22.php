@@ -44,35 +44,41 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 	<ul class="items-formato">
 		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 1)? 'here': '' ?>" id="formato_1" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=1"> 70FXXIIIA </a> </li>
-		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 2)? 'here': '' ?>" id="formato_2" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=2"> 70FXXIIIB </a> </li>
 		<li> 
-			<a class="btn-group btn btn-info btn-sm <?php echo ($formato == 3)? 'here': '' ?>" id="formato_3" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=3"> 70FXXIIIC </a> 
+			<a class="btn-group btn btn-info btn-sm <?php echo ($formato == 2)? 'here': '' ?>" id="formato_2" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=2"> 70FXXIIIB </a> 
 			<ul class="subitems">
-				<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 31)? 'here': '' ?>" id="formato_31" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=31"> 70FXXIIIB1 </a> </li>
+				<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 21)? 'here': '' ?>" id="formato_21" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=21"> 70FXXIIIB1 </a> </li>
+				<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 22)? 'here': '' ?>" id="formato_22" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=22"> 70FXXIIIB2 </a> </li>
+				<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 23)? 'here': '' ?>" id="formato_23" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=23"> 70FXXIIIB3 </a> </li>
+				
 			</ul>
 		</li>
+		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 3)? 'here': '' ?>" id="formato_3" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=3"> 70FXXIIIC </a> </li>
 		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 4)? 'here': '' ?>" id="formato_4" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=4"> 70FXXIIID </a> </li>
+	</ul>
 
 	<br><br>
-	<h2> Utilización de los tiempos oficiales en radio y tv </h2>
+	<h2> Respecto a los recursos y el presupuesto </h2>
 	<table id="grid" class="dataTable stripe hover order-column row-border cell-border compact">
 		<thead>
 	        <tr>
-	            <th>id_proveedor</th>
-	            <th>id</th>
-				<th>Razón Social</th>
-				<th>Nombre(s)</th>
-				<th>Primer Apellido</th>
-				<th>Segundo Apellido</th>
-				<th>Nombre de los Proveedores y/o responsables</th>
-				<th>Registro Federal de contribuyentes</th>
-				<th>Procedimiento de contratación</th>
-				<th>Fundamento juridicos</th> 
-				<th>Descripcion breve de las razones que justifican<th/>
-				<th>Estatus<th/>
+	           	<th>ID TPO/th>
+	           	<th>ID PNT</th>
+	           	<th>ID</th>
+				<th>Partida genérica</th>
+				<th>Clave del concepto</th>
+				<th>Nombre del concepto</th>
+				<th>Presupuesto asignado por concepto</th>
+				<th>Presupuesto modificado por concepto</th>
+				<!--th>Presupuesto total ejercido por concepto</th-->
+				<th>Denominación de cada partida</th>
+				<th>Presupuesto total asignado a cada partida</th>
+				<th>Presupuesto modificado por partida</th>
+				<th>Presupuesto ejercido al periodo reportado de cada partida</th>
+				<th>Estatus</th>
 	        </tr>
 	    </thead>
-	    <tbody></tbody>
+	    <tbody> <tr> </tr> </tbody>
 	</table>
 </section>
 
@@ -82,26 +88,31 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 <script src="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.js" type="text/javascript" ></script>
 
 <script type="text/javascript">
+
 	$(document).ready(function(){
+		$("#formato_<?php echo $formato?>").css("background-color:", "#0277bd")
 
 	    $('#grid').DataTable({
 	    	ajax: {
-	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros3",
+	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros22",
 	    		dataSrc: ''
 	    	},
-	    	columns: [
-	    		{ data: 'id_proveedor' },
-	    		{ data: 'id' },
-				{ data: 'nombre_razon_social' },
-				{ data: 'nombres' },
-				{ data: 'primer_apellido' },
-				{ data: 'segundo_apellido' },
-				{ data: 'nombre_comercial' },
-				{ data: 'rfc' },
-				{ data: 'nombre_procedimiento' },
-				{ data: 'fundamento_juridico' },
-				{ data: 'descripcion_justificacion' },
-				{ data: 'estatus_pnt' }
+    		scrollY: true,
+	    	scrollX: true,
+			columns: [
+				{ data: 'id_tpo' },
+				{ data: 'id_pnt' },
+				{ data: 'id' },
+				{ data: 'Partida Genérica' },
+				{ data: 'Clave del concepto' },
+				{ data: 'Nombre del concepto' },
+				{ data: 'Presupuesto Asignado por concepto' },
+				{ data: 'Presupuesto Modificado por concepto' },
+				{ data: 'Denominacion de cada partida' },
+				{ data: 'Presupuesto total asignado a cada partida' },
+				{ data: 'Presupuesto modificado por partida' },
+				{ data: 'Presupuesto ejercido al periodo reportado de cada partida' },
+				{ data: 'estatus_pnt'}
 			],
 			columnDefs: [ 
 				{
@@ -137,7 +148,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: [0,1,2,3,4,5,6,7,8,9,10,11, 12],
+				    targets: [0,1,2,3,4,5,6,7,8,9,10,11,12],
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	if(!data) return "<label class='btn'> <small> N/D </small></label>"
@@ -146,6 +157,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				}
 			]
 	    });
+			/*
+
 		$(document).on("click","a.crear",function(e){ 
 	    	e.preventDefault();
 		    var data = JSON.parse( $(this).attr("data") )
@@ -160,7 +173,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
 
 		    formato = {
-				"idFormato": 43360, /*"Contratación de servicios de publicidad oficial"*/
+				"idFormato": 43320, //"Contratación de servicios de publicidad oficial"
 				"IdRegistro": "",
 				"token": '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>',
 				"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,
@@ -169,13 +182,13 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				"registros": [{
 				    "numeroRegistro": 1,
 				    "campos": [
-				    	{"idCampo": 333943, "valor": data["Ejercicio"] }
+				    	{"idCampo": 333943, "valor": data["Ejercicio"] },
+						
 				    ]
 				}],
 			  "_id_interno": data["ID FACTURA"]
 			}
 
-			/**/
 	    	$.post(url, formato, function(res, error){
     			if(res && res.success) {
 	    			tr.children("td").eq(1).text(res.id_pnt)
@@ -193,7 +206,6 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
     			else tr.css("background-color", "#fff")
 
 	    	})
-			/**/
 	    });
 
 		$(document).on("click","a.eliminar",function(e){ 
@@ -214,7 +226,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
 
 			var formato = {
-				"idFormato": 43360, 
+				"idFormato": 43320, 
 				"correoUnidadAdministrativa": "so.inai@inai.org.mx",
 				"token": token,
 				"registros":[ { "numeroRegistro":1, "idRegistro": data.id_pnt || id_pnt } ],
@@ -244,5 +256,10 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    	})
 
 	    })
+			/**/
+
+	  	
+
 	})
+
 </script>

@@ -473,8 +473,8 @@ class Logo extends CI_Controller
         echo json_encode( $rows ); 
     }
 
-    function registros3(){
-        $query = $this->db->query("SELECT pnt.id_proveedor id_pnt, pnt.id_proveedor id,
+    function registros21(){
+        $query = $this->db->query("SELECT pnt.id_proveedor id, pnt.id_pnt id_pnt, pnt.estatus_pnt,
                     prov.nombre_razon_social, prov.nombres, prov.primer_apellido,
                     prov.segundo_apellido, prov.nombre_comercial, prov.rfc,
                     proc.nombre_procedimiento, con.fundamento_juridico,
@@ -490,7 +490,7 @@ class Logo extends CI_Controller
         echo json_encode( $rows ); 
     }
 
-    function registros4(){
+    function registros22(){
         $query = $this->db->query("SELECT pnt.id_presupuesto_desglose id_tpo, pnt.id_pnt, pnt.id,
                     pcon.partida 'Partida Genérica',  pcon.concepto 'Clave del concepto',
                     pcon.nombre_concepto 'Nombre del concepto',
@@ -499,7 +499,8 @@ class Logo extends CI_Controller
                     pcon.denominacion_partida 'Denominacion de cada partida',
                     pdes.monto_presupuesto 'Presupuesto total asignado a cada partida',
                     pdes.monto_modificacion 'Presupuesto modificado por partida',
-                    fact.total_ejercido 'Presupuesto ejercido al periodo reportado de cada partida'
+                    fact.total_ejercido 'Presupuesto ejercido al periodo reportado de cada partida', 
+                    pnt.estatus_pnt
                     FROM tab_presupuestos_desglose pdes
                     JOIN (SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', 
                                p.partida, p.denominacion 'denominacion_partida'
@@ -533,8 +534,9 @@ class Logo extends CI_Controller
         echo json_encode( $rows ); 
     }
 
-    function registros5(){
-        $query = $this->db->query("SELECT cont.fecha_celebracion 'Fecha de firma del contrato',
+    function registros23(){
+        $query = $this->db->query("SELECT pnt.id_contrato id, pnt.id_pnt id_pnt, id,
+                cont.fecha_celebracion 'Fecha de firma del contrato',
                 cont.numero_contrato 'Número o referencia de identificación del contrato',
                 cont.objeto_contrato 'Objeto del contrato',
                 vcon.`Archivo contrato en PDF (Vinculo al archivo)` 'Hipervínculo al contrato firmado',
@@ -543,13 +545,15 @@ class Logo extends CI_Controller
                 vcon.`Monto pagado a la fecha` 'Monto pagado al periodo publicado',
                 vcon.`Fecha inicio` 'Fecha de inicio de los servicios contratados',
                 vcon.`Fecha fin` 'Fecha de término de los servicios contratados',
-                f.numeros_factura 'Números de factura', f.files_factura_pdf 'Hipervínculos a la factura'
+                f.numeros_factura 'Números de factura', f.files_factura_pdf 'Hipervínculos a la factura',
+                area_responsable, fecha_validacion, fecha_actualizacion, nota, pnt.estatus_pnt
                 FROM tab_contratos cont
                 LEFT JOIN vout_contratos vcon ON vcon.`ID (Número de contrato)` = cont.id_contrato
                 LEFT JOIN vout_convenios_modificatorios vcmod ON vcmod.`ID (Número de contrato)` = cont.id_contrato
                 LEFT JOIN (SELECT f.id_contrato, GROUP_CONCAT(f.numero_factura) numeros_factura, 
                                   GROUP_CONCAT(f.file_factura_pdf) files_factura_pdf
-                           FROM tab_facturas f GROUP BY f.id_contrato) f ON f.id_contrato = cont.id_contrato");
+                           FROM tab_facturas f GROUP BY f.id_contrato) f ON f.id_contrato = cont.id_contrato
+                 LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato");
 
         $rows = $query->result_array();
 
@@ -557,7 +561,7 @@ class Logo extends CI_Controller
         echo json_encode( $rows ); 
     }
 
-    function registros6(){
+     function registros3(){
         $query = $this->db->query("SELECT ej.ejercicio 'Ejercicio', 
                 cam.fecha_inicio_periodo 'Fecha de inicio del periodo que se informa',
                 cam.fecha_termino_periodo 'Fecha de termino del periodo que se informa',
@@ -619,25 +623,36 @@ class Logo extends CI_Controller
         header('Content-Type: application/json');
         echo json_encode( $rows ); 
     }
-   /*
-    function registros7(){
 
-        Denominación de la partida
-        Presupuesto total asignado a cada partida
-        Presupuesto ejercido al periodo reportado de cada partida
-        $query = $this->db->query("");
+    function registros31(){ /* PROVISIONAL */
+        $query = $this->db->query("SELECT pnt.id_proveedor id_pnt, pnt.id_proveedor id,
+                    prov.nombre_razon_social, prov.nombres, prov.primer_apellido,
+                    prov.segundo_apellido, prov.nombre_comercial, prov.rfc,
+                    proc.nombre_procedimiento, con.fundamento_juridico,
+                    con.descripcion_justificacion, pnt.estatus_pnt
+                    FROM tab_proveedores prov
+                    LEFT JOIN tab_contratos con ON con.id_proveedor = prov.id_proveedor
+                    LEFT JOIN cat_procedimientos proc ON proc.id_procedimiento = con.id_procedimiento
+                    LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor");
 
         $rows = $query->result_array();
 
         header('Content-Type: application/json');
         echo json_encode( $rows ); 
     }
-    */
-    
-    function test(){
-        $_array = array ('id' => $this->input->get() );
+
+    function registros4(){
+        $query = $this->db->query("SELECT cam.id_campana_aviso id_tpo, pnt.id_pnt, pnt.id,  pnt.estatus_pnt, 
+                ej.ejercicio, cam.fecha_inicio_periodo, cam.fecha_termino_periodo, cam.mensajeTO, 
+                /*Hipervínculo, */ cam.fecha_validacion, cam.fecha_actualizacion, cam.area_responsable, cam.nota 
+                FROM tab_campana_aviso cam 
+                JOIN cat_ejercicios ej ON ej.id_ejercicio = cam.id_ejercicio 
+                LEFT JOIN rel_pnt_campana_aviso pnt ON pnt.id_campana_aviso = cam.id_campana_aviso;"); 
+
+       $rows = $query->result_array();
+
         header('Content-Type: application/json');
-        echo json_encode( $_array ); 
+        echo json_encode( $rows ); 
     }
 
     function pnt(){
@@ -655,9 +670,8 @@ class Logo extends CI_Controller
         $data['body_class'] = 'skin-blue';
 
         $formato = 1;
-
-        if( isset($_GET["formato"]) ){
-            //if($formato)
+        $validpntformato = array(1,2,21,22,23,3,31,4);
+        if( isset($_GET["formato"]) and in_array( $_GET["formato"], $validpntformato) ){
             $formato = $_GET["formato"];
         }
 
@@ -711,25 +725,6 @@ class Logo extends CI_Controller
         
         $this->load->view('tpoadminv1/includes/template', $data);
     }
-    function pnt1(){
-          $data['hola'] = 'hola';
-        $this->load->view('tpoadminv1/logo/pnt1', $data);
-    }
-
-     function pnt2(){
-          $data['hola'] = 'hola';
-        $this->load->view('tpoadminv1/logo/pnt2', $data);
-    }
-
-     function pnt3(){
-          $data['hola'] = 'hola';
-        $this->load->view('tpoadminv1/logo/pnt3', $data);
-    }
-
-
-
-
-   
 
     function alta_carga_logo(){
 
