@@ -536,24 +536,25 @@ class Logo extends CI_Controller
 
     function registros23(){
         $query = $this->db->query("SELECT pnt.id_contrato id_tpo, pnt.id_pnt id_pnt, pnt.id,
-                cont.fecha_celebracion 'Fecha de firma del contrato',
-                cont.numero_contrato 'Número o referencia de identificación del contrato',
-                cont.objeto_contrato 'Objeto del contrato',
-                vcon.`Archivo contrato en PDF (Vinculo al archivo)` 'Hipervínculo al contrato firmado',
-                vcmod.`Archivo convenio en PDF (Vinculo al archivo)` 'Hipervínculo al convenio modificatorio en su caso',
-                vcon.`Monto original del contrato` 'Monto total del contrato',
-                vcon.`Monto pagado a la fecha` 'Monto pagado al periodo publicado',
-                vcon.`Fecha inicio` 'Fecha de inicio de los servicios contratados',
-                vcon.`Fecha fin` 'Fecha de término de los servicios contratados',
-                f.numeros_factura 'Números de factura', f.files_factura_pdf 'Hipervínculos a la factura',
-                area_responsable, fecha_validacion, fecha_actualizacion, nota, pnt.estatus_pnt
-                FROM tab_contratos cont
-                LEFT JOIN vout_contratos vcon ON vcon.`ID (Número de contrato)` = cont.id_contrato
-                LEFT JOIN vout_convenios_modificatorios vcmod ON vcmod.`ID (Número de contrato)` = cont.id_contrato
-                LEFT JOIN (SELECT f.id_contrato, GROUP_CONCAT(f.numero_factura) numeros_factura, 
-                                  GROUP_CONCAT(f.file_factura_pdf) files_factura_pdf
-                           FROM tab_facturas f GROUP BY f.id_contrato) f ON f.id_contrato = cont.id_contrato
-                LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato");
+            cont.fecha_celebracion 'Fecha de firma del contrato',
+            cont.numero_contrato 'Número o referencia de identificación del contrato',
+            cont.objeto_contrato 'Objeto del contrato',
+            vcon.`Archivo contrato en PDF (Vinculo al archivo)` 'Hipervínculo al contrato firmado',
+            vcmod.`Archivo convenio en PDF (Vinculo al archivo)` 'Hipervínculo al convenio modificatorio en su caso',
+            vcon.`Monto original del contrato` 'Monto total del contrato',
+            vcon.`Monto pagado a la fecha` 'Monto pagado al periodo publicado',
+            vcon.`Fecha inicio` 'Fecha de inicio de los servicios contratados',
+            vcon.`Fecha fin` 'Fecha de término de los servicios contratados',
+            f.numeros_factura 'Números de factura', f.files_factura_pdf 'Hipervínculos a la factura',
+            area_responsable, fecha_validacion, fecha_actualizacion, nota, pnt.estatus_pnt
+            FROM tab_contratos cont
+            LEFT JOIN vout_contratos vcon ON vcon.`ID (Número de contrato)` = cont.id_contrato
+            LEFT JOIN vout_convenios_modificatorios vcmod ON vcmod.`ID (Número de contrato)` = cont.id_contrato
+            LEFT JOIN (SELECT f.id_contrato, f.numero_factura numeros_factura, 
+                       f.file_factura_pdf files_factura_pdf
+                       FROM tab_facturas f ) f ON f.id_contrato = cont.id_contrato
+            LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato
+            WHERE cont.numero_contrato != 'Sin contrato'; ");
 
         $rows = $query->result_array();
 
