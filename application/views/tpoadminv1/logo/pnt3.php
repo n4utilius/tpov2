@@ -58,18 +58,39 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	<table id="grid" class="dataTable stripe hover order-column row-border cell-border compact">
 		<thead>
 	        <tr>
-	            <th>id_proveedor</th>
-	            <th>id</th>
-				<th>Razón Social</th>
-				<th>Nombre(s)</th>
-				<th>Primer Apellido</th>
-				<th>Segundo Apellido</th>
-				<th>Nombre de los Proveedores y/o responsables</th>
-				<th>Registro Federal de contribuyentes</th>
-				<th>Procedimiento de contratación</th>
-				<th>Fundamento juridicos</th> 
-				<th>Descripcion breve de las razones que justifican<th/>
-				<th>Estatus<th/>
+	            <th> id_tpo </th>
+				<th> id_pnt </th>
+				<th> id </th>
+				<th> Ejercicio </th>
+				<th> Fecha de inicio del periodo que se informa </th>
+				<th> Fecha de termino del periodo que se informa </th>
+				<th> Sujeto obligado al que se le proporcionó el servicio/permiso </th>
+				<th> Tipo (catálogo) </th>
+				<th> Medio de comunicación (catálogo) </th>
+				<th> Descripción de unidad por ejemplo: spot de 30 segundos (radio); mensaje en TV 20 segundos </th>
+				<th> Concepto o campaña </th>
+				<th> Clave única de identificación de campaña o aviso institucional en su caso </th>
+				<th> Autoridad que proporcionó la clave única de identificación de campaña o aviso institucional </th>
+				<th> Cobertura (catálogo) </th>
+				<th> Ámbito geográfico de cobertura </th>
+				<th> Sexo (catálogo) </th>
+				<th> Lugar de residencia </th>
+				<th> Nivel educativo </th>
+				<th> Grupo de edad </th>
+				<th> Nivel económico </th>
+				<th> Concesionario responsable de publicar la campaña o la comunicación correspondiente (razón social) </th>
+				<th> Distintivo y/o nombre comercial del concesionario responsable de publicar la campaña o comunicación </th>
+				<th> Descripción breve de las razones que justifican la elección del proveedor </th>
+				<th> Monto total del tiempo de Estado o tiempo fiscal consumidos </th>
+				<th> Área administrativa encargada de solicitar la difusión del mensaje o producto en  </th>su caso
+				<th> Fecha de inicio de difusión del concepto o campaña </th>
+				<th> Fecha de término de difusión del concepto o campaña </th>
+				<th> Número de factura en su caso </th>
+				<th> Área(s) responsable(s) que genera(n) posee(n) publica(n) y actualizan la  </th>información
+				<th> Fecha de validación </th>
+				<th> Fecha de Actualización </th>
+				<th> Nota </th>
+				<th> Estatus </th>
 	        </tr>
 	    </thead>
 	    <tbody></tbody>
@@ -90,18 +111,39 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    		dataSrc: ''
 	    	},
 	    	columns: [
-	    		{ data: 'id_proveedor' },
-	    		{ data: 'id' },
-				{ data: 'nombre_razon_social' },
-				{ data: 'nombres' },
-				{ data: 'primer_apellido' },
-				{ data: 'segundo_apellido' },
-				{ data: 'nombre_comercial' },
-				{ data: 'rfc' },
-				{ data: 'nombre_procedimiento' },
-				{ data: 'fundamento_juridico' },
-				{ data: 'descripcion_justificacion' },
-				{ data: 'estatus_pnt' }
+	    		{ data: 'id_tpo' },
+				{ data: 'id_pnt' },
+				{ data: 'id' },
+				{ data: 'Ejercicio' },
+				{ data: 'Fecha de inicio del periodo que se informa' },
+				{ data: 'Fecha de termino del periodo que se informa' },
+				{ data: 'Sujeto obligado al que se le proporcionó el servicio/permiso' },
+				{ data: 'Tipo (catálogo)' },
+				{ data: 'Medio de comunicación (catálogo)' },
+				{ data: 'Descripción de unidad por ejemplo: spot de 30 segundos (radio); mensaje en TV 20 segundos' },
+				{ data: 'Concepto o campaña' },
+				{ data: 'Clave única de identificación de campaña o aviso institucional en su caso' },
+				{ data: 'Autoridad que proporcionó la clave única de identificación de campaña o aviso institucional' },
+				{ data: 'Cobertura (catálogo)' },
+				{ data: 'Ámbito geográfico de cobertura' },
+				{ data: 'Sexo (catálogo)' },
+				{ data: 'Lugar de residencia' },
+				{ data: 'Nivel educativo' },
+				{ data: 'Grupo de edad' },
+				{ data: 'Nivel económico' },
+				{ data: 'Concesionario responsable de publicar la campaña o la comunicación correspondiente (razón social)' },
+				{ data: 'Distintivo y/o nombre comercial del concesionario responsable de publicar la campaña o comunicación' },
+				{ data: 'Descripción breve de las razones que justifican la elección del proveedor' },
+				{ data: 'Monto total del tiempo de Estado o tiempo fiscal consumidos' },
+				{ data: 'Área administrativa encargada de solicitar la difusión del mensaje o producto en su caso' },
+				{ data: 'Fecha de inicio de difusión del concepto o campaña' },
+				{ data: 'Fecha de término de difusión del concepto o campaña' },
+				{ data: 'Número de factura en su caso' },
+				{ data: 'Área(s) responsable(s) que genera(n) posee(n) publica(n) y actualizan la información' },
+				{ data: 'Fecha de validación' },
+				{ data: 'Fecha de Actualización' },
+				{ data: 'Nota' },
+				{ data: 'Estatus' }
 			],
 			columnDefs: [ 
 				{
@@ -113,7 +155,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: 12,
+				    targets: 32,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	var response = ""
@@ -137,7 +179,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: [0,1,2,3,4,5,6,7,8,9,10,11, 12],
+				    targets: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
+				    		  25,26,27,28,29,30,31,32],
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	if(!data) return "<label class='btn'> <small> N/D </small></label>"

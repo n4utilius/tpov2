@@ -57,9 +57,9 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	<h2> Presupuesto total asignado y ejercido de cada partida </h2>
 	<table id="grid" class="dataTable stripe hover order-column row-border cell-border compact">
 		<thead>
-	        <tr>
-	            <th>id_proveedor</th>
-	            <th>id</th>
+	        <!--tr>
+	            <th>ID TPO</th>
+	            <th>ID PNT</th>
 				<th>Razón Social</th>
 				<th>Nombre(s)</th>
 				<th>Primer Apellido</th>
@@ -70,7 +70,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				<th>Fundamento juridicos</th> 
 				<th>Descripcion breve de las razones que justifican<th/>
 				<th>Estatus<th/>
-	        </tr>
+	        </tr-->
 	    </thead>
 	    <tbody></tbody>
 	</table>
@@ -86,12 +86,14 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 	    $('#grid').DataTable({
 	    	ajax: {
-	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros3",
+	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros31",
 	    		dataSrc: ''
 	    	},
+    		scrollY: true,
+	    	scrollX: true,
 	    	columns: [
-	    		{ data: 'id_proveedor' },
-	    		{ data: 'id' },
+	    		{ data: 'id_tpo' },
+	    		{ data: 'id_pnt' },
 				{ data: 'nombre_razon_social' },
 				{ data: 'nombres' },
 				{ data: 'primer_apellido' },
@@ -113,7 +115,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: 12,
+				    targets: 11,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	var response = ""
@@ -137,7 +139,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: [0,1,2,3,4,5,6,7,8,9,10,11, 12],
+				    targets: [0,1,2,3,4,5,6,7,8,9,11],
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	if(!data) return "<label class='btn'> <small> N/D </small></label>"

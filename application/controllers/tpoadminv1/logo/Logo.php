@@ -535,7 +535,7 @@ class Logo extends CI_Controller
     }
 
     function registros23(){
-        $query = $this->db->query("SELECT pnt.id_contrato id, pnt.id_pnt id_pnt, id,
+        $query = $this->db->query("SELECT pnt.id_contrato id_tpo, pnt.id_pnt id_pnt, pnt.id,
                 cont.fecha_celebracion 'Fecha de firma del contrato',
                 cont.numero_contrato 'Número o referencia de identificación del contrato',
                 cont.objeto_contrato 'Objeto del contrato',
@@ -553,7 +553,7 @@ class Logo extends CI_Controller
                 LEFT JOIN (SELECT f.id_contrato, GROUP_CONCAT(f.numero_factura) numeros_factura, 
                                   GROUP_CONCAT(f.file_factura_pdf) files_factura_pdf
                            FROM tab_facturas f GROUP BY f.id_contrato) f ON f.id_contrato = cont.id_contrato
-                 LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato");
+                LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato");
 
         $rows = $query->result_array();
 
@@ -562,61 +562,68 @@ class Logo extends CI_Controller
     }
 
      function registros3(){
-        $query = $this->db->query("SELECT ej.ejercicio 'Ejercicio', 
-                cam.fecha_inicio_periodo 'Fecha de inicio del periodo que se informa',
-                cam.fecha_termino_periodo 'Fecha de termino del periodo que se informa',
-                so.nombre_sujeto_obligado 'Sujeto obligado al que se le proporcionó el servicio/permiso',
-                ctip.nombre_campana_tipo 'Tipo (catálogo)',
-                -- 'Medio de comunicación (catálogo)'
-                -- 'Descripción de unidad por ejemplo: spot de 30 segundos (radio); mensaje en TV 20 segundos'
-                cam.nombre_campana_aviso 'Concepto o campaña',
-                cam.clave_campana 'Clave única de identificación de campaña o aviso institucional en su caso',
-                cam.autoridad  'Autoridad que proporcionó la clave única de identificación de campaña o aviso institucional',
-                ccob.nombre_campana_cobertura 'Cobertura (catálogo)',
-                cam.campana_ambito_geo 'Ámbito geográfico de cobertura',
-                sex.nombre_poblacion_sexo 'Sexo (catálogo)',
-                lug.nombre_poblacion_lugar 'Lugar de residencia',
-                edu.nombre_poblacion_nivel_educativo 'Nivel educativo', 
-                eda.nombre_poblacion_grupo_edad 'Grupo de edad',
-                niv.nombre_poblacion_nivel 'Nivel económico',
-                -- 'Concesionario responsable de publicar la campaña o la comunicación correspondiente (razón social)'
-                -- 'Distintivo y/o nombre comercial del concesionario responsable de publicar la campaña o comunicación'
-                -- 'Descripción breve de las razones que justifican la elección del proveedor'
-                -- 'Monto total del tiempo de Estado o tiempo fiscal consumidos'
-                -- 'Área administrativa encargada de solicitar la difusión del mensaje o producto en su caso'
-                cam.fecha_inicio 'Fecha de inicio de difusión del concepto o campaña',
-                cam.fecha_termino 'Fecha de término de difusión del concepto o campaña',
-                -- 'Presupuesto total asignado y ejercido de cada partida', 'Número de factura en su caso'
-                cam.area_responsable 'Área(s) responsable(s) que genera(n) posee(n) publica(n) y actualizan la información',
-                cam.fecha_validacion 'Fecha de validación',
-                cam.fecha_actualizacion 'Fecha de Actualización',
-                cam.nota 'Nota'
-                FROM tab_campana_aviso cam
-                JOIN cat_ejercicios ej ON ej.id_ejercicio = cam.id_ejercicio
-                JOIN tab_sujetos_obligados so ON so.id_sujeto_obligado = cam.id_so_solicitante
-                JOIN cat_campana_tipos ctip ON ctip.id_campana_tipo = cam.id_campana_tipo
-                JOIN cat_campana_coberturas ccob ON ccob.id_campana_cobertura = cam.id_campana_cobertura
-                JOIN (SELECT csex.id_campana_aviso, sex.nombre_poblacion_sexo
-                      FROM rel_campana_sexo csex
-                      JOIN cat_poblacion_sexo sex ON sex.id_poblacion_sexo = csex.id_poblacion_sexo) sex 
-                ON sex.id_campana_aviso = cam.id_campana_aviso
-                LEFT JOIN (SELECT clug.id_campana_aviso, lug.nombre_poblacion_lugar
-                      FROM rel_campana_lugar clug
-                      JOIN cat_poblacion_lugar lug ON lug.id_poblacion_lugar = clug.id_campana_lugar) lug
-                ON lug.id_campana_aviso = cam.id_campana_aviso
-                LEFT JOIN (SELECT cedu.id_campana_aviso, edu.nombre_poblacion_nivel_educativo
-                      FROM rel_campana_nivel_educativo cedu
-                      JOIN cat_poblacion_nivel_educativo edu ON edu.id_poblacion_nivel_educativo = cedu.id_rel_campana_nivel_educativo) edu
-                ON edu.id_campana_aviso = cam.id_campana_aviso
-                LEFT JOIN (SELECT ceda.id_campana_aviso, eda.nombre_poblacion_grupo_edad
-                      FROM rel_campana_grupo_edad ceda
-                      JOIN cat_poblacion_grupo_edad eda ON eda.id_poblacion_grupo_edad = ceda.id_rel_campana_grupo_edad) eda
-                ON eda.id_campana_aviso = cam.id_campana_aviso
-                JOIN (SELECT cniv.id_campana_aviso, GROUP_CONCAT(niv.nombre_poblacion_nivel) nombre_poblacion_nivel
-                      FROM rel_campana_nivel cniv
-                      JOIN cat_poblacion_nivel niv ON niv.id_poblacion_nivel = cniv.id_poblacion_nivel
-                      GROUP BY cniv.id_campana_aviso) niv ON niv.id_campana_aviso = cam.id_campana_aviso
-                ;");
+        $query = $this->db->query("SELECT pnt.id_campana_aviso id_tpo, pnt.id_pnt, pnt.id, ej.ejercicio 'Ejercicio', 
+                  cam.fecha_inicio_periodo 'Fecha de inicio del periodo que se informa',
+                  cam.fecha_termino_periodo 'Fecha de termino del periodo que se informa',
+                  so.nombre_sujeto_obligado 'Sujeto obligado al que se le proporcionó el servicio/permiso',
+                  ctip.nombre_campana_tipoTO 'Tipo (catálogo)',
+                  cscat.nombre_servicio_categoria 'Medio de comunicación (catálogo)', 
+                  csun.nombre_servicio_unidad 'Descripción de unidad por ejemplo: spot de 30 segundos (radio); mensaje en TV 20 segundos',
+                  cam.nombre_campana_aviso 'Concepto o campaña',
+                  cam.clave_campana 'Clave única de identificación de campaña o aviso institucional en su caso',
+                  cam.autoridad  'Autoridad que proporcionó la clave única de identificación de campaña o aviso institucional',
+                  ccob.nombre_campana_cobertura 'Cobertura (catálogo)',
+                  cam.campana_ambito_geo 'Ámbito geográfico de cobertura',
+                  sex.nombre_poblacion_sexo 'Sexo (catálogo)',
+                  lug.poblacion_lugar 'Lugar de residencia',
+                  edu.nombre_poblacion_nivel_educativo 'Nivel educativo', 
+                  eda.nombre_poblacion_grupo_edad 'Grupo de edad',
+                  niv.nombre_poblacion_nivel 'Nivel económico',
+                  prov.nombre_razon_social 'Concesionario responsable de publicar la campaña o la comunicación correspondiente (razón social)',
+                  prov.nombre_comercial 'Distintivo y/o nombre comercial del concesionario responsable de publicar la campaña o comunicación',
+                  ord.descripcion_justificacion 'Descripción breve de las razones que justifican la elección del proveedor',
+                  cam.monto_tiempo 'Monto total del tiempo de Estado o tiempo fiscal consumidos',
+                  cam.area_responsable 'Área administrativa encargada de solicitar la difusión del mensaje o producto en su caso',
+                  cam.fecha_inicio 'Fecha de inicio de difusión del concepto o campaña',
+                  cam.fecha_termino 'Fecha de término de difusión del concepto o campaña',
+                  -- 'Presupuesto total asignado y ejercido de cada partida', 
+                  fac.numero_factura 'Número de factura en su caso' ,
+                  fac.area_responsable 'Área(s) responsable(s) que genera(n) posee(n) publica(n) y actualizan la información',
+                  cam.fecha_validacion 'Fecha de validación',
+                  cam.fecha_actualizacion 'Fecha de Actualización',
+                  cam.nota 'Nota',  pnt.estatus_pnt 'Estatus'
+                  FROM tab_campana_aviso cam
+                  JOIN cat_ejercicios ej ON ej.id_ejercicio = cam.id_ejercicio
+                  JOIN tab_facturas_desglose fdes ON fdes.id_campana_aviso = cam.id_campana_aviso
+                  JOIN tab_facturas fac ON fac.id_factura = fdes.id_factura
+                  JOIN tab_proveedores prov ON prov.id_proveedor = fac.id_proveedor
+                  JOIN tab_ordenes_compra ord ON ord.id_proveedor = fac.id_proveedor
+                  JOIN cat_servicios_categorias cscat ON cscat.id_servicio_categoria = fdes.id_servicio_categoria
+                  JOIN cat_servicios_unidades csun ON csun.id_servicio_unidad = fdes.id_servicio_unidad
+                  JOIN tab_sujetos_obligados so ON so.id_sujeto_obligado = cam.id_so_solicitante
+                  JOIN cat_campana_tiposTO ctip ON ctip.id_campana_tipoTO = cam.id_campana_tipoTO
+                  JOIN cat_campana_coberturas ccob ON ccob.id_campana_cobertura = cam.id_campana_cobertura
+                  JOIN (SELECT csex.id_campana_aviso, sex.nombre_poblacion_sexo
+                        FROM rel_campana_sexo csex
+                        JOIN cat_poblacion_sexo sex ON sex.id_poblacion_sexo = csex.id_poblacion_sexo) sex 
+                  ON sex.id_campana_aviso = cam.id_campana_aviso
+                  LEFT JOIN (SELECT clug.id_campana_aviso, clug.poblacion_lugar
+                        FROM rel_campana_lugar clug
+                        JOIN cat_poblacion_lugar lug ON lug.id_poblacion_lugar = clug.id_campana_lugar) lug
+                  ON lug.id_campana_aviso = cam.id_campana_aviso
+                  LEFT JOIN (SELECT cedu.id_campana_aviso, edu.nombre_poblacion_nivel_educativo
+                        FROM rel_campana_nivel_educativo cedu
+                        JOIN cat_poblacion_nivel_educativo edu ON edu.id_poblacion_nivel_educativo = cedu.id_rel_campana_nivel_educativo) edu
+                  ON edu.id_campana_aviso = cam.id_campana_aviso
+                  LEFT JOIN (SELECT ceda.id_campana_aviso, eda.nombre_poblacion_grupo_edad
+                        FROM rel_campana_grupo_edad ceda
+                        JOIN cat_poblacion_grupo_edad eda ON eda.id_poblacion_grupo_edad = ceda.id_rel_campana_grupo_edad) eda
+                  ON eda.id_campana_aviso = cam.id_campana_aviso
+                  JOIN (SELECT cniv.id_campana_aviso, GROUP_CONCAT(niv.nombre_poblacion_nivel) nombre_poblacion_nivel
+                        FROM rel_campana_nivel cniv
+                        JOIN cat_poblacion_nivel niv ON niv.id_poblacion_nivel = cniv.id_poblacion_nivel
+                        GROUP BY cniv.id_campana_aviso) niv ON niv.id_campana_aviso = cam.id_campana_aviso
+                  LEFT JOIN rel_pnt_campana_aviso2 pnt ON pnt.id_campana_aviso = cam.id_campana_aviso;");
 
         $rows = $query->result_array();
 
@@ -625,15 +632,13 @@ class Logo extends CI_Controller
     }
 
     function registros31(){ /* PROVISIONAL */
-        $query = $this->db->query("SELECT pnt.id_proveedor id_pnt, pnt.id_proveedor id,
-                    prov.nombre_razon_social, prov.nombres, prov.primer_apellido,
-                    prov.segundo_apellido, prov.nombre_comercial, prov.rfc,
-                    proc.nombre_procedimiento, con.fundamento_juridico,
-                    con.descripcion_justificacion, pnt.estatus_pnt
-                    FROM tab_proveedores prov
-                    LEFT JOIN tab_contratos con ON con.id_proveedor = prov.id_proveedor
-                    LEFT JOIN cat_procedimientos proc ON proc.id_procedimiento = con.id_procedimiento
-                    LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor");
+        $query = $this->db->query("SELECT pnt.id_proveedor id_tpo, pnt.id_pnt, prov.nombre_razon_social, 
+            prov.nombres, prov.primer_apellido, prov.segundo_apellido, prov.nombre_comercial, prov.rfc, 
+            proc.nombre_procedimiento, cont.fundamento_juridico, cont.descripcion_justificacion, pnt.estatus_pnt
+        FROM tab_proveedores prov
+        JOIN tab_contratos cont ON cont.id_proveedor = prov.id_proveedor
+        JOIN cat_procedimientos proc ON proc.id_procedimiento = cont.id_procedimiento
+        LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor;");
 
         $rows = $query->result_array();
 
@@ -642,7 +647,7 @@ class Logo extends CI_Controller
     }
 
     function registros4(){
-        $query = $this->db->query("SELECT cam.id_campana_aviso id_tpo, pnt.id_pnt, pnt.id,  pnt.estatus_pnt, 
+        $query = $this->db->query("SELECT pnt.id_campana_aviso id_tpo, pnt.id_pnt, pnt.id,  pnt.estatus_pnt, 
                 ej.ejercicio, cam.fecha_inicio_periodo, cam.fecha_termino_periodo, cam.mensajeTO, 
                 /*Hipervínculo, */ cam.fecha_validacion, cam.fecha_actualizacion, cam.area_responsable, cam.nota 
                 FROM tab_campana_aviso cam 

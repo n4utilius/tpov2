@@ -85,6 +85,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros4",
 	    		dataSrc: ''
 	    	},
+    		scrollY: true,
+	    	scrollX: true,
 	    	columns: [
 	    		{ data: 'id_tpo'},
 	    		{ data: 'id_pnt'},
