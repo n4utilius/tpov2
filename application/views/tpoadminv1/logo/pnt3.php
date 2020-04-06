@@ -5,6 +5,9 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 }
 ?>
 
+<script type="text/javascript" src="<?php echo base_url(); ?>plugins/sanitizer/sanitizer.js"></script>
+
+
 <link href="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 	body { transition: background-color ease-in 3s; /* tweak to your liking */ }
@@ -103,6 +106,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 <script src="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.js" type="text/javascript" ></script>
 
 <script type="text/javascript">
+
+
 	$(document).ready(function(){
 
 	    $('#grid').DataTable({
@@ -110,6 +115,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros3",
 	    		dataSrc: ''
 	    	},
+    		scrollY: true,
+	    	scrollX: true,
 	    	columns: [
 	    		{ data: 'id_tpo' },
 				{ data: 'id_pnt' },
@@ -157,21 +164,23 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				{
 				    targets: 32,
 				    data: "data",
-				    render: function ( data, type, row, meta ) {
+				     render: function ( data, type, row, meta ) {
 				      	var response = ""
+			      		row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
 				      	if(!data){ 
+
 				      		response += "<a class='tpo_btn crear' href='#' data='"
-				      		response += JSON.stringify(row) + "'> <img width='24' src='<?php echo base_url(); ?>plugins/img/upload.png'> </a>"
+				      		response +=  row + "'> <img width='24' src='<?php echo base_url(); ?>plugins/img/upload.png'> </a>"
 				      		
 				      		response += "<img class='check invisible' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
-				      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + JSON.stringify(row) + "'> <img src='<?php echo base_url(); ?>plugins/img/erase.png'></a>"
+				      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + row + "'> <img src='<?php echo base_url(); ?>plugins/img/erase.png'></a>"
 				      		return response
 				      	}else{
 				      		response += "<a class='tpo_btn crear invisible' href='#' data='"
-				      		response += JSON.stringify(row) + "'> <img width='24' src='<?php echo base_url(); ?>plugins/img/upload.png'> </a>"
+				      		response += row + "'> <img width='24' src='<?php echo base_url(); ?>plugins/img/upload.png'> </a>"
 
 				      		response += "<img class='check' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
-				      		response += "<a class='tpo_btn eliminar' href='#' data='" + JSON.stringify(row) + "'> <img src='<?php echo base_url(); ?>plugins/img/erase.png'></a>"
+				      		response += "<a class='tpo_btn eliminar' href='#' data='" + row + "'> <img src='<?php echo base_url(); ?>plugins/img/erase.png'></a>"
 					      	return response
 
 				      	}
