@@ -440,8 +440,8 @@
                     <?php 
                         echo "  <tr>";
                         echo "    <form>";
-                        echo "    <td> <input type='input' id='unidad_administrativa' class='form-control' name='unidad_administrativa' value='" . $_SESSION["unidad_administrativa"] . "'> </td>";
-                        echo "    <td> <input type='input' id='sujeto_obligado' class='form-control' name='sujeto_obligado' value='" . $_SESSION["sujeto_obligado"] . "'> </td>";
+                        echo "    <td> <input type='input' id='unidad_administrativa' class='form-control' name='unidad_administrativa' value='" . ( ( isset($_SESSION['unidad_administrativa']) )? $_SESSION["unidad_administrativa"] : '' ) . "'> </td>";
+                        echo "    <td> <input type='input' id='sujeto_obligado' class='form-control' name='sujeto_obligado' value='" . ( ( isset($_SESSION['sujeto_obligado']) )? $_SESSION["sujeto_obligado"] : '' ) . "'> </td>";
                         echo "    <td> <a type='button' id='modificar_sujeto' href='" . base_url() . "index.php/tpoadminv1/logo/logo/modificar_sujeto' 
                                             class='btn-group btn btn-primary btn-sm'> <i class='fa fa-edit'></i> Actualizar datos de Sujeto Obligado </a> </td>"; 
                         echo "    </form>";

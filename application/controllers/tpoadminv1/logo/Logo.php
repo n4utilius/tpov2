@@ -134,9 +134,9 @@ class Logo extends CI_Controller
 
         }else{
             $post_data = array(); 
-            $post_data['nombre_sujeto_obligado'] = "'" . $_POST["sujeto_obligado"] . "'";
-            $post_data['nombre_unidad_administrativa'] = "'" . $_POST["unidad_administrativa"] . "'";
-            $post_data['correo_unidad_administrativa'] = "'" . $_SESSION["user_pnt"] . "'";
+            $post_data['nombre_sujeto_obligado'] =  $_POST["sujeto_obligado"];
+            $post_data['nombre_unidad_administrativa'] =  $_POST["unidad_administrativa"];
+            $post_data['correo_unidad_administrativa'] =  $_SESSION["user_pnt"];
 
             $this->db->insert('unidades_so', $post_data);
             $query =  $this->db->insert_id();
@@ -203,8 +203,8 @@ class Logo extends CI_Controller
         if( $result["success"] ){
             $pntid = $result["mensaje"]["registros"][0]["idRegistro"]; 
 
-            $table = "";
-            $nombre_id_interno = "";
+            $table = "rel_pnt_presupuesto";
+            $nombre_id_interno = "id_presupuesto";
 
             switch ($_POST["idFormato"]) {
                 case 43322:
@@ -226,11 +226,11 @@ class Logo extends CI_Controller
             $result['id_tpo'] =  $this->db->insert_id();
             $result['id_pnt'] =   $pntid;
 
-            $response = json_encode($result);
-
-            header('Content-Type: application/json');
-            echo  $response; 
         }
+        
+        $response = json_encode($result);
+        header('Content-Type: application/json');
+        echo  $response; 
     }
 
 

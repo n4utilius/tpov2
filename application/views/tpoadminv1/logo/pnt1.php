@@ -109,7 +109,6 @@ $(document).ready(function(){
 	        { data: 'area_responsable' },
 	        { data: 'fecha_validacion' },
 	        { data: 'fecha_actualizacion' },
-	        { data: 'nota_planeacion' },																																																																				
 	        { data: 'estatus_pnt' }
 		],
 		columnDefs: [ 
@@ -212,6 +211,7 @@ $(document).ready(function(){
     			tr.children("td").eq(13).children("a.crear").addClass("invisible")
     		} else {
     			console.log("No se pudo insertar el elemento correctamente")
+    			console.log(res, error)
     			a.css("display", "block")
     		}
 
