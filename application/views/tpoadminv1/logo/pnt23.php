@@ -136,28 +136,38 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				{
 				    targets: 17,
 				    data: "data",
-				     render: function ( data, type, row, meta ) {
+				    render: function ( data, type, row, meta ) {
 				      	var response = ""
 			      		row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
 				      	if(!data){ 
+				      		response += "<a class='tpo_btn crear' href='#' data='" + row + "'>" 
+				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> Agregar </span> </a>"
 
-				      		response += "<a class='tpo_btn crear' href='#' data='"
-				      		response +=  row + "'> <img width='24' src='<?php echo base_url(); ?>plugins/img/upload.png'> </a>"
-				      		
 				      		response += "<img class='check invisible' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
-				      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + row + "'> <img src='<?php echo base_url(); ?>plugins/img/erase.png'></a>"
+
+				      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + row + "'>" 
+				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i> Eliminar </span> </a>"
+
+				      		response += "<a class='tpo_btn editar invisible' href='#' data='" + row + "'>" 
+				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i> Modificar </span></a>"
+				      		
 				      		return response
 				      	}else{
-				      		response += "<a class='tpo_btn crear invisible' href='#' data='"
-				      		response += row + "'> <img width='24' src='<?php echo base_url(); ?>plugins/img/upload.png'> </a>"
+				      		response += "<a class='tpo_btn crear invisible' href='#' data='" + row + "'>" 
+				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> Agregar</span> </a>"
 
 				      		response += "<img class='check' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
-				      		response += "<a class='tpo_btn eliminar' href='#' data='" + row + "'> <img src='<?php echo base_url(); ?>plugins/img/erase.png'></a>"
+
+				      		response += "<a class='tpo_btn eliminar' href='#' data='" + row + "'>" 
+				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i> Eliminar </span> </a>"
+
+				      		response += "<a class='tpo_btn editar' href='#' data='" + row + "'>" 
+				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i> Modificar </span></a>"
+
 					      	return response
 
 				      	}
-
-				    }
+					}
 				},
 				{
 				    targets: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],

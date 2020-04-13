@@ -623,16 +623,18 @@
 
 
     $("a#re-conectar").on("click", function(e){
-        //$.ajaxSetup({ async: false });  
         e.preventDefault()
-       $(".active").prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
+        $("td.inactive").prepend(
+            "<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
+        
         $.post( $(this).attr("href"), { 'user': $("#re-user").val() , 'password': $("#re-pass").val() }, 
-            function(data){ 
-                $(".inactive").children(".loading").remove()
-                location.reload(); 
+            function(data, error){
+                console.log(data, error) 
+                $("td.inactive").children(".loading").remove()
+                //location.reload(); 
             }
         );
-        $(".inactive").children(".loading").remove()
+        $("td.inactive").children(".loading").remove()
     })
 
      $("a#modificar_sujeto").on("click", function(e){

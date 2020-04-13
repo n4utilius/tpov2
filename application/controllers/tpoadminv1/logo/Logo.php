@@ -83,6 +83,8 @@ class Logo extends CI_Controller
             "password" => $_POST["password"] 
         );
 
+
+
         $options = array(
             'http' => array(
             'method'  => 'POST',
@@ -92,10 +94,17 @@ class Logo extends CI_Controller
             )
         );
 
+        $response = json_encode($data);
+
+        header('Content-Type: application/json');
+        echo  $response; 
+
         $context  = stream_context_create( $options );
         $result = file_get_contents( $URL, false, $context );
-        $result = json_decode($result, true);
+        //$result = json_decode($result, true);
 
+        
+        /*
         if( $result["success"] ){
             $_SESSION["user_pnt"] = $data["usuario"];
             $_SESSION["pnt"] = $result;
@@ -106,10 +115,14 @@ class Logo extends CI_Controller
 
             $_SESSION["sujeto_obligado"] = $query->row()->nombre_sujeto_obligado;
             $_SESSION["unidad_administrativa"] = $query->row()->nombre_unidad_administrativa;
+        
          }
 
+        $response = json_encode($result);
+
         header('Content-Type: application/json');
-        echo json_encode($result);
+        echo  $response; 
+        */
 
     }
 
