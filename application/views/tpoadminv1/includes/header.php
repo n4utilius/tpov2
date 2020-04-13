@@ -11,6 +11,16 @@ header('Expires: 0'); // Proxies.
 
 ?>
 
+<style type="text/css">
+    .navbar-nav > .user-menu > .dropdown-menu > li.user-header {
+        height: 250px !important;
+    }
+
+    .navbar-nav > .user-menu > .dropdown-menu > li.user-header a#desconectar_pnt{
+        color: #fff;
+    }
+</style>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -84,25 +94,18 @@ header('Expires: 0'); // Proxies.
                                         <?php echo $heading; ?> <br> <?php echo $job; ?>
                                         <!--<small>Member since Nov. 2012</small>-->
                                     </p>
+                                    <a href="<?php echo base_url() . 'index.php/tpoadminv1/securecms/logout'; ?>" 
+                                       class="btn btn-default btn-flat">Salir</a>
+
+                                    <br>
+                                    <b> <center> Usuario PNT:  <?php //echo $_SESSION["user_pnt"]; ?> </center> </b>
+                                    <a type='submit' class='btn-group btn btn-danger btn-sm' 
+                                       href='<?php //echo base_url(); ?>index.php/tpoadminv1/logo/logo/salir_pnt' 
+                                       id='desconectar_pnt'> Desconectar PNT </a> 
+                                   
                                 </li>
                                 <!-- Menu Body -->
-                                <li class="user-body">
-                                    <div class="pull-right">
-                                        <a href="<?php echo base_url() . 'index.php/tpoadminv1/securecms/logout'; ?>" class="btn btn-default btn-flat">Salir</a>
-                                    </div>
-                                    <?php if( ( isset($_SESSION['pnt']) ) and 
-                                        ( isset($_SESSION["pnt"]["success"]) ) and ( $_SESSION["pnt"]["success"] ) ){ ?>
-                                        <div class="col-xs-8">
-                                            <div class="pull-right"> 
-                                                <b> Usuario PNT: <?php echo $_SESSION["user_pnt"]; ?>  </b> 
-                                                <a type='submit' class='btn-group btn btn-danger btn-sm' 
-                                                    href='<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/salir_pnt' 
-                                                    id='desconectar_pnt'> Desconectar PNT </a> 
-                                            </div>
-                                        </div>
-
-                                    <?php } ?>
-                                </li>
+                                <li class="user-body">  </li>
                                 <li class="user-footer"> </li>
                                 <!-- Menu Footer-->
 
