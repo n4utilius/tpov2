@@ -182,23 +182,23 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				      		response += "<img class='check invisible' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
 
 				      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i> Eliminar </span> </a>"
+				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
 
 				      		response += "<a class='tpo_btn editar invisible' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i> Modificar </span></a>"
+				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
 				      		
 				      		return response
 				      	}else{
 				      		response += "<a class='tpo_btn crear invisible' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> Agregar</span> </a>"
+				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> </span> </a>"
 
 				      		response += "<img class='check' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
 
 				      		response += "<a class='tpo_btn eliminar' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i> Eliminar </span> </a>"
+				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
 
 				      		response += "<a class='tpo_btn editar' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i> Modificar </span></a>"
+				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
 
 					      	return response
 

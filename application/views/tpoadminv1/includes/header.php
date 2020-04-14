@@ -13,7 +13,7 @@ header('Expires: 0'); // Proxies.
 
 <style type="text/css">
     .navbar-nav > .user-menu > .dropdown-menu > li.user-header {
-        height: 250px !important;
+        min-height: 280px !important;
     }
 
     .navbar-nav > .user-menu > .dropdown-menu > li.user-header a#desconectar_pnt{
@@ -105,8 +105,8 @@ header('Expires: 0'); // Proxies.
                                    
                                 </li>
                                 <!-- Menu Body -->
-                                <li class="user-body">  </li>
-                                <li class="user-footer"> </li>
+                                <!--li class="user-body">  </li>
+                                <li class="user-footer"> </li-->
                                 <!-- Menu Footer-->
 
                                 <script type="text/javascript">
