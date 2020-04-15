@@ -15,7 +15,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	h4{ float: left; margin-right: 30px; margin-top: 3px;  }
 	.items-formato { margin-left:0; padding: 0 }
 	.items-formato li{ list-style: none; float: left; margin-right:20px;}
-	.items-formato li a{ width: 140px; background-color: #cc33ff; border-color: #cc33ff; font-weight: bolder;}
+	.items-formato li a.btn-group{ width: 140px; background-color: #cc33ff; border-color: #cc33ff; font-weight: bolder;}
 	.here{ 
 		background-color: #0277bd !important;
 		border-color: #0277bd !important;
@@ -53,7 +53,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 4)? 'here': '' ?>" id="formato_4" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=4"> 70FXXIIID </a> </li>
 	</ul>
 
-	<br><br>
+	<br><br><br>
 	<h2> Programa Anual de Comunicación Social o equivalente </h2>
 	<table id="grid1" class="dataTable stripe hover order-column row-border cell-border compact" >
 		<thead>
@@ -136,7 +136,7 @@ $(document).ready(function(){
 		      		row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
 			      	if(!data){ 
 			      		response += "<a class='tpo_btn crear' href='#' data='" + row + "'>" 
-			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> Agregar </span> </a>"
+			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
 
 			      		response += "<img class='check invisible' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
 

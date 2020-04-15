@@ -1,8 +1,9 @@
 <?php  
-if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !( $_SESSION["pnt"]["success"] ) ){
+/*if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !( $_SESSION["pnt"]["success"] ) ){
 	header("Location: " . base_url() ."index.php/tpoadminv1/logo/logo/alta_carga_logo");
 	die();
 }
+*/
 ?>
 
 <script type="text/javascript" src="<?php echo base_url(); ?>plugins/sanitizer/sanitizer.js"></script>
@@ -15,12 +16,13 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	.loading{ float: left; } 
 	h4{ float: left; margin-right: 30px; margin-top: 3px;  }
 	.items-formato { margin-left:0; padding: 0 }
-	.items-formato li{ list-style: none; float: left; margin-right:20px; max-width: 140px;}
-	.items-formato li a{ width: 140px; background-color: #cc33ff; border-color: #cc33ff; font-weight: bolder;}
-	.subitems{ width: 600px; position: relative; top: 10px; border-left: 3px solid #c3f;
-			   height: 30px; margin: 0; padding-left: 5px;}
-	.subitems li a{ background-color: #ff00bf; }
-	.here{ background-color: #0277bd !important; border-color: #0277bd !important;}
+	.items-formato li{ list-style: none; float: left; margin-right:20px;}
+	.subitems{ margin-top: 10px; }
+	.items-formato li a.btn-group{ width: 140px; background-color: #cc33ff; border-color: #cc33ff; font-weight: bolder;}
+	.here{ 
+		background-color: #0277bd !important;
+		border-color: #0277bd !important;
+	}
 </style>
 
 <!-- Main content -->
@@ -55,24 +57,19 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		</li>
 		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 4)? 'here': '' ?>" id="formato_4" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=4"> 70FXXIIID </a> </li>
 
-	<br><br>
+	<br><br><br>
 	<h2> Presupuesto total asignado y ejercido de cada partida </h2>
 	<table id="grid" class="dataTable stripe hover order-column row-border cell-border compact">
 		<thead>
-	        <!--tr>
-	            <th>ID TPO</th>
-	            <th>ID PNT</th>
-				<th>Razón Social</th>
-				<th>Nombre(s)</th>
-				<th>Primer Apellido</th>
-				<th>Segundo Apellido</th>
-				<th>Nombre de los Proveedores y/o responsables</th>
-				<th>Registro Federal de contribuyentes</th>
-				<th>Procedimiento de contratación</th>
-				<th>Fundamento juridicos</th> 
-				<th>Descripcion breve de las razones que justifican<th/>
-				<th>Estatus<th/>
-	        </tr-->
+	        <tr>
+				<th>ID TPO</th>
+				<th>ID PNT</th>
+				<th>ID</th>
+	            <th>Denominación Partida</th>
+	            <th>Presupuesto total asignado a cada partida</th>
+	            <th>Presupuesto ejercido al periodo reportado de cada partida</th>
+				<th>Estatus</th>
+	        </tr>
 	    </thead>
 	    <tbody></tbody>
 	</table>
@@ -96,15 +93,10 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    	columns: [
 	    		{ data: 'id_tpo' },
 	    		{ data: 'id_pnt' },
-				{ data: 'nombre_razon_social' },
-				{ data: 'nombres' },
-				{ data: 'primer_apellido' },
-				{ data: 'segundo_apellido' },
-				{ data: 'nombre_comercial' },
-				{ data: 'rfc' },
-				{ data: 'nombre_procedimiento' },
-				{ data: 'fundamento_juridico' },
-				{ data: 'descripcion_justificacion' },
+	    		{ data: 'id' },
+				{ data: 'denominacion_partida' },
+				{ data: 'monto_presupuesto' },
+				{ data: 'total_ejercido' },
 				{ data: 'estatus_pnt' }
 			],
 			columnDefs: [ 
@@ -117,14 +109,14 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: 11,
+				    targets: 6,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	var response = ""
 			      		row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
 				      	if(!data){ 
 				      		response += "<a class='tpo_btn crear' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> Agregar </span> </a>"
+				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
 
 				      		response += "<img class='check invisible' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
 
@@ -153,7 +145,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 					}
 				},
 				{
-				    targets: [0,1,2,3,4,5,6,7,8,9,11],
+				    targets: [0,1,2,3,4,5],
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	if(!data) return "<label class='btn'> <small> N/D </small></label>"
@@ -162,10 +154,11 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				}
 			]
 	    });
+	    /*
 		$(document).on("click","a.crear",function(e){ 
 	    	e.preventDefault();
 		    var data = JSON.parse( $(this).attr("data") )
-			  , url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
+			  , url = "<?php //echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
 			
 			var a = $(this)
 		      , tr = a.parents("tr")
@@ -173,15 +166,15 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 		    a.css("display", "none")
 		    tr.css("background-color", "rgba(0,255,0, 0.2)")
-		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
+		    td.prepend("<img class='loading' src='<?php //echo base_url(); ?>plugins/img/loading.gif'>")
 
 		    formato = {
-				"idFormato": 43369, /*"Contratación de servicios de publicidad oficial"*/
+				"idFormato": 43369, //"Contratación de servicios de publicidad oficial"
 				"IdRegistro": "",
-				"token": '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>',
-				"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,
-				"unidadAdministrativa": '<?php echo $_SESSION["unidad_administrativa"]; ?>',
-				"SujetoObligado": '<?php echo $_SESSION["sujeto_obligado"]; ?>',
+				"token": '<?php //echo $_SESSION["pnt"]["token"]["token"]; ?>',
+				"correoUnidadAdministrativa": '<?php //echo $_SESSION["user_pnt"]; ?>' ,
+				"unidadAdministrativa": '<?php //echo $_SESSION["unidad_administrativa"]; ?>',
+				"SujetoObligado": '<?php //echo $_SESSION["sujeto_obligado"]; ?>',
 				"registros": [{
 				    "numeroRegistro": 1,
 				    "campos": [
@@ -191,7 +184,6 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 			  "_id_interno": data["ID FACTURA"]
 			}
 
-			/**/
 	    	$.post(url, formato, function(res, error){
     			if(res && res.success) {
 	    			tr.children("td").eq(1).text(res.id_pnt)
@@ -209,7 +201,6 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
     			else tr.css("background-color", "#fff")
 
 	    	})
-			/**/
 	    });
 
 		$(document).on("click","a.eliminar",function(e){ 
@@ -222,12 +213,12 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		    a.css("display", "none")
 		    a.siblings().css("display", "none")
 		    tr.css("background-color", "rgba(255,0,0, 0.2)")
-		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
+		    td.prepend("<img class='loading' src='<?php //echo base_url(); ?>plugins/img/loading.gif'>")
 
 		    var id_pnt = tr.children("td").eq(1).text()
 
 	    	var data = JSON.parse( $(this).attr("data")  )
-			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
+			  , token = '<?php //echo $_SESSION["pnt"]["token"]["token"]; ?>'
 
 			var formato = {
 				"idFormato": 43320, 
@@ -237,7 +228,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				"id_pnt": data.id_pnt || id_pnt
 			}
 
-			var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
+			var url = "<?php //echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
 
 	    	$.post(url, formato, function(res, error){
 	    		//if(res.success) location.reload(); 
@@ -260,5 +251,6 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    	})
 
 	    })
+	    */
 	})
 </script>

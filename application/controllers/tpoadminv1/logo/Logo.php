@@ -376,8 +376,8 @@ class Logo extends CI_Controller
     }
 
 
-    function registros(){
-        $query = $this->db->query("SELECT pnt.id_tpo, pnt.id_pnt, p.id_presupuesto, e.ejercicio, p.fecha_inicio_periodo,
+    function registros(){ 
+        $query = $this->db->query("SELECT IFNULL(pnt.id_tpo, 'N/D'), pnt.id_pnt, p.id_presupuesto, e.ejercicio, p.fecha_inicio_periodo,
             p.fecha_termino_periodo, p.denominacion, p.fecha_publicacion, p.file_programa_anual,
             p.area_responsable, p.fecha_validacion, p.fecha_actualizacion, p.nota, pnt.estatus_pnt
             FROM tab_presupuestos p
@@ -646,13 +646,26 @@ class Logo extends CI_Controller
     }
 
     function registros31(){ /* PROVISIONAL */
-        $query = $this->db->query("SELECT pnt.id_proveedor id_tpo, pnt.id_pnt, prov.nombre_razon_social, 
-            prov.nombres, prov.primer_apellido, prov.segundo_apellido, prov.nombre_comercial, prov.rfc, 
-            proc.nombre_procedimiento, cont.fundamento_juridico, cont.descripcion_justificacion, pnt.estatus_pnt
-        FROM tab_proveedores prov
-        JOIN tab_contratos cont ON cont.id_proveedor = prov.id_proveedor
-        JOIN cat_procedimientos proc ON proc.id_procedimiento = cont.id_procedimiento
-        LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor;");
+        $query = $this->db->query("SELECT pnt.id_presupuesto_desglose id_tpo, 
+                       pnt.id_pnt, pnt.id,
+                       pcon.denominacion_partida,
+                       pdes.monto_presupuesto ,
+                       fact.total_ejercido,
+                       pnt.estatus_pnt
+                FROM tab_presupuestos_desglose pdes
+                JOIN (SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', 
+                           p.partida, p.denominacion 'denominacion_partida'
+                      FROM (SELECT id_presupesto_concepto, concepto, partida, denominacion FROM cat_presupuesto_conceptos pc
+                          WHERE trim(coalesce(concepto, '')) <> '' AND trim(coalesce(partida, '')) <> '' ) p 
+                      JOIN (SELECT concepto, denominacion FROM cat_presupuesto_conceptos
+                          WHERE trim(coalesce(concepto, '')) <>'' AND trim(coalesce(partida, '')) = '') c
+                      ON c.concepto = p.concepto
+                ) pcon ON pcon.id_presupesto_concepto = pdes.id_presupuesto_concepto
+                LEFT JOIN (SELECT numero_partida, SUM(cantidad) total_ejercido 
+                           FROM tab_facturas_desglose GROUP BY numero_partida
+                ) fact ON fact.numero_partida = pcon.partida
+                LEFT JOIN rel_pnt_presupuesto_desglose2 pnt 
+                ON pnt.id_presupuesto_desglose = pdes.id_presupuesto_desglose");
 
         $rows = $query->result_array();
 
