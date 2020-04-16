@@ -28,18 +28,19 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 <section class="content">
 <section class="content">
 	<h4>Ejercicios</h4>
-	<select>
-		<option>2010</option>	
-		<option>2011</option>	
-		<option>2012</option>	
-		<option>2013</option>	
-		<option>2014</option>	
-		<option>2015</option>	
-		<option>2016</option>	
-		<option>2017</option>	
-		<option>2018</option>	
-		<option>2019</option>	
-		<option>2020</option>	
+	<select id="year">
+		<option value="">Selecciona un año</option>	
+		<option value="2010">2010</option>	
+		<option value="2011">2011</option>	
+		<option value="2012">2012</option>	
+		<option value="2013">2013</option>	
+		<option value="2014">2014</option>	
+		<option value="2015">2015</option>	
+		<option value="2016">2016</option>	
+		<option value="2017">2017</option>	
+		<option value="2018">2018</option>	
+		<option value="2019">2019</option>	
+		<option value="2020">2020</option>	
 	</select>
 
 	<br><br>
@@ -82,14 +83,29 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 </section>
 
 
+
+
 <script type="text/javascript" src="<?php echo base_url(); ?>plugins/jQuery/jQuery-3.3.1.js"></script>
 <script src="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.js" type="text/javascript" ></script>
 
 <script type="text/javascript">
+
+
+
 $(document).ready(function(){
 	$("#formato_<?php echo $formato?>").css("background-color:", "#0277bd")
-	/**/
-    $('#grid1').DataTable({
+	
+	$.fn.dataTable.ext.search.push( function( settings, data, dataIndex ){
+        var year = $('#year').val()
+        var ejercicio = parseInt( data[3] ) || 0; 
+
+    	if (year == "") return true
+        return (year == ejercicio);
+    });
+
+    $('#year').change( function() { table.draw(); });
+    
+    table = $('#grid1').DataTable({
     	ajax: {
     		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros",
     		dataSrc: ''
@@ -168,13 +184,16 @@ $(document).ready(function(){
 			    targets: [0,1,2,3,4,5,6,7,8,9,10,11, 12],
 			    data: "data",
 			    render: function ( data, type, row, meta ) {
-			      	if(!data) return "<label class='btn'> <small> N/D </small></label>"
+			      	if(!data){
+			      		var res = "<label class='btn'> <small> N/D </small></label>"
+			      		return res 
+			      		
+			      	} 
 			        return data
 			    }
 			}
 		]
     });
-
 
 	$(document).on("click","a.crear",function(e){/* 
     	e.preventDefault();

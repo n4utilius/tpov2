@@ -1,9 +1,9 @@
-<?php  
+<?php  /*
 if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !( $_SESSION["pnt"]["success"] ) ){
 	header("Location: " . base_url() ."index.php/tpoadminv1/logo/logo/alta_carga_logo");
 	die();
 }
-?>
+*/?>
 <script type="text/javascript" src="<?php echo base_url(); ?>plugins/sanitizer/sanitizer.js"></script>
 
 <link href="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.css" rel="stylesheet" type="text/css" />
@@ -25,18 +25,19 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 <!-- Main content -->
 <section class="content">
 	<h4>Ejercicios</h4>
-	<select>
-		<option>2010</option>	
-		<option>2011</option>	
-		<option>2012</option>	
-		<option>2013</option>	
-		<option>2014</option>	
-		<option>2015</option>	
-		<option>2016</option>	
-		<option>2017</option>	
-		<option>2018</option>	
-		<option>2019</option>	
-		<option>2020</option>	
+	<select id="year">
+		<option value="">Selecciona un año</option>	
+		<option value="2010">2010</option>	
+		<option value="2011">2011</option>	
+		<option value="2012">2012</option>	
+		<option value="2013">2013</option>	
+		<option value="2014">2014</option>	
+		<option value="2015">2015</option>	
+		<option value="2016">2016</option>	
+		<option value="2017">2017</option>	
+		<option value="2018">2018</option>	
+		<option value="2019">2019</option>	
+		<option value="2020">2020</option>	
 	</select>
 
 	<br><br>
@@ -81,7 +82,19 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 <script type="text/javascript">
 	$(document).ready(function(){
 
-	    $('#grid').DataTable({
+	    $("#formato_<?php echo $formato?>").css("background-color:", "#0277bd")
+
+	    $.fn.dataTable.ext.search.push( function( settings, data, dataIndex ){
+	        var year = $('#year').val()
+	        var ejercicio = parseInt( data[3] ) || 0; 
+
+	    	if (year == "") return true
+	        return (year == ejercicio);
+	    });
+
+	    $('#year').change( function() { table.draw(); });
+	    
+	    table = $('#grid').DataTable({
 	    	ajax: {
 	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros4",
 	    		dataSrc: ''
@@ -158,10 +171,11 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				}
 			]
 	    });
-		$(document).on("click","a.crear",function(e){ 
+		
+		$(document).on("click","a.crear",function(e){ /*
 	    	e.preventDefault();
 		    var data = JSON.parse( $(this).attr("data") )
-			  , url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
+			  , url = "<?php //echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
 			
 			var a = $(this)
 		      , tr = a.parents("tr")
@@ -169,15 +183,15 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 		    a.css("display", "none")
 		    tr.css("background-color", "rgba(0,255,0, 0.2)")
-		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
+		    td.prepend("<img class='loading' src='<?php //echo base_url(); ?>plugins/img/loading.gif'>")
 
 		    formato = {
 				"idFormato": 43321, //"Hipervínculo a información de tiempos oficiales en radio y televisió"
 				"IdRegistro": "",
-				"token": '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>',
-				"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,
-				"unidadAdministrativa": '<?php echo $_SESSION["unidad_administrativa"]; ?>',
-				"SujetoObligado": '<?php echo $_SESSION["sujeto_obligado"]; ?>',
+				"token": '<?php //echo $_SESSION["pnt"]["token"]["token"]; ?>',
+				"correoUnidadAdministrativa": '<?php //echo $_SESSION["user_pnt"]; ?>' ,
+				"unidadAdministrativa": '<?php //echo $_SESSION["unidad_administrativa"]; ?>',
+				"SujetoObligado": '<?php //echo $_SESSION["sujeto_obligado"]; ?>',
 				"registros": [{
 				    "numeroRegistro": 1,
 				    "campos": [
@@ -216,10 +230,10 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
     			else tr.css("background-color", "#fff")
 
 	    	})
-	    });
+	    */});
 		
 
-		$(document).on("click","a.eliminar",function(e){ 
+		$(document).on("click","a.eliminar",function(e){ /*
 	    	e.preventDefault();
 
 	    	var a = $(this)
@@ -229,12 +243,12 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		    a.css("display", "none")
 		    a.siblings().css("display", "none")
 		    tr.css("background-color", "rgba(255,0,0, 0.2)")
-		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/i´´mg/loading.gif'>")
+		    td.prepend("<img class='loading' src='<?php //echo base_url(); ?>plugins/i´´mg/loading.gif'>")
 
 		    var id_pnt = tr.children("td").eq(1).text()
 
 	    	var data = JSON.parse( $(this).attr("data")  )
-			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
+			  , token = '<?php// echo $_SESSION["pnt"]["token"]["token"]; ?>'
 
 			var formato = {
 				"idFormato": 43321, 
@@ -244,7 +258,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				"id_pnt": data.id_pnt || id_pnt
 			}
 
-			var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
+			var url = "<?php //echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
 
 	    	$.post(url, formato, function(res, error){
 	    		//if(res.success) location.reload(); 
@@ -267,6 +281,6 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
     				tr.css("background-color", "#fff")
 	    	})
 
-	    })
+	    */})
 	})
 </script>

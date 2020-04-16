@@ -1,9 +1,9 @@
-<?php  
+<?php  /*
 if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !( $_SESSION["pnt"]["success"] ) ){
 	header("Location: " . base_url() ."index.php/tpoadminv1/logo/logo/alta_carga_logo");
 	die();
 }
-?>
+*/?>
 
 <script type="text/javascript" src="<?php echo base_url(); ?>plugins/sanitizer/sanitizer.js"></script>
 
@@ -27,18 +27,19 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 <!-- Main content -->
 <section class="content">
 	<h4>Ejercicios</h4>
-	<select>
-		<option>2010</option>	
-		<option>2011</option>	
-		<option>2012</option>	
-		<option>2013</option>	
-		<option>2014</option>	
-		<option>2015</option>	
-		<option>2016</option>	
-		<option>2017</option>	
-		<option>2018</option>	
-		<option>2019</option>	
-		<option>2020</option>	
+	<select id="year">
+		<option value="">Selecciona un año</option>	
+		<option value="2010">2010</option>	
+		<option value="2011">2011</option>	
+		<option value="2012">2012</option>	
+		<option value="2013">2013</option>	
+		<option value="2014">2014</option>	
+		<option value="2015">2015</option>	
+		<option value="2016">2016</option>	
+		<option value="2017">2017</option>	
+		<option value="2018">2018</option>	
+		<option value="2019">2019</option>	
+		<option value="2020">2020</option>	
 	</select>
 
 	<br><br>
@@ -106,205 +107,215 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 <script src="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.js" type="text/javascript" ></script>
 
 <script type="text/javascript">
+$(document).ready(function(){
+	$("#formato_<?php echo $formato?>").css("background-color:", "#0277bd")
 
+    $.fn.dataTable.ext.search.push( function( settings, data, dataIndex ){
+        var year = $('#year').val()
+        var ejercicio = parseInt( data[3] ) || 0; 
 
-	$(document).ready(function(){
+    	if (year == "") return true
+        return (year == ejercicio);
+    });
 
-	    $('#grid').DataTable({
-	    	ajax: {
-	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros3",
-	    		dataSrc: ''
-	    	},
-    		scrollY: true,
-	    	scrollX: true,
-	    	columns: [
-	    		{ data: 'id_tpo' },
-				{ data: 'id_pnt' },
-				{ data: 'id' },
-				{ data: 'Ejercicio' },
-				{ data: 'Fecha de inicio del periodo que se informa' },
-				{ data: 'Fecha de termino del periodo que se informa' },
-				{ data: 'Sujeto obligado al que se le proporcionó el servicio/permiso' },
-				{ data: 'Tipo (catálogo)' },
-				{ data: 'Medio de comunicación (catálogo)' },
-				{ data: 'Descripción de unidad por ejemplo: spot de 30 segundos (radio); mensaje en TV 20 segundos' },
-				{ data: 'Concepto o campaña' },
-				{ data: 'Clave única de identificación de campaña o aviso institucional en su caso' },
-				{ data: 'Autoridad que proporcionó la clave única de identificación de campaña o aviso institucional' },
-				{ data: 'Cobertura (catálogo)' },
-				{ data: 'Ámbito geográfico de cobertura' },
-				{ data: 'Sexo (catálogo)' },
-				{ data: 'Lugar de residencia' },
-				{ data: 'Nivel educativo' },
-				{ data: 'Grupo de edad' },
-				{ data: 'Nivel económico' },
-				{ data: 'Concesionario responsable de publicar la campaña o la comunicación correspondiente (razón social)' },
-				{ data: 'Distintivo y/o nombre comercial del concesionario responsable de publicar la campaña o comunicación' },
-				{ data: 'Descripción breve de las razones que justifican la elección del proveedor' },
-				{ data: 'Monto total del tiempo de Estado o tiempo fiscal consumidos' },
-				{ data: 'Área administrativa encargada de solicitar la difusión del mensaje o producto en su caso' },
-				{ data: 'Fecha de inicio de difusión del concepto o campaña' },
-				{ data: 'Fecha de término de difusión del concepto o campaña' },
-				{ data: 'Número de factura en su caso' },
-				{ data: 'Área(s) responsable(s) que genera(n) posee(n) publica(n) y actualizan la información' },
-				{ data: 'Fecha de validación' },
-				{ data: 'Fecha de Actualización' },
-				{ data: 'Nota' },
-				{ data: 'Estatus' }
-			],
-			columnDefs: [ 
-				{
-				    targets: 1,
-				    data: "data",
-				    render: function ( data, type, row, meta ) {
-				      	if(!data) return "<label class='btn'> <small> SIN SUBIR </small></label>"
-				      	return data
-				    }
-				},
-				{
-				    targets: 32,
-				    data: "data",
-				    render: function ( data, type, row, meta ) {
-				      	var response = ""
-			      		row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
-				      	if(!data){ 
-				      		response += "<a class='tpo_btn crear' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
+    $('#year').change( function() { table.draw(); });
+    
+    table = $('#grid').DataTable({
+    	ajax: {
+    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros3",
+    		dataSrc: ''
+    	},
+		scrollY: true,
+    	scrollX: true,
+    	columns: [
+    		{ data: 'id_tpo' },
+			{ data: 'id_pnt' },
+			{ data: 'id' },
+			{ data: 'Ejercicio' },
+			{ data: 'Fecha de inicio del periodo que se informa' },
+			{ data: 'Fecha de termino del periodo que se informa' },
+			{ data: 'Sujeto obligado al que se le proporcionó el servicio/permiso' },
+			{ data: 'Tipo (catálogo)' },
+			{ data: 'Medio de comunicación (catálogo)' },
+			{ data: 'Descripción de unidad por ejemplo: spot de 30 segundos (radio); mensaje en TV 20 segundos' },
+			{ data: 'Concepto o campaña' },
+			{ data: 'Clave única de identificación de campaña o aviso institucional en su caso' },
+			{ data: 'Autoridad que proporcionó la clave única de identificación de campaña o aviso institucional' },
+			{ data: 'Cobertura (catálogo)' },
+			{ data: 'Ámbito geográfico de cobertura' },
+			{ data: 'Sexo (catálogo)' },
+			{ data: 'Lugar de residencia' },
+			{ data: 'Nivel educativo' },
+			{ data: 'Grupo de edad' },
+			{ data: 'Nivel económico' },
+			{ data: 'Concesionario responsable de publicar la campaña o la comunicación correspondiente (razón social)' },
+			{ data: 'Distintivo y/o nombre comercial del concesionario responsable de publicar la campaña o comunicación' },
+			{ data: 'Descripción breve de las razones que justifican la elección del proveedor' },
+			{ data: 'Monto total del tiempo de Estado o tiempo fiscal consumidos' },
+			{ data: 'Área administrativa encargada de solicitar la difusión del mensaje o producto en su caso' },
+			{ data: 'Fecha de inicio de difusión del concepto o campaña' },
+			{ data: 'Fecha de término de difusión del concepto o campaña' },
+			{ data: 'Número de factura en su caso' },
+			{ data: 'Área(s) responsable(s) que genera(n) posee(n) publica(n) y actualizan la información' },
+			{ data: 'Fecha de validación' },
+			{ data: 'Fecha de Actualización' },
+			{ data: 'Nota' },
+			{ data: 'Estatus' }
+		],
+		columnDefs: [ 
+			{
+			    targets: 1,
+			    data: "data",
+			    render: function ( data, type, row, meta ) {
+			      	if(!data) return "<label class='btn'> <small> SIN SUBIR </small></label>"
+			      	return data
+			    }
+			},
+			{
+			    targets: 32,
+			    data: "data",
+			    render: function ( data, type, row, meta ) {
+			      	var response = ""
+		      		row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
+			      	if(!data){ 
+			      		response += "<a class='tpo_btn crear' href='#' data='" + row + "'>" 
+			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
 
-				      		response += "<img class='check invisible' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
+			      		response += "<img class='check invisible' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
 
-				      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
+			      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + row + "'>" 
+			      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
 
-				      		response += "<a class='tpo_btn editar invisible' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
-				      		
-				      		return response
-				      	}else{
-				      		response += "<a class='tpo_btn crear invisible' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> </span> </a>"
+			      		response += "<a class='tpo_btn editar invisible' href='#' data='" + row + "'>" 
+			      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
+			      		
+			      		return response
+			      	}else{
+			      		response += "<a class='tpo_btn crear invisible' href='#' data='" + row + "'>" 
+			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> </span> </a>"
 
-				      		response += "<img class='check' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
+			      		response += "<img class='check' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
 
-				      		response += "<a class='tpo_btn eliminar' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
+			      		response += "<a class='tpo_btn eliminar' href='#' data='" + row + "'>" 
+			      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
 
-				      		response += "<a class='tpo_btn editar' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
+			      		response += "<a class='tpo_btn editar' href='#' data='" + row + "'>" 
+			      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
 
-					      	return response
+				      	return response
 
-				      	}
-					}
-				},
-				{
-				    targets: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
-				    		  25,26,27,28,29,30,31,32],
-				    data: "data",
-				    render: function ( data, type, row, meta ) {
-				      	if(!data) return "<label class='btn'> <small> N/D </small></label>"
-				        return data
-				    }
+			      	}
 				}
-			]
-	    });
-		$(document).on("click","a.crear",function(e){ 
-	    	e.preventDefault();
-		    var data = JSON.parse( $(this).attr("data") )
-			  , url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
+			},
+			{
+			    targets: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
+			    		  25,26,27,28,29,30,31,32],
+			    data: "data",
+			    render: function ( data, type, row, meta ) {
+			      	if(!data) return "<label class='btn'> <small> N/D </small></label>"
+			        return data
+			    }
+			}
+		]
+    });
+
+	$(document).on("click","a.crear",function(e){ /*
+    	e.preventDefault();
+	    var data = JSON.parse( $(this).attr("data") )
+		  , url = "<?php //echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
+		
+		var a = $(this)
+	      , tr = a.parents("tr")
+	      , td = a.parents("td")
+
+	    a.css("display", "none")
+	    tr.css("background-color", "rgba(0,255,0, 0.2)")
+	    td.prepend("<img class='loading' src='<?php //echo base_url(); ?>plugins/img/loading.gif'>")
+
+	    formato = {
+			"idFormato": 43360, //"Contratación de servicios de publicidad oficial"
+			"IdRegistro": "",
+			"token": '<?php //echo $_SESSION["pnt"]["token"]["token"]; ?>',
+			"correoUnidadAdministrativa": '<?php //echo $_SESSION["user_pnt"]; ?>' ,
+			"unidadAdministrativa": '<?php //echo $_SESSION["unidad_administrativa"]; ?>',
+			"SujetoObligado": '<?php //echo $_SESSION["sujeto_obligado"]; ?>',
+			"registros": [{
+			    "numeroRegistro": 1,
+			    "campos": [
+			    	{"idCampo": 333943, "valor": data["Ejercicio"] }
+			    ]
+			}],
+		  "_id_interno": data["ID FACTURA"]
+		}
+
+		
+    	$.post(url, formato, function(res, error){
+			if(res && res.success) {
+    			tr.children("td").eq(1).text(res.id_pnt)
+    			tr.children("td").eq(12).children("a.eliminar").removeClass("invisible")
+    			tr.children("td").eq(12).children("img.check").removeClass("invisible")
+    			tr.children("td").eq(12).children("a.crear").addClass("invisible")
+    		} else {
+    			console.log("No se pudo insertar el elemento correctamente")
+    			a.css("display", "block")
+    		}
+
+			td.children("img.loading").remove("")
 			
-			var a = $(this)
-		      , tr = a.parents("tr")
-		      , td = a.parents("td")
+			if(tr.hasClass("odd")) tr.css("background-color", "#f9f9f9")
+			else tr.css("background-color", "#fff")
 
-		    a.css("display", "none")
-		    tr.css("background-color", "rgba(0,255,0, 0.2)")
-		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
+    	})
+		
+    */});
 
-		    formato = {
-				"idFormato": 43360, /*"Contratación de servicios de publicidad oficial"*/
-				"IdRegistro": "",
-				"token": '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>',
-				"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,
-				"unidadAdministrativa": '<?php echo $_SESSION["unidad_administrativa"]; ?>',
-				"SujetoObligado": '<?php echo $_SESSION["sujeto_obligado"]; ?>',
-				"registros": [{
-				    "numeroRegistro": 1,
-				    "campos": [
-				    	{"idCampo": 333943, "valor": data["Ejercicio"] }
-				    ]
-				}],
-			  "_id_interno": data["ID FACTURA"]
-			}
+	$(document).on("click","a.eliminar",function(e){ /*
+    	e.preventDefault();
 
-			/**/
-	    	$.post(url, formato, function(res, error){
-    			if(res && res.success) {
-	    			tr.children("td").eq(1).text(res.id_pnt)
-	    			tr.children("td").eq(12).children("a.eliminar").removeClass("invisible")
-	    			tr.children("td").eq(12).children("img.check").removeClass("invisible")
-	    			tr.children("td").eq(12).children("a.crear").addClass("invisible")
-	    		} else {
-	    			console.log("No se pudo insertar el elemento correctamente")
-	    			a.css("display", "block")
-	    		}
+    	var a = $(this)
+	      , tr = a.parents("tr")
+	      , td = a.parents("td")
 
-    			td.children("img.loading").remove("")
-    			
-    			if(tr.hasClass("odd")) tr.css("background-color", "#f9f9f9")
-    			else tr.css("background-color", "#fff")
+	    a.css("display", "none")
+	    a.siblings().css("display", "none")
+	    tr.css("background-color", "rgba(255,0,0, 0.2)")
+	    td.prepend("<img class='loading' src='<?php //echo base_url(); ?>plugins/img/loading.gif'>")
 
-	    	})
-			/**/
-	    });
+	    var id_pnt = tr.children("td").eq(1).text()
 
-		$(document).on("click","a.eliminar",function(e){ 
-	    	e.preventDefault();
+    	var data = JSON.parse( $(this).attr("data")  )
+		  , token = '<?php //echo $_SESSION["pnt"]["token"]["token"]; ?>'
 
-	    	var a = $(this)
-		      , tr = a.parents("tr")
-		      , td = a.parents("td")
+		var formato = {
+			"idFormato": 43360, 
+			"correoUnidadAdministrativa": "so.inai@inai.org.mx",
+			"token": token,
+			"registros":[ { "numeroRegistro":1, "idRegistro": data.id_pnt || id_pnt } ],
+			"id_pnt": data.id_pnt || id_pnt
+		}
 
-		    a.css("display", "none")
-		    a.siblings().css("display", "none")
-		    tr.css("background-color", "rgba(255,0,0, 0.2)")
-		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
+		var url = "<?php //echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
 
-		    var id_pnt = tr.children("td").eq(1).text()
+    	$.post(url, formato, function(res, error){
+    		//if(res.success) location.reload(); 
+    		if(res && res.success) {
+    			tr.children("td").eq(1).html("<label class='btn'> <small> SIN SUBIR </small></label>")
+    			tr.children("td").eq(12).children("a.eliminar").addClass("invisible")
+    			tr.children("td").eq(12).children("img.check").addClass("invisible")
+    			tr.children("td").eq(12).children("a.crear").css("display", "block")
+    		} else {
+    			console.log("No se pudo eliminar el elemento correctamente")
+    			a.css("display", "block")
+    			a.siblings().css("display", "block")
+    		}
 
-	    	var data = JSON.parse( $(this).attr("data")  )
-			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
+			td.children("img.loading").remove("")
+			if(tr.hasClass("odd"))
+				tr.css("background-color", "#f9f9f9")
+			else
+				tr.css("background-color", "#fff")
+    	})
 
-			var formato = {
-				"idFormato": 43360, 
-				"correoUnidadAdministrativa": "so.inai@inai.org.mx",
-				"token": token,
-				"registros":[ { "numeroRegistro":1, "idRegistro": data.id_pnt || id_pnt } ],
-				"id_pnt": data.id_pnt || id_pnt
-			}
-
-			var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
-
-	    	$.post(url, formato, function(res, error){
-	    		//if(res.success) location.reload(); 
-	    		if(res && res.success) {
-	    			tr.children("td").eq(1).html("<label class='btn'> <small> SIN SUBIR </small></label>")
-	    			tr.children("td").eq(12).children("a.eliminar").addClass("invisible")
-	    			tr.children("td").eq(12).children("img.check").addClass("invisible")
-	    			tr.children("td").eq(12).children("a.crear").css("display", "block")
-	    		} else {
-	    			console.log("No se pudo eliminar el elemento correctamente")
-	    			a.css("display", "block")
-	    			a.siblings().css("display", "block")
-	    		}
-
-    			td.children("img.loading").remove("")
-    			if(tr.hasClass("odd"))
-    				tr.css("background-color", "#f9f9f9")
-    			else
-    				tr.css("background-color", "#fff")
-	    	})
-
-	    })
-	})
+    */})
+})
 </script>
