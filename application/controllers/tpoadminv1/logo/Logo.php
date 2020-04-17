@@ -487,15 +487,18 @@ class Logo extends CI_Controller
     }
 
     function registros21(){
-        $query = $this->db->query("SELECT pnt.id_proveedor id, pnt.id_pnt id_pnt, pnt.estatus_pnt,
-                    prov.nombre_razon_social, prov.nombres, prov.primer_apellido,
-                    prov.segundo_apellido, prov.nombre_comercial, prov.rfc,
-                    proc.nombre_procedimiento, con.fundamento_juridico,
-                    con.descripcion_justificacion, pnt.estatus_pnt
-                    FROM tab_proveedores prov
+        $query = $this->db->query("SELECT pnt.id_tpo, pnt.id_proveedor id, pnt.id_pnt, 
+                    con.descripcion_justificacion, e.ejercicio, proc.nombre_procedimiento, 
+                    con.fundamento_juridico, prov.nombre_razon_social, prov.nombres, prov.primer_apellido,
+                    prov.segundo_apellido, prov.nombre_comercial, prov.rfc, pnt.estatus_pnt
+                    FROM tab_facturas f
+                    JOIN tab_facturas_desglose fd ON fd.id_factura = f.id_factura
+                    JOIN tab_campana_aviso cam ON cam.id_campana_aviso = fd.id_campana_aviso
+                    JOIN cat_ejercicios e ON e.id_ejercicio = cam.id_ejercicio 
+                    JOIN tab_proveedores prov ON prov.id_proveedor = f.id_proveedor
                     LEFT JOIN tab_contratos con ON con.id_proveedor = prov.id_proveedor
                     LEFT JOIN cat_procedimientos proc ON proc.id_procedimiento = con.id_procedimiento
-                    LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor");
+                    LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor;");
 
         $rows = $query->result_array();
 
