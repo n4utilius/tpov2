@@ -651,13 +651,10 @@ class Logo extends CI_Controller
         echo json_encode( $rows ); 
     }
 
-    function registros31(){ /* PROVISIONAL */
+    function registros31(){
         $query = $this->db->query("SELECT pnt.id_presupuesto_desglose id_tpo, 
-                       pnt.id_pnt, pnt.id,
-                       pcon.denominacion_partida,
-                       pdes.monto_presupuesto ,
-                       fact.total_ejercido,
-                       pnt.estatus_pnt
+                       pnt.id_pnt, pnt.id, ej.ejercicio, pcon.denominacion_partida,
+                       pdes.monto_presupuesto, fact.total_ejercido, pnt.estatus_pnt
                 FROM tab_presupuestos_desglose pdes
                 JOIN (SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', 
                            p.partida, p.denominacion 'denominacion_partida'
@@ -670,6 +667,8 @@ class Logo extends CI_Controller
                 LEFT JOIN (SELECT numero_partida, SUM(cantidad) total_ejercido 
                            FROM tab_facturas_desglose GROUP BY numero_partida
                 ) fact ON fact.numero_partida = pcon.partida
+                JOIN tab_presupuestos pre ON pre.id_presupuesto = pdes.id_presupuesto
+                JOIN cat_ejercicios ej ON ej.id_ejercicio = pre.id_ejercicio
                 LEFT JOIN rel_pnt_presupuesto_desglose2 pnt 
                 ON pnt.id_presupuesto_desglose = pdes.id_presupuesto_desglose");
 

@@ -28,18 +28,19 @@
 <!-- Main content -->
 <section class="content">
 	<h4>Ejercicios</h4>
-	<select>
-		<option>2010</option>	
-		<option>2011</option>	
-		<option>2012</option>	
-		<option>2013</option>	
-		<option>2014</option>	
-		<option>2015</option>	
-		<option>2016</option>	
-		<option>2017</option>	
-		<option>2018</option>	
-		<option>2019</option>	
-		<option>2020</option>	
+	<select id="year">
+		<option value="">Selecciona un año</option>	
+		<option value="2010">2010</option>	
+		<option value="2011">2011</option>	
+		<option value="2012">2012</option>	
+		<option value="2013">2013</option>	
+		<option value="2014">2014</option>	
+		<option value="2015">2015</option>	
+		<option value="2016">2016</option>	
+		<option value="2017">2017</option>	
+		<option value="2018">2018</option>	
+		<option value="2019">2019</option>	
+		<option value="2020">2020</option>	
 	</select>
 
 	<br><br>
@@ -65,6 +66,7 @@
 				<th>ID TPO</th>
 				<th>ID PNT</th>
 				<th>ID</th>
+				<th>Ejercicio</th>
 	            <th>Denominación Partida</th>
 	            <th>Presupuesto total asignado a cada partida</th>
 	            <th>Presupuesto ejercido al periodo reportado de cada partida</th>
@@ -83,7 +85,17 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
-	    $('#grid').DataTable({
+	     $.fn.dataTable.ext.search.push( function( settings, data, dataIndex ){
+	        var year = $('#year').val()
+	        var ejercicio = parseInt( data[3] ) || 0; 
+
+	    	if (year == "") return true
+	        return (year == ejercicio);
+	    });
+
+	    $('#year').change( function() { table.draw(); });
+	    
+	    table = $('#grid').DataTable({
 	    	ajax: {
 	    		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros31",
 	    		dataSrc: ''
@@ -94,6 +106,7 @@
 	    		{ data: 'id_tpo' },
 	    		{ data: 'id_pnt' },
 	    		{ data: 'id' },
+	    		{ data: 'ejercicio' },
 				{ data: 'denominacion_partida' },
 				{ data: 'monto_presupuesto' },
 				{ data: 'total_ejercido' },
@@ -109,7 +122,7 @@
 				    }
 				},
 				{
-				    targets: 6,
+				    targets: 7,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	var response = ""
@@ -145,7 +158,7 @@
 					}
 				},
 				{
-				    targets: [0,1,2,3,4,5],
+				    targets: [0,1,2,3,4,5,6],
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	if(!data) return "<label class='btn'> <small> N/D </small></label>"
