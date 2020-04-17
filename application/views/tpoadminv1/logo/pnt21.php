@@ -137,7 +137,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
-				    targets: 12,
+				    targets: 13,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	var response = ""
@@ -173,7 +173,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 					}
 				},
 				{
-				    targets: [0,1,2,3,4,5,6,7,8,9,10,11],
+				    targets: [0,1,2,3,4,5,6,7,8,9,10,11,12],
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	if(!data) return "<label class='btn'> <small> N/D </small></label>"

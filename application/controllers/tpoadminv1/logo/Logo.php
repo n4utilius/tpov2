@@ -508,7 +508,7 @@ class Logo extends CI_Controller
 
     function registros22(){
         $query = $this->db->query("SELECT pnt.id_presupuesto_desglose id_tpo, pnt.id_pnt, pnt.id,
-                    pcon.partida 'Partida Genérica',  pcon.concepto 'Clave del concepto',
+                    ej.ejercicio, pcon.partida 'Partida Genérica',  pcon.concepto 'Clave del concepto',
                     pcon.nombre_concepto 'Nombre del concepto',
                     total.presupuesto 'Presupuesto Asignado por concepto',
                     total.modificado 'Presupuesto Modificado por concepto',
@@ -517,7 +517,9 @@ class Logo extends CI_Controller
                     pdes.monto_modificacion 'Presupuesto modificado por partida',
                     fact.total_ejercido 'Presupuesto ejercido al periodo reportado de cada partida', 
                     pnt.estatus_pnt
-                    FROM tab_presupuestos_desglose pdes
+                    FROM tab_presupuestos_desglose pdes 
+                    JOIN tab_presupuestos pre ON pre.id_presupuesto = pdes.id_presupuesto
+                    JOIN cat_ejercicios ej ON ej.id_ejercicio = pre.id_ejercicio
                     JOIN (SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', 
                                p.partida, p.denominacion 'denominacion_partida'
                           FROM (SELECT id_presupesto_concepto, concepto, partida, denominacion FROM cat_presupuesto_conceptos pc
@@ -552,7 +554,7 @@ class Logo extends CI_Controller
 
     function registros23(){
         $query = $this->db->query("SELECT pnt.id_contrato id_tpo, pnt.id_pnt id_pnt, pnt.id,
-            cont.fecha_celebracion 'Fecha de firma del contrato',
+            ej.ejercicio, cont.fecha_celebracion 'Fecha de firma del contrato',
             cont.numero_contrato 'Número o referencia de identificación del contrato',
             cont.objeto_contrato 'Objeto del contrato',
             vcon.`Archivo contrato en PDF (Vinculo al archivo)` 'Hipervínculo al contrato firmado',
@@ -567,8 +569,9 @@ class Logo extends CI_Controller
             LEFT JOIN vout_contratos vcon ON vcon.`ID (Número de contrato)` = cont.id_contrato
             LEFT JOIN vout_convenios_modificatorios vcmod ON vcmod.`ID (Número de contrato)` = cont.id_contrato
             LEFT JOIN (SELECT f.id_contrato, f.numero_factura numeros_factura, 
-                       f.file_factura_pdf files_factura_pdf
+                       f.file_factura_pdf files_factura_pdf, f.id_ejercicio
                        FROM tab_facturas f ) f ON f.id_contrato = cont.id_contrato
+            LEFT JOIN cat_ejercicios ej ON ej.id_ejercicio = f.id_ejercicio
             LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato
             WHERE cont.numero_contrato != 'Sin contrato'; ");
 
