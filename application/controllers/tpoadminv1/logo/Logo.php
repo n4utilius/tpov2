@@ -374,6 +374,13 @@ class Logo extends CI_Controller
         echo json_encode( $data["formatos"] ); 
     }
 
+    function ejercicios(){ 
+        $query = $this->db->query("SELECT ejercicio FROM cat_ejercicios WHERE active = 1");
+        $rows = $query->result_array();
+
+        header('Content-Type: application/json');
+        echo json_encode( $rows ); 
+    }
 
     function registros(){ 
         $cols = array("pnt.id_tpo", "pnt.id_pnt", "p.id_presupuesto", "e.ejercicio", 
