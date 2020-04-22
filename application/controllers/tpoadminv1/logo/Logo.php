@@ -367,7 +367,6 @@ class Logo extends CI_Controller
         $context  = stream_context_create($options);
         $result = file_get_contents($URL, false, $context);
 
-        //session_start();
 
         $data["formatos"] = json_decode($result);
 
@@ -377,13 +376,21 @@ class Logo extends CI_Controller
 
 
     function registros(){ 
-        $query = $this->db->query("SELECT IFNULL(pnt.id_tpo, 'N/D'), pnt.id_pnt, p.id_presupuesto, e.ejercicio, p.fecha_inicio_periodo,
-            p.fecha_termino_periodo, p.denominacion, p.fecha_publicacion, p.file_programa_anual,
-            p.area_responsable, p.fecha_validacion, p.fecha_actualizacion, p.nota, pnt.estatus_pnt
-            FROM tab_presupuestos p
-            JOIN cat_ejercicios e ON p.id_ejercicio = e.id_ejercicio
-            LEFT JOIN rel_pnt_presupuesto pnt ON p.id_presupuesto = pnt.id_presupuesto");
+        $cols = array("pnt.id_tpo", "pnt.id_pnt", "p.id_presupuesto", "e.ejercicio", 
+                      "p.fecha_inicio_periodo", "p.fecha_termino_periodo", "p.denominacion", 
+                      "p.fecha_publicacion", "p.file_programa_anual", "p.area_responsable", 
+                      "p.fecha_validacion", "p.fecha_actualizacion", "p.nota", "pnt.estatus_pnt");
 
+        foreach ($cols as &$col) {
+            $tag = ( strpos($col, ".") )? explode(".", $col)[1] : $col;
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+
+        $stm = "SELECT " . join(", ", $cols) . " FROM tab_presupuestos p "
+             . "JOIN cat_ejercicios e ON p.id_ejercicio = e.id_ejercicio "
+             . "LEFT JOIN rel_pnt_presupuesto pnt ON p.id_presupuesto = pnt.id_presupuesto";
+
+        $query = $this->db->query($stm);
         $rows = $query->result_array();
 
         header('Content-Type: application/json');
@@ -391,60 +398,55 @@ class Logo extends CI_Controller
     }
 
     function registros2(){
-        $query = $this->db->query("
-                SELECT pnt.id_tpo 'ID TPO', pnt.id_pnt 'ID PNT', f.id_factura 'ID FACTURA', e.ejercicio 'Ejercicio',
-                    CONCAT(CASE 
-                        WHEN f.id_trimestre = 1 THEN '01/01/'
-                        WHEN f.id_trimestre = 2 THEN '01/04/'
-                        WHEN f.id_trimestre = 3 THEN '01/07/'
+        $cols = array("pnt.id_tpo", "pnt.id_pnt", "f.id_factura", "e.ejercicio", 
+                      "fd.area_administrativa",  "fd.id_servicio_clasificacion", 
+                      "scat.nombre_servicio_categoria",  "sscat.nombre_servicio_subcategoria", 
+                      "suni.nombre_servicio_unidad", "cam.nombre_campana_aviso", "cam.periodo", 
+                      "ctem.nombre_campana_tema", "cobj.campana_objetivo", "cam.objetivo_comunicacion", 
+                      "fd.precio_unitarios", "cam.clave_campana", "cam.autoridad", 
+                      "cam.campana_ambito_geo", "cam.fecha_inicio", "cam.fecha_termino", 
+                      "lugar.poblaciones", "edu.nivel_educativo", "edad.rangos_edad ",  
+                      "neco.poblacion_nivel", "f.area_responsable", "f.fecha_validacion", 
+                      "f.fecha_actualizacion", "f.nota", "pnt.estatus_pnt");
+
+        foreach ($cols as &$col) {
+            $tag = ( strpos($col, ".") )? explode(".", $col)[1] : $col;
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+
+        $query = $this->db->query("SELECT " . join(", ", $cols) . ", 
+                  CONCAT(CASE 
+                        WHEN f.id_trimestre = NULL THEN '' WHEN f.id_trimestre = 1 THEN '01/01/'
+                        WHEN f.id_trimestre = 2 THEN '01/04/' WHEN f.id_trimestre = 3 THEN '01/07/'
                         WHEN f.id_trimestre = 4 THEN '01/10/'
-                    END, e.ejercicio ) 'Fecha de inicio del periodo que se informa', 
+                    END, IFNULL(e.ejercicio, '') ) fecha_inicio, 
                     CONCAT(CASE 
-                        WHEN f.id_trimestre = 1 THEN '31/03/'
-                        WHEN f.id_trimestre = 2 THEN '30/06/'
-                        WHEN f.id_trimestre = 3 THEN '30/09/'
+                        WHEN f.id_trimestre = NULL THEN '' WHEN f.id_trimestre = 1 THEN '31/03/'
+                        WHEN f.id_trimestre = 2 THEN '30/06/'  WHEN f.id_trimestre = 3 THEN '30/09/'
                         WHEN f.id_trimestre = 4 THEN '31/12/'
-                    END, e.ejercicio ) 'Fecha de término del periodo que se informa', 
+                    END, IFNULL(e.ejercicio, '') ) fecha_termino, 
                     (CASE 
+                        WHEN ( (fd.id_so_contratante IS NULL) && (fd.id_so_solicitante IS NULL) ) THEN ''
                         WHEN ( (fd.id_so_contratante IS NOT NULL) && (fd.id_so_solicitante IS NOT NULL) ) THEN 2
                         WHEN ( (fd.id_so_contratante IS NOT NULL) && (fd.id_so_solicitante IS NULL) ) THEN 0
                         WHEN ( (fd.id_so_contratante IS NULL) && (fd.id_so_solicitante IS NOT NULL) ) THEN 1
-                    END) 'Función del Sujeto Obligado (catálogo)',
-                    fd.area_administrativa 'Área administrativa Encargada de Solicitar El Servicio o Producto, en su caso',
-                    fd.id_servicio_clasificacion 'Clasificación Del(los) Servicios (catálogo)', 
-                    scat.nombre_servicio_categoria 'Tipo de Servicio', sscat.nombre_servicio_subcategoria 'Tipo de Medio (catálogo)',
-                    suni.nombre_servicio_unidad 'Descripción de Unidad',
+                    END) funcion_sujeto,
                     (CASE 
-                        WHEN cam.id_campana_tipo = 1 THEN 1
+                        WHEN cam.id_campana_tipo= NULL THEN '' WHEN cam.id_campana_tipo = 1 THEN 1
                         WHEN cam.id_campana_tipo = 2 THEN 0
-                    END) 'Tipo (catálogo)',
-                    cam.nombre_campana_aviso 'Nombre de la Campaña o Aviso Institucional',  
-                    cam.periodo 'Año de la Campaña', ctem.nombre_campana_tema 'Tema de la Campaña o Aviso Institucional', 
-                    cobj.campana_objetivo 'Objetivo Institucional' , cam.objetivo_comunicacion 'Objetivo de Comunicación', 
-                    fd.precio_unitarios 'Costo por unidad',cam.clave_campana 'Clave Única de Indentificación de Campaña', 
-                    cam.autoridad 'Autoridad que proporcionó la Clave', 
+                    END) 'tipo',
                     (CASE 
-                        WHEN ccob.id_campana_cobertura = 1 THEN 3
-                        WHEN ccob.id_campana_cobertura = 2 THEN 2
-                        WHEN ccob.id_campana_cobertura = 3 THEN 1
+                        WHEN ccob.id_campana_cobertura = NULL THEN '' WHEN ccob.id_campana_cobertura = 1 THEN 3
+                        WHEN ccob.id_campana_cobertura = 2 THEN 2 WHEN ccob.id_campana_cobertura = 3 THEN 1
                         WHEN ccob.id_campana_cobertura = 4 THEN 0
-                    END) 'Cobertura (catálogo)', 
-                    cam.campana_ambito_geo 'Ámbito Geográfico de Cobertura', 
-                    cam.fecha_inicio 'Fecha de inicio de la Campaña o Aviso Institucional', 
-                    cam.fecha_termino 'Fecha de término de la Campaña o Aviso Institucional', 
+                    END) 'cobertura', 
                     (CASE 
-                        WHEN sexo.poblacion_sexo = 1 THEN 1
-                        WHEN sexo.poblacion_sexo = 2 THEN 0
-                        WHEN sexo.poblacion_sexo = 3 THEN 2
-                    END) 'Sexo (catálogo)', 
-                    lugar.poblaciones 'Lugar de Residencia', edu.nivel_educativo 'Nivel Educativo', edad.rangos_edad 'Grupos de Edad', 
-                    neco.poblacion_nivel 'Nivel Socioeconómico',
-                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'Respecto a los proveedores y su contratación', 
-                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'Respecto a los recursos y presupuesto', 
-                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'Respecto al Contrato y los Montos', 
-                    f.area_responsable 'Área(s) Responsable(s) que generan(n) posee(n), Publica(n) y Actualiza(n) la información',
-                    f.fecha_validacion 'Fecha de Validación', f.fecha_actualizacion 'Fecha de Actualización', f.nota 'Nota', 
-                    pnt.estatus_pnt 'Estatus PNT'
+                        WHEN sexo.poblacion_sexo = NULL THEN '' WHEN sexo.poblacion_sexo = 1 THEN 1
+                        WHEN sexo.poblacion_sexo = 2 THEN 0 WHEN sexo.poblacion_sexo = 3 THEN 2
+                    END) 'sexo', 
+                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'resp_pro_con', 
+                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'resp_rec_pre', 
+                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'resp_con_mon'
                 FROM tab_facturas f
                 JOIN tab_facturas_desglose fd ON fd.id_factura = f.id_factura
                 JOIN tab_campana_aviso cam ON cam.id_campana_aviso = fd.id_campana_aviso

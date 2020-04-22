@@ -53,7 +53,7 @@
 		<li> 
 			<a class="btn-group btn btn-info btn-sm <?php echo ($formato == 3)? 'here': '' ?>" id="formato_3" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=3"> 70FXXIIIC </a> 
 			<ul class="subitems">
-				<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 31)? 'here': '' ?>" id="formato_31" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=31"> 70FXXIIIB1 </a> </li>
+				<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 31)? 'here': '' ?>" id="formato_31" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=31"> 70FXXIIIC1 </a> </li>
 			</ul>
 		</li>
 		<li> <a class="btn-group btn btn-info btn-sm <?php echo ($formato == 4)? 'here': '' ?>" id="formato_4" href="<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/pnt?formato=4"> 70FXXIIID </a> </li>

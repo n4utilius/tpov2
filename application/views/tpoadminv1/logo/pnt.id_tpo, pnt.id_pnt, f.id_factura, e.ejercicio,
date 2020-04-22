@@ -1,0 +1,53 @@
+pnt.id_tpo, pnt.id_pnt, f.id_factura, e.ejercicio,
+                    CONCAT(CASE 
+                        WHEN f.id_trimestre = 1 THEN '01/01/'
+                        WHEN f.id_trimestre = 2 THEN '01/04/'
+                        WHEN f.id_trimestre = 3 THEN '01/07/'
+                        WHEN f.id_trimestre = 4 THEN '01/10/'
+                    END, e.ejercicio ) fecha_inicio, 
+                    CONCAT(CASE 
+                        WHEN f.id_trimestre = 1 THEN '31/03/'
+                        WHEN f.id_trimestre = 2 THEN '30/06/'
+                        WHEN f.id_trimestre = 3 THEN '30/09/'
+                        WHEN f.id_trimestre = 4 THEN '31/12/'
+                    END, e.ejercicio ) fecha_termino, 
+                    (CASE 
+                        WHEN ( (fd.id_so_contratante IS NOT NULL) && (fd.id_so_solicitante IS NOT NULL) ) THEN 2
+                        WHEN ( (fd.id_so_contratante IS NOT NULL) && (fd.id_so_solicitante IS NULL) ) THEN 0
+                        WHEN ( (fd.id_so_contratante IS NULL) && (fd.id_so_solicitante IS NOT NULL) ) THEN 1
+                    END) funcion_sujeto,
+                    fd.area_administrativa,
+                    fd.id_servicio_clasificacion, 
+                    scat.nombre_servicio_categoria, sscat.nombre_servicio_subcategoria,
+                    suni.nombre_servicio_unidad,
+                    (CASE 
+                        WHEN cam.id_campana_tipo = 1 THEN 1
+                        WHEN cam.id_campana_tipo = 2 THEN 0
+                    END) 'tipo',
+                    cam.nombre_campana_aviso,  
+                    cam.periodo, ctem.nombre_campana_tema, 
+                    cobj.campana_objetivo, cam.objetivo_comunicacion, 
+                    fd.precio_unitarios,cam.clave_campana, 
+                    cam.autoridad, 
+                    (CASE 
+                        WHEN ccob.id_campana_cobertura = 1 THEN 3
+                        WHEN ccob.id_campana_cobertura = 2 THEN 2
+                        WHEN ccob.id_campana_cobertura = 3 THEN 1
+                        WHEN ccob.id_campana_cobertura = 4 THEN 0
+                    END) 'cobertura', 
+                    cam.campana_ambito_geo, 
+                    cam.fecha_inicio, 
+                    cam.fecha_termino, 
+                    (CASE 
+                        WHEN sexo.poblacion_sexo = 1 THEN 1
+                        WHEN sexo.poblacion_sexo = 2 THEN 0
+                        WHEN sexo.poblacion_sexo = 3 THEN 2
+                    END) 'sexo', 
+                    lugar.poblaciones 'Lugar de Residencia', edu.nivel_educativo 'Nivel Educativo', edad.rangos_edad 'Grupos de Edad', 
+                    neco.poblacion_nivel 'Nivel Socioeconómico',
+                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'Respecto a los proveedores y su contratación', 
+                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'Respecto a los recursos y presupuesto', 
+                    CONCAT(f.id_ejercicio, '-', f.id_factura, '-', f.id_orden_compra, '-', f.id_contrato, '-', f.id_proveedor) 'Respecto al Contrato y los Montos', 
+                    f.area_responsable 'Área(s) Responsable(s) que generan(n) posee(n), Publica(n) y Actualiza(n) la información',
+                    f.fecha_validacion 'Fecha de Validación', f.fecha_actualizacion 'Fecha de Actualización', f.nota 'Nota', 
+                    pnt.estatus_pnt 'Estatus PNT'
