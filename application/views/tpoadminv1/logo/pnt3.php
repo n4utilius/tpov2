@@ -51,9 +51,9 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	<table id="grid" class="dataTable stripe hover order-column row-border cell-border compact">
 		<thead>
 	        <tr>
-	            <th> id_tpo </th>
-				<th> id_pnt </th>
-				<th> id </th>
+	            <th> ID TPO </th>
+				<th> ID PNT </th>
+				<th> ID </th>
 				<th> Ejercicio </th>
 				<th> Fecha de inicio del periodo que se informa </th>
 				<th> Fecha de termino del periodo que se informa </th>
@@ -129,36 +129,36 @@ $(document).ready(function(){
     		{ data: 'id_tpo' },
 			{ data: 'id_pnt' },
 			{ data: 'id' },
-			{ data: 'Ejercicio' },
-			{ data: 'Fecha de inicio del periodo que se informa' },
-			{ data: 'Fecha de termino del periodo que se informa' },
-			{ data: 'Sujeto obligado al que se le proporcionó el servicio/permiso' },
-			{ data: 'Tipo (catálogo)' },
-			{ data: 'Medio de comunicación (catálogo)' },
-			{ data: 'Descripción de unidad por ejemplo: spot de 30 segundos (radio); mensaje en TV 20 segundos' },
-			{ data: 'Concepto o campaña' },
-			{ data: 'Clave única de identificación de campaña o aviso institucional en su caso' },
-			{ data: 'Autoridad que proporcionó la clave única de identificación de campaña o aviso institucional' },
-			{ data: 'Cobertura (catálogo)' },
-			{ data: 'Ámbito geográfico de cobertura' },
-			{ data: 'Sexo (catálogo)' },
-			{ data: 'Lugar de residencia' },
-			{ data: 'Nivel educativo' },
-			{ data: 'Grupo de edad' },
-			{ data: 'Nivel económico' },
-			{ data: 'Concesionario responsable de publicar la campaña o la comunicación correspondiente (razón social)' },
-			{ data: 'Distintivo y/o nombre comercial del concesionario responsable de publicar la campaña o comunicación' },
-			{ data: 'Descripción breve de las razones que justifican la elección del proveedor' },
-			{ data: 'Monto total del tiempo de Estado o tiempo fiscal consumidos' },
-			{ data: 'Área administrativa encargada de solicitar la difusión del mensaje o producto en su caso' },
-			{ data: 'Fecha de inicio de difusión del concepto o campaña' },
-			{ data: 'Fecha de término de difusión del concepto o campaña' },
-			{ data: 'Número de factura en su caso' },
-			{ data: 'Área(s) responsable(s) que genera(n) posee(n) publica(n) y actualizan la información' },
-			{ data: 'Fecha de validación' },
-			{ data: 'Fecha de Actualización' },
-			{ data: 'Nota' },
-			{ data: 'Estatus' }
+			{ data: 'ejercicio' },
+			{ data: 'fecha_inicio_periodo' },
+			{ data: 'fecha_termino_periodo' },
+			{ data: 'nombre_sujeto_obligado' },
+			{ data: 'nombre_campana_tipoTO' },
+			{ data: 'nombre_servicio_categoria' },
+			{ data: 'nombre_servicio_unidad' },
+			{ data: 'nombre_campana_aviso' },
+			{ data: 'clave_campana' },
+			{ data: 'autoridad' },
+			{ data: 'nombre_campana_cobertura' },
+			{ data: 'campana_ambito_geo' },
+			{ data: 'nombre_poblacion_sexo' },
+			{ data: 'poblacion_lugar' },
+			{ data: 'nombre_poblacion_nivel_educativo' },
+			{ data: 'nombre_poblacion_grupo_edad' },
+			{ data: 'nombre_poblacion_nivel' },
+			{ data: 'nombre_razon_social' },
+			{ data: 'nombre_comercial' },
+			{ data: 'descripcion_justificacion' },
+			{ data: 'monto_tiempo' },
+			{ data: 'area_responsable' },
+			{ data: 'fecha_inicio' },
+			{ data: 'fecha_termino' },
+			{ data: 'numero_factura' },
+			{ data: 'area_responsable' },
+			{ data: 'fecha_validacion' },
+			{ data: 'fecha_actualizacion' },
+			{ data: 'nota' },
+			{ data: 'estatus_pnt' }
 		],
 		columnDefs: [ 
 			{

@@ -389,7 +389,10 @@ class Logo extends CI_Controller
                       "p.fecha_validacion", "p.fecha_actualizacion", "p.nota", "pnt.estatus_pnt");
 
         foreach ($cols as &$col) {
-            $tag = ( strpos($col, ".") )? explode(".", $col)[1] : $col;
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $col = $col_arr[0]; $tag = $col_arr[1];
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
             $col = "IFNULL(" . $col . ", '') AS $tag";
         }
 
@@ -417,12 +420,15 @@ class Logo extends CI_Controller
                       "f.fecha_actualizacion", "f.nota", "pnt.estatus_pnt");
 
         foreach ($cols as &$col) {
-            $tag = ( strpos($col, ".") )? explode(".", $col)[1] : $col;
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $col = $col_arr[0]; $tag = $col_arr[1];
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
             $col = "IFNULL(" . $col . ", '') AS $tag";
         }
 
         $query = $this->db->query("SELECT " . join(", ", $cols) . ", 
-                  CONCAT(CASE 
+                    CONCAT(CASE 
                         WHEN f.id_trimestre = NULL THEN '' WHEN f.id_trimestre = 1 THEN '01/01/'
                         WHEN f.id_trimestre = 2 THEN '01/04/' WHEN f.id_trimestre = 3 THEN '01/07/'
                         WHEN f.id_trimestre = 4 THEN '01/10/'
@@ -496,11 +502,21 @@ class Logo extends CI_Controller
     }
 
     function registros21(){
-        $query = $this->db->query("SELECT pnt.id_tpo, pnt.id_proveedor id, pnt.id_pnt, 
-                    con.descripcion_justificacion, e.ejercicio, proc.nombre_procedimiento, 
-                    con.fundamento_juridico, prov.nombre_razon_social, prov.nombres, prov.primer_apellido,
-                    prov.segundo_apellido, prov.nombre_comercial, prov.rfc, pnt.estatus_pnt
-                    FROM tab_facturas f
+        $cols = array("pnt.id_tpo", "pnt.id_proveedor id", "pnt.id_pnt", "con.descripcion_justificacion", 
+                      "e.ejercicio", "proc.nombre_procedimiento", "con.fundamento_juridico", 
+                      "prov.nombre_razon_social", "prov.nombres", "prov.primer_apellido", 
+                      "prov.segundo_apellido", "prov.nombre_comercial", "prov.rfc", "pnt.estatus_pnt");
+
+        foreach ($cols as &$col) {
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $col = $col_arr[0]; $tag = $col_arr[1];
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+
+
+        $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_facturas f
                     JOIN tab_facturas_desglose fd ON fd.id_factura = f.id_factura
                     JOIN tab_campana_aviso cam ON cam.id_campana_aviso = fd.id_campana_aviso
                     JOIN cat_ejercicios e ON e.id_ejercicio = cam.id_ejercicio 
@@ -516,17 +532,20 @@ class Logo extends CI_Controller
     }
 
     function registros22(){
-        $query = $this->db->query("SELECT pnt.id_presupuesto_desglose id_tpo, pnt.id_pnt, pnt.id,
-                    ej.ejercicio, pcon.partida 'Partida Genérica',  pcon.concepto 'Clave del concepto',
-                    pcon.nombre_concepto 'Nombre del concepto',
-                    total.presupuesto 'Presupuesto Asignado por concepto',
-                    total.modificado 'Presupuesto Modificado por concepto',
-                    pcon.denominacion_partida 'Denominacion de cada partida',
-                    pdes.monto_presupuesto 'Presupuesto total asignado a cada partida',
-                    pdes.monto_modificacion 'Presupuesto modificado por partida',
-                    fact.total_ejercido 'Presupuesto ejercido al periodo reportado de cada partida', 
-                    pnt.estatus_pnt
-                    FROM tab_presupuestos_desglose pdes 
+         $cols = array("pnt.id_presupuesto_desglose id_tpo", "pnt.id_pnt", "pnt.id", "ej.ejercicio", 
+                       "pcon.partida", "pcon.concepto", "pcon.nombre_concepto", "total.presupuesto", 
+                       "total.modificado", "pcon.denominacion_partida", "pdes.monto_presupuesto", 
+                       "pdes.monto_modificacion", "fact.total_ejercido", "pnt.estatus_pnt");
+
+        foreach ($cols as &$col) {
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $col = $col_arr[0]; $tag = $col_arr[1];
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+
+        $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_presupuestos_desglose pdes 
                     JOIN tab_presupuestos pre ON pre.id_presupuesto = pdes.id_presupuesto
                     JOIN cat_ejercicios ej ON ej.id_ejercicio = pre.id_ejercicio
                     JOIN (SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', 
@@ -562,18 +581,26 @@ class Logo extends CI_Controller
     }
 
     function registros23(){
-        $query = $this->db->query("SELECT pnt.id_contrato id_tpo, pnt.id_pnt id_pnt, pnt.id,
-            ej.ejercicio, cont.fecha_celebracion 'Fecha de firma del contrato',
-            cont.numero_contrato 'Número o referencia de identificación del contrato',
-            cont.objeto_contrato 'Objeto del contrato',
-            vcon.`Archivo contrato en PDF (Vinculo al archivo)` 'Hipervínculo al contrato firmado',
-            vcmod.`Archivo convenio en PDF (Vinculo al archivo)` 'Hipervínculo al convenio modificatorio en su caso',
-            vcon.`Monto original del contrato` 'Monto total del contrato',
-            vcon.`Monto pagado a la fecha` 'Monto pagado al periodo publicado',
-            vcon.`Fecha inicio` 'Fecha de inicio de los servicios contratados',
-            vcon.`Fecha fin` 'Fecha de término de los servicios contratados',
-            f.numeros_factura 'Números de factura', f.files_factura_pdf 'Hipervínculos a la factura',
-            area_responsable, fecha_validacion, fecha_actualizacion, nota, pnt.estatus_pnt
+        $cols = array("pnt.id_contrato id_tpo", "pnt.id_pnt id_pnt", "pnt.id", "ej.ejercicio", 
+                      "cont.fecha_celebracion", "cont.numero_contrato", "cont.objeto_contrato", 
+                      "f.numeros_factura", "f.files_factura_pdf", "cont.area_responsable", 
+                      "cont.fecha_validacion", "cont.fecha_actualizacion", "cont.nota", "pnt.estatus_pnt");
+
+        foreach ($cols as &$col) {
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $tag = array_pop($col_arr); $col = join(" ", $col_arr);
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+
+        $query = $this->db->query("SELECT " . join(", ", $cols) . ",
+                IFNULL(vcon.`Archivo contrato en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al contrato firmado',
+                IFNULL(vcmod.`Archivo convenio en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al convenio modificatorio en su caso',
+                IFNULL(vcon.`Monto original del contrato` , '') AS 'Monto total del contrato',
+                IFNULL(vcon.`Monto pagado a la fecha` , '') AS 'Monto pagado al periodo publicado',
+                IFNULL(vcon.`Fecha inicio` , '') AS 'Fecha de inicio de los servicios contratados',
+                IFNULL(vcon.`Fecha fin` , '') AS 'Fecha de término de los servicios contratados'
             FROM tab_contratos cont
             LEFT JOIN vout_contratos vcon ON vcon.`ID (Número de contrato)` = cont.id_contrato
             LEFT JOIN vout_convenios_modificatorios vcmod ON vcmod.`ID (Número de contrato)` = cont.id_contrato
@@ -591,36 +618,26 @@ class Logo extends CI_Controller
     }
 
      function registros3(){
-        $query = $this->db->query("SELECT pnt.id_campana_aviso id_tpo, pnt.id_pnt, pnt.id, ej.ejercicio 'Ejercicio', 
-                  cam.fecha_inicio_periodo 'Fecha de inicio del periodo que se informa',
-                  cam.fecha_termino_periodo 'Fecha de termino del periodo que se informa',
-                  so.nombre_sujeto_obligado 'Sujeto obligado al que se le proporcionó el servicio/permiso',
-                  ctip.nombre_campana_tipoTO 'Tipo (catálogo)',
-                  cscat.nombre_servicio_categoria 'Medio de comunicación (catálogo)', 
-                  csun.nombre_servicio_unidad 'Descripción de unidad por ejemplo: spot de 30 segundos (radio); mensaje en TV 20 segundos',
-                  cam.nombre_campana_aviso 'Concepto o campaña',
-                  cam.clave_campana 'Clave única de identificación de campaña o aviso institucional en su caso',
-                  cam.autoridad  'Autoridad que proporcionó la clave única de identificación de campaña o aviso institucional',
-                  ccob.nombre_campana_cobertura 'Cobertura (catálogo)',
-                  cam.campana_ambito_geo 'Ámbito geográfico de cobertura',
-                  sex.nombre_poblacion_sexo 'Sexo (catálogo)',
-                  lug.poblacion_lugar 'Lugar de residencia',
-                  edu.nombre_poblacion_nivel_educativo 'Nivel educativo', 
-                  eda.nombre_poblacion_grupo_edad 'Grupo de edad',
-                  niv.nombre_poblacion_nivel 'Nivel económico',
-                  prov.nombre_razon_social 'Concesionario responsable de publicar la campaña o la comunicación correspondiente (razón social)',
-                  prov.nombre_comercial 'Distintivo y/o nombre comercial del concesionario responsable de publicar la campaña o comunicación',
-                  ord.descripcion_justificacion 'Descripción breve de las razones que justifican la elección del proveedor',
-                  cam.monto_tiempo 'Monto total del tiempo de Estado o tiempo fiscal consumidos',
-                  cam.area_responsable 'Área administrativa encargada de solicitar la difusión del mensaje o producto en su caso',
-                  cam.fecha_inicio 'Fecha de inicio de difusión del concepto o campaña',
-                  cam.fecha_termino 'Fecha de término de difusión del concepto o campaña',
-                  -- 'Presupuesto total asignado y ejercido de cada partida', 
-                  fac.numero_factura 'Número de factura en su caso' ,
-                  fac.area_responsable 'Área(s) responsable(s) que genera(n) posee(n) publica(n) y actualizan la información',
-                  cam.fecha_validacion 'Fecha de validación',
-                  cam.fecha_actualizacion 'Fecha de Actualización',
-                  cam.nota 'Nota',  pnt.estatus_pnt 'Estatus'
+        $cols = array("pnt.id_campana_aviso id_tpo", "pnt.id_pnt", "pnt.id", "ej.ejercicio", "cam.autoridad", 
+                      "cam.fecha_inicio_periodo", "cam.fecha_termino_periodo", "so.nombre_sujeto_obligado", 
+                      "ctip.nombre_campana_tipoTO", "cscat.nombre_servicio_categoria", "cam.clave_campana", 
+                      "csun.nombre_servicio_unidad", "cam.nombre_campana_aviso", "cam.campana_ambito_geo", 
+                      "ccob.nombre_campana_cobertura", "sex.nombre_poblacion_sexo", "lug.poblacion_lugar", 
+                      "edu.nombre_poblacion_nivel_educativo", "eda.nombre_poblacion_grupo_edad", 
+                      "niv.nombre_poblacion_nivel", "prov.nombre_razon_social", "prov.nombre_comercial", 
+                      "ord.descripcion_justificacion", "cam.monto_tiempo", "cam.area_responsable", 
+                      "cam.fecha_inicio", "cam.fecha_termino", "fac.numero_factura", "fac.area_responsable", 
+                      "cam.fecha_validacion", "cam.fecha_actualizacion", "pnt.estatus_pnt", "cam.nota");
+
+        foreach ($cols as &$col) {
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $tag = array_pop($col_arr); $col = join(" ", $col_arr);
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+        $query = $this->db->query("SELECT " . join(", ", $cols) . " 
+                    -- 'Presupuesto total asignado y ejercido de cada partida',
                   FROM tab_campana_aviso cam
                   JOIN cat_ejercicios ej ON ej.id_ejercicio = cam.id_ejercicio
                   JOIN tab_facturas_desglose fdes ON fdes.id_campana_aviso = cam.id_campana_aviso
@@ -661,10 +678,19 @@ class Logo extends CI_Controller
     }
 
     function registros31(){
-        $query = $this->db->query("SELECT pnt.id_presupuesto_desglose id_tpo, 
-                       pnt.id_pnt, pnt.id, ej.ejercicio, pcon.denominacion_partida,
-                       pdes.monto_presupuesto, fact.total_ejercido, pnt.estatus_pnt
-                FROM tab_presupuestos_desglose pdes
+        $cols = array("pnt.id_presupuesto_desglose id_tpo", "pnt.id_pnt", "pnt.id", "ej.ejercicio", 
+                      "pcon.denominacion_partida", "pdes.monto_presupuesto", "fact.total_ejercido", 
+                      "pnt.estatus_pnt");
+
+        foreach ($cols as &$col) {
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $tag = array_pop($col_arr); $col = join(" ", $col_arr);
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+
+        $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_presupuestos_desglose pdes
                 JOIN (SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', 
                            p.partida, p.denominacion 'denominacion_partida'
                       FROM (SELECT id_presupesto_concepto, concepto, partida, denominacion FROM cat_presupuesto_conceptos pc
@@ -688,9 +714,20 @@ class Logo extends CI_Controller
     }
 
     function registros4(){
-        $query = $this->db->query("SELECT pnt.id_campana_aviso id_tpo, pnt.id_pnt, pnt.id,  pnt.estatus_pnt, 
-                ej.ejercicio, cam.fecha_inicio_periodo, cam.fecha_termino_periodo, cam.mensajeTO, 
-                /*Hipervínculo, */ cam.fecha_validacion, cam.fecha_actualizacion, cam.area_responsable, cam.nota 
+        $cols = array("pnt.id_presupuesto_desglose id_tpo", "pnt.id_pnt", "pnt.id", "ej.ejercicio", 
+                      "pcon.denominacion_partida", "pdes.monto_presupuesto", "fact.total_ejercido", 
+                      "pnt.estatus_pnt");
+
+        foreach ($cols as &$col) {
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $tag = array_pop($col_arr); $col = join(" ", $col_arr);
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+
+        $query = $this->db->query("SELECT " . join(", ", $cols) . "
+                /* Hipervínculo, */ 
                 FROM tab_campana_aviso cam 
                 JOIN cat_ejercicios ej ON ej.id_ejercicio = cam.id_ejercicio 
                 LEFT JOIN rel_pnt_campana_aviso pnt ON pnt.id_campana_aviso = cam.id_campana_aviso;"); 

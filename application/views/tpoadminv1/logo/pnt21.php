@@ -135,6 +135,16 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    }
 				},
 				{
+				    targets: 6,
+				    data: "data",
+				    render: function ( data, type, row, meta ) {
+				      	if(!data || data == '') return "<label class='btn'> <small> SIN SUBIR </small></label>"
+				      	if(data == 1) return "Contratante" 
+				      	if(data == 2) return "Solicitante" 
+				      	if(data == 3) return "Contratante y Solicitante" 
+				    }
+				},
+				{
 				    targets: 13,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
