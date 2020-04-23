@@ -83,8 +83,6 @@ class Logo extends CI_Controller
             "password" => $_POST["password"] 
         );
 
-
-
         $options = array(
             'http' => array(
             'method'  => 'POST',
@@ -95,16 +93,11 @@ class Logo extends CI_Controller
         );
 
         $response = json_encode($data);
-
-        header('Content-Type: application/json');
-        echo  $response; 
-
         $context  = stream_context_create( $options );
         $result = file_get_contents( $URL, false, $context );
-        //$result = json_decode($result, true);
+        $result = json_decode($result, true);
 
         
-        /*
         if( $result["success"] ){
             $_SESSION["user_pnt"] = $data["usuario"];
             $_SESSION["pnt"] = $result;
@@ -122,7 +115,6 @@ class Logo extends CI_Controller
 
         header('Content-Type: application/json');
         echo  $response; 
-        */
 
     }
 
@@ -415,7 +407,7 @@ class Logo extends CI_Controller
                       "ctem.nombre_campana_tema", "cobj.campana_objetivo", "cam.objetivo_comunicacion", 
                       "fd.precio_unitarios", "cam.clave_campana", "cam.autoridad", 
                       "cam.campana_ambito_geo", "cam.fecha_inicio", "cam.fecha_termino", 
-                      "lugar.poblaciones", "edu.nivel_educativo", "edad.rangos_edad ",  
+                      "lugar.poblaciones", "edu.nivel_educativo", "edad.rangos_edad",  
                       "neco.poblacion_nivel", "f.area_responsable", "f.fecha_validacion", 
                       "f.fecha_actualizacion", "f.nota", "pnt.estatus_pnt");
 
@@ -714,9 +706,9 @@ class Logo extends CI_Controller
     }
 
     function registros4(){
-        $cols = array("pnt.id_presupuesto_desglose id_tpo", "pnt.id_pnt", "pnt.id", "ej.ejercicio", 
-                      "pcon.denominacion_partida", "pdes.monto_presupuesto", "fact.total_ejercido", 
-                      "pnt.estatus_pnt");
+        $cols = array("pnt.id_campana_aviso id_tpo", "pnt.id_pnt", "pnt.id", "pnt.estatus_pnt", "ej.ejercicio", 
+                      "cam.fecha_inicio_periodo", "cam.fecha_termino_periodo", "cam.mensajeTO", 
+                      "cam.fecha_validacion", "cam.fecha_actualizacion", "cam.area_responsable", "cam.nota");
 
         foreach ($cols as &$col) {
             $tag = $col;
