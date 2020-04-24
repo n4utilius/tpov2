@@ -629,9 +629,8 @@
         
         $.post( $(this).attr("href"), { 'user': $("#re-user").val() , 'password': $("#re-pass").val() }, 
             function(data, error){
-                console.log(data, error) 
                 $("td.inactive").children(".loading").remove()
-                //location.reload(); 
+                location.reload(); 
             }
         );
         $("td.inactive").children(".loading").remove()

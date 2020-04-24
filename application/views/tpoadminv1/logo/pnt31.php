@@ -1,9 +1,9 @@
 <?php  
-/*if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !( $_SESSION["pnt"]["success"] ) ){
+if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !( $_SESSION["pnt"]["success"] ) ){
 	header("Location: " . base_url() ."index.php/tpoadminv1/logo/logo/alta_carga_logo");
 	die();
 }
-*/
+
 ?>
 
 <script type="text/javascript" src="<?php echo base_url(); ?>plugins/sanitizer/sanitizer.js"></script>
@@ -114,53 +114,47 @@
 				    targets: 7,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
-				      	var response = ""
-			      		row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
-				      	if(!data){ 
-				      		response += "<a class='tpo_btn crear' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
+			      	var response = ""
+		      		_row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
+			      	if( !(row.id_pnt) || row.id_pnt === ""){ 
+			      		response += "<a class='tpo_btn crear' href='#' data='" + _row + "'>" 
+			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
 
-				      		response += "<img class='check invisible' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
+			      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + _row + "'>" 
+			      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
 
-				      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
+			      		response += "<a class='tpo_btn editar invisible' href='#' data='" + _row + "'>" 
+			      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
+			      	}else{
+			      		response += "<a class='tpo_btn crear invisible' href='#' data='" + _row + "'>" 
+			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> </span> </a>"
 
-				      		response += "<a class='tpo_btn editar invisible' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
-				      		
-				      		return response
-				      	}else{
-				      		response += "<a class='tpo_btn crear invisible' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> </span> </a>"
+			      		response += "<a class='tpo_btn eliminar' href='#' data='" + _row + "'>" 
+			      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
 
-				      		response += "<img class='check' src='<?php echo base_url(); ?>plugins/img/correct.png'>"
-
-				      		response += "<a class='tpo_btn eliminar' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
-
-				      		response += "<a class='tpo_btn editar' href='#' data='" + row + "'>" 
-				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
-
-					      	return response
-
-				      	}
-					}
+			      		response += "<a class='tpo_btn editar' href='#' data='" + _row + "'>" 
+			      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
+			      	}
+			      	return response
+				}
 				},
 				{
-				    targets: [0,1,2,3,4,5,6],
+				    targets: [3,4,5,6],
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
-				      	if(!data) return "<label class='btn'> <small> N/D </small></label>"
-				        return data
+				    	if( !(row.id_pnt) || row.id_pnt === ""){ 
+				      		if(!data) return "<label class='btn'> <small> N/D </small></label>"
+				        	return data
+					    } else return "<input type='text' value='" + data + "'>" 
 				    }
 				}
 			]
 	    });
-	    /*
+
 		$(document).on("click","a.crear",function(e){ 
 	    	e.preventDefault();
 		    var data = JSON.parse( $(this).attr("data") )
-			  , url = "<?php //echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
+			  , url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
 			
 			var a = $(this)
 		      , tr = a.parents("tr")
@@ -173,10 +167,10 @@
 		    formato = {
 				"idFormato": 43369, //"Contratación de servicios de publicidad oficial"
 				"IdRegistro": "",
-				"token": '<?php //echo $_SESSION["pnt"]["token"]["token"]; ?>',
-				"correoUnidadAdministrativa": '<?php //echo $_SESSION["user_pnt"]; ?>' ,
-				"unidadAdministrativa": '<?php //echo $_SESSION["unidad_administrativa"]; ?>',
-				"SujetoObligado": '<?php //echo $_SESSION["sujeto_obligado"]; ?>',
+				"token": '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>',
+				"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,
+				"unidadAdministrativa": '<?php echo $_SESSION["unidad_administrativa"]; ?>',
+				"SujetoObligado": '<?php echo $_SESSION["sujeto_obligado"]; ?>',
 				"registros": [{
 				    "numeroRegistro": 1,
 				    "campos": [
@@ -215,12 +209,12 @@
 		    a.css("display", "none")
 		    a.siblings().css("display", "none")
 		    tr.css("background-color", "rgba(255,0,0, 0.2)")
-		    td.prepend("<img class='loading' src='<?php //echo base_url(); ?>plugins/img/loading.gif'>")
+		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
 
 		    var id_pnt = tr.children("td").eq(1).text()
 
 	    	var data = JSON.parse( $(this).attr("data")  )
-			  , token = '<?php //echo $_SESSION["pnt"]["token"]["token"]; ?>'
+			  , token = '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>'
 
 			var formato = {
 				"idFormato": 43320, 
@@ -230,7 +224,7 @@
 				"id_pnt": data.id_pnt || id_pnt
 			}
 
-			var url = "<?php //echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
+			var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
 
 	    	$.post(url, formato, function(res, error){
 	    		//if(res.success) location.reload(); 
@@ -253,6 +247,5 @@
 	    	})
 
 	    })
-	    */
 	})
 </script>
