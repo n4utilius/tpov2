@@ -598,7 +598,7 @@ class Logo extends CI_Controller
                     LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor
                     WHERE f.id_factura = " . $id_factura . ";");
 
-        $data = array( "facturas" => $query->result_array() )
+        $data = array( "facturas" => $query->result_array() );
 
         //Datos de Contrato
         $id_contrato = $_GET["id_contrato"];
@@ -632,8 +632,9 @@ class Logo extends CI_Controller
             LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato
             WHERE cont.id_contrato = " . $id_contrato . ";");
 
-        $data["contratos"] = $query->result_array() );
-
+        $data["contratos"] = $query->result_array();
+        /*
+        */
         header('Content-Type: application/json');
         echo json_encode( $data ); 
     }
