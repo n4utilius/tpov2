@@ -115,7 +115,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 			      	var response = ""
-		      		_row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
+		      		_row = row //HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
 			      	if( !(row.id_pnt) || row.id_pnt === ""){ 
 			      		response += "<a class='tpo_btn crear' href='#' data='" + _row + "'>" 
 			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
@@ -145,7 +145,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    	if( !(row.id_pnt) || row.id_pnt === ""){ 
 				      		if(!data) return "<label class='btn'> <small> N/D </small></label>"
 				        	return data
-					    } else return "<input type='text' value='" + data + "'>" 
+					   //} else return "<input type='text' value='" + data + "'>" 
+				    	} else return data
 				    }
 				}
 			]
@@ -181,14 +182,14 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 			}
 
 	    	$.post(url, formato, function(res, error){
-    			if(res && res.success) {
+				if(!res || !('success' in res) ) {
+	    			console.log("No se pudo insertar el elemento correctamente")
+	    			a.css("display", "block")
+	    		} else {
 	    			tr.children("td").eq(1).text(res.id_pnt)
 	    			tr.children("td").eq(12).children("a.eliminar").removeClass("invisible")
 	    			tr.children("td").eq(12).children("img.check").removeClass("invisible")
 	    			tr.children("td").eq(12).children("a.crear").addClass("invisible")
-	    		} else {
-	    			console.log("No se pudo insertar el elemento correctamente")
-	    			a.css("display", "block")
 	    		}
 
     			td.children("img.loading").remove("")
@@ -228,15 +229,15 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 	    	$.post(url, formato, function(res, error){
 	    		//if(res.success) location.reload(); 
-	    		if(res && res.success) {
+				if(!res || !('success' in res) ) {
+	    			console.log("No se pudo eliminar el elemento correctamente")
+	    			a.css("display", "block")
+	    			a.siblings().css("display", "block")
+	    		} else {
 	    			tr.children("td").eq(1).html("<label class='btn'> <small> SIN SUBIR </small></label>")
 	    			tr.children("td").eq(12).children("a.eliminar").addClass("invisible")
 	    			tr.children("td").eq(12).children("img.check").addClass("invisible")
 	    			tr.children("td").eq(12).children("a.crear").css("display", "block")
-	    		} else {
-	    			console.log("No se pudo eliminar el elemento correctamente")
-	    			a.css("display", "block")
-	    			a.siblings().css("display", "block")
 	    		}
 
     			td.children("img.loading").remove("")

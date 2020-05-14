@@ -4,9 +4,12 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	die();
 }
 ?>
-<script type="text/javascript" src="<?php echo base_url(); ?>plugins/sanitizer/sanitizer.js"></script>
+
 
 <link href="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url(); ?>plugins/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+
+
 <style type="text/css">
 	body { transition: background-color ease-in 3s; /* tweak to your liking */ }
 	.invisible { display: none; }
@@ -91,14 +94,26 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				<th> Estatus PNT </th>
 	        </tr>
 	    </thead>
-	    <tbody> <tr> </tr> </tbody>
+	    <tbody> 
+	    	<tr> 
+	     		<!--img class='loading' src='<?php echo base_url(); ?>plugins/img/loading3.gif'-->
+	    	</tr> 
+		</tbody>
 	</table>
 </section>
 
+<section id="detalles"> </section>
 
-<script type="text/javascript" src="<?php echo base_url(); ?>plugins/jQuery/jQuery-3.3.1.js"></script>
+
+<!--script type="text/javascript" src="<?php echo base_url(); ?>plugins/jQuery/jQuery-3.3.1.js"></script-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+
+<script type="text/javascript" src="<?php echo base_url(); ?>plugins/sanitizer/sanitizer.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>plugins/colorbox/jquery.colorbox.js"></script>
+
 <link href="<?php echo base_url(); ?>plugins/DataTables2/datatables.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.js" type="text/javascript" ></script>
+
 
 <script type="text/javascript">
 
@@ -142,7 +157,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				{ data: 'area_administrativa' },
 				{ data: 'id_servicio_clasificacion' },
 				{ data: 'nombre_servicio_categoria' },
-				{ data: 'nombre_servicio_subcategoria' },
+				{ data: 'id_servicio_subcategoria' },
 				{ data: 'nombre_servicio_unidad' },
 				{ data: 'tipo' },
 				{ data: 'nombre_campana_aviso' },
@@ -155,8 +170,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				{ data: 'autoridad' },
 				{ data: 'cobertura' },
 				{ data: 'campana_ambito_geo' },
-				{ data: 'fecha_inicio' },
-				{ data: 'fecha_termino' },
+				{ data: 'fecha_inicio_cam' },
+				{ data: 'fecha_termino_cam' },
 				{ data: 'sexo' },
 				{ data: 'poblaciones' },
 				{ data: 'nivel_educativo' },
@@ -182,29 +197,33 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    targets: 35,
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
-			      	var response = ""
-		      		_row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
-			      	if( !(row.id_pnt) || row.id_pnt === ""){ 
-			      		response += "<a class='tpo_btn crear' href='#' data='" + _row + "'>" 
-			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
+				      	var response = ""
+			      		_row = row //HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
+				      	if( !(row.id_pnt) || row.id_pnt === ""){ 
+				      		response += "<a class='tpo_btn crear' href='#' data='" + _row + "'>" 
+				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
 
-			      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + _row + "'>" 
-			      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
+				      		response += "<a class='tpo_btn eliminar invisible' href='#' data='" + _row + "'>" 
+				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
 
-			      		response += "<a class='tpo_btn editar invisible' href='#' data='" + _row + "'>" 
-			      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
-			      	}else{
-			      		response += "<a class='tpo_btn crear invisible' href='#' data='" + _row + "'>" 
-			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> </span> </a>"
+				      		response += "<a class='tpo_btn editar invisible' href='#' data='" + _row + "'>" 
+				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
+				      	}else{
+				      		response += "<a class='tpo_btn crear invisible' href='#' data='" + _row + "'>" 
+				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i> </span> </a>"
 
-			      		response += "<a class='tpo_btn eliminar' href='#' data='" + _row + "'>" 
-			      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
+				      		response += "<a class='tpo_btn eliminar' href='#' data='" + _row + "'>" 
+				      		response += "<span class='btn btn-danger btn-sm'><i class='fa fa-close'></i>  </span> </a>"
 
-			      		response += "<a class='tpo_btn editar' href='#' data='" + _row + "'>" 
-			      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
-			      	}
-			      	return response
-				}
+				      		response += "<a class='tpo_btn editar' href='#' data='" + _row + "'>" 
+				      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
+				      	}
+
+			      		response += "<a class='tpo_btn ver_mas' href='#' data='" + row.resp_pro_con + "'>" 
+			      		response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  Ver más información </span></a>"
+				      	
+				      	return response
+					}
 				},
 				{
 				    targets: [3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34],
@@ -213,11 +232,13 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    	if( !(row.id_pnt) || row.id_pnt === ""){ 
 				      		if(!data) return "<label class='btn'> <small> N/D </small></label>"
 				        	return data
-					    } else return "<input type='text' value='" + data + "'>" 
+					   //} else return "<input type='text' value='" + data + "'>" 
+				    	} else return data
 				    }
 				}
 			]
 	    });
+
 
 		$(document).on("click","a.crear",function(e){ 
 	    	e.preventDefault();
@@ -242,52 +263,53 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				"registros": [{
 				    "numeroRegistro": 1,
 				    "campos": [
-				    	{"idCampo": 333943, "valor": data["Ejercicio"] },
-						{"idCampo": 333963, "valor": ( data["Fecha de inicio del periodo que se informa"] != null )? data["Fecha de inicio del periodo que se informa"].split('-').reverse().join('/') : '' },
-						{"idCampo": 333964, "valor": ( data["Fecha de término del periodo que se informa"] != null )? data["Fecha de término del periodo que se informa"].split('-').reverse().join('/') : '' },
-						{"idCampo": 333962, "valor": parseInt(data["Función del Sujeto Obligado (catálogo)"]) },
-						{"idCampo": 333950, "valor": data["Área administrativa Encargada de Solicitar El Servicio o Producto, en su caso"]},
-						{"idCampo": 333968, "valor": data["Clasificación Del(los) Servicios (catálogo)"]},
-						{"idCampo": 333940, "valor": data["Tipo de Servicio<"]},
-						{"idCampo": 333969, "valor": data["Tipo de Medio(catálogo)"] },
-						{"idCampo": 333970, "valor": data["Descripción de Unidad"]},
-						{"idCampo": 333956, "valor": parseInt(data["Tipo (catálogo)"]) },
-						{"idCampo": 333947, "valor": data["Nombre de la Campaña o Aviso Institucional"]},
-						{"idCampo": 333942, "valor": data["Año de la Campaña"]},
-						{"idCampo": 333948, "valor": data["Tema de la Campaña o Aviso Institucional"]},
-						{"idCampo": 333951, "valor": data["Objetivo Institucional"]},
-						{"idCampo": 333949, "valor": data["Objetivo de Comunicación"]},
-						{"idCampo": 333972, "valor": data["Costo por unidad"]},
-						{"idCampo": 333944, "valor": data["Clave Única de Indentificación de Campaña"]},
-						{"idCampo": 333973, "valor": data["Autoridad que proporcionó la Clave"]},
-						{"idCampo": 333955, "valor": parseInt(data["Cobertura (catálogo)"]) },
-						{"idCampo": 333971, "valor": data["Ámbito Geográfico de Cobertura"]},
-						{"idCampo": 333952, "valor": ( data["Fecha de inicio de la Campaña o Aviso Institucional"] != null )? data["Fecha de inicio de la Campaña o Aviso Institucional"].split('-').reverse().join('/') : '' },
-						{"idCampo": 333953, "valor": ( data["Fecha de término de la Campaña o Aviso Institucional"] != null )? data["Fecha de término de la Campaña o Aviso Institucional"].split('-').reverse().join('/') : '' },
-						{"idCampo": 333965, "valor": parseInt(data["Sexo (catálogo)"]) },
-						{"idCampo": 333946, "valor": data["Lugar de Residencia"]},
-						{"idCampo": 333941, "valor": data["Nivel Educativo"]},
-						{"idCampo": 333945, "valor": data["Grupos de Edad"]},
-						{"idCampo": 333974, "valor": data["Nivel Socioeconómico"]},
+				    	{"idCampo": 333943, "valor": data["ejercicio"] },
+						{"idCampo": 333963, "valor": ( data["fecha_inicio"] != null )? data["fecha_inicio"].split('-').reverse().join('/') : '' },
+						{"idCampo": 333964, "valor": ( data["fecha_termino"] != null )? data["fecha_termino"].split('-').reverse().join('/') : '' },
+						{"idCampo": 333962, "valor": parseInt(data["funcion_sujeto"]) },
+						{"idCampo": 333950, "valor": data["area_administrativa"]},
+						{"idCampo": 333968, "valor": data["id_servicio_clasificacion"]},
+						{"idCampo": 333940, "valor": data["nombre_servicio_categoria"]},
+						{"idCampo": 333969, "valor": data["id_servicio_subcategoria"] },
+						{"idCampo": 333970, "valor": data["nombre_servicio_unidad"]},
+						{"idCampo": 333956, "valor": parseInt(data["tipo"]) },
+						{"idCampo": 333947, "valor": data["nombre_campana_aviso"]},
+						{"idCampo": 333942, "valor": data["periodo"]},
+						{"idCampo": 333948, "valor": data["nombre_campana_tema"]},
+						{"idCampo": 333951, "valor": data["campana_objetivo"]},
+						{"idCampo": 333949, "valor": data["objetivo_comunicacion"]},
+						{"idCampo": 333972, "valor": data["precio_unitarios"]},
+						{"idCampo": 333944, "valor": data["clave_campana"]},
+						{"idCampo": 333973, "valor": data["autoridad"]},
+						{"idCampo": 333955, "valor": parseInt(data["cobertura"]) },
+						{"idCampo": 333971, "valor": data["campana_ambito_geo"]},
+						{"idCampo": 333952, "valor": ( data["fecha_inicio_cam"] != null )? data["fecha_inicio_cam"].split('-').reverse().join('/') : '' },
+						{"idCampo": 333953, "valor": ( data["fecha_termino_cam"] != null )? data["fecha_termino_cam"].split('-').reverse().join('/') : '' },
+						{"idCampo": 333965, "valor": parseInt(data["sexo"]) },
+						{"idCampo": 333946, "valor": data["poblaciones"]},
+						{"idCampo": 333941, "valor": data["nivel_educativo"]},
+						{"idCampo": 333945, "valor": data["rangos_edad"]},
+						{"idCampo": 333974, "valor": data["poblacion_nivel"]},
 						//(data.fecha_termino_periodo != null)? data.fecha_termino_periodo.split('-').reverse().join('/') : ''
-						{"idCampo": 333967, "valor": data["Área(s) Responsable(s) que generan(n) posee(n), Publica(n) y Actualiza(n) la información"]},
-						{"idCampo": 333954, "valor": (data["Fecha de Validación"] != null )? data["Fecha de Validación"].split('-').reverse().join('/') : '' },
-						{"idCampo": 333961, "valor": (data["Fecha de Actualización"] != null )? data["Fecha de Actualización"].split('-').reverse().join('/') : '' },
-						{"idCampo": 333966, "valor": data["Nota"]}//
+						{"idCampo": 333967, "valor": data["area_responsable"]},
+						{"idCampo": 333954, "valor": (data["fecha_validacion"] != null )? data["fecha_validacion"].split('-').reverse().join('/') : '' },
+						{"idCampo": 333961, "valor": (data["fecha_actualizacion"] != null )? data["fecha_actualizacion"].split('-').reverse().join('/') : '' },
+						{"idCampo": 333966, "valor": data["nota"]}//
 				    ]
 				}],
-			  "_id_interno": data["ID FACTURA"]
+			  "_id_interno": data["id_factura"]
 			}
 
+
 	    	$.post(url, formato, function(res, error){
-    			if(res && res.success) {
+	    		if(!res || !('success' in res) ){
+	    			console.log("No se pudo insertar el elemento correctamente")
+	    			a.css("display", "block")
+	    		} else {
 	    			tr.children("td").eq(1).text(res.id_pnt)
 	    			tr.children("td").eq(35).children("a.eliminar").removeClass("invisible")
 	    			tr.children("td").eq(35).children("img.check").removeClass("invisible")
 	    			tr.children("td").eq(35).children("a.crear").addClass("invisible")
-	    		} else {
-	    			console.log("No se pudo insertar el elemento correctamente")
-	    			a.css("display", "block")
 	    		}
 
     			td.children("img.loading").remove("")
@@ -298,6 +320,37 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	    	})
 			
 	    });
+
+		$(document).on("click","a.ver_mas",function(e){ 
+	    	e.preventDefault();
+	    	var ids= $(this).attr("data").split("-")
+			var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros50";
+
+	    	$.get(url, { id_factura: ids[1], id_contrato: ids[3] },  function(res, error){
+    			var format_data = function(tag, data){
+    				var res = "<td><h3> Datos de " + tag + " </h3> <ul>"
+	 				for (var key in data){
+	 					if(data[key] == "") continue;
+	 					//$("#detalles").append(key, facturas[key])
+	 					res += "<li> <b>" + key.toUpperCase() + ":</b> " + data[key] + "</li>"
+	 				}
+	    			res += "</ul><td>"
+	    			return res
+    			}
+    			
+    			var facturas = res.facturas[0]
+    			 // , contratos = res.contratos[0]
+
+    			var html = "<table> <tr>"
+
+    			html += "</tr>"
+    			html += "</table>"
+ 					console.log( html )
+
+ 				$.colorbox({html: html});
+ 				
+	    	})
+    	})
 
 		$(document).on("click","a.eliminar",function(e){ 
 	    	e.preventDefault();
@@ -327,16 +380,16 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 			var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
 
 	    	$.post(url, formato, function(res, error){
-	    		//if(res.success) location.reload(); 
-	    		if(res && res.success) {
+	    		if(res && ('success' in res) ) location.reload(); 
+	    		if(!res || !('success' in res) ){
+	    			console.log("No se pudo eliminar el elemento correctamente")
+	    			a.css("display", "block")
+	    			a.siblings().css("display", "block")
+	    		} else {
 	    			tr.children("td").eq(1).html("<label class='btn'> <small> SIN SUBIR </small></label>")
 	    			tr.children("td").eq(35).children("a.eliminar").addClass("invisible")
 	    			tr.children("td").eq(35).children("img.check").addClass("invisible")
 	    			tr.children("td").eq(35).children("a.crear").css("display", "block")
-	    		} else {
-	    			console.log("No se pudo eliminar el elemento correctamente")
-	    			a.css("display", "block")
-	    			a.siblings().css("display", "block")
 	    		}
 
     			td.children("img.loading").remove("")

@@ -124,6 +124,7 @@ $(document).ready(function(){
 	        { data: 'area_responsable' },
 	        { data: 'fecha_validacion' },
 	        { data: 'fecha_actualizacion' },
+	        { data: 'nota' },
 	        { data: 'estatus_pnt' }
 		],
 		columnDefs: [ 
@@ -142,7 +143,8 @@ $(document).ready(function(){
 			    	if( !(row.id_pnt) || row.id_pnt === ""){ 
 			      		if(!data) return  "<label class='btn'> <small> N/D </small></label>"
 			        	return (data.length > 100)? data.substr( 0, 100 ) + "..." : data
-				    } else return "<input type='text' value='" + data + "'>" 
+				     //} else return "<input type='text' value='" + data + "'>" 
+				    } else return data
 			    }
 			},
 			{
@@ -150,7 +152,7 @@ $(document).ready(function(){
 			    data: "data",
 			    render: function ( data, type, row, meta ) {
 			      	var response = ""
-		      		_row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
+		      		_row = row //HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
 			      	if( !(row.id_pnt) || row.id_pnt === ""){ 
 			      		response += "<a class='tpo_btn crear' href='#' data='" + _row + "'>" 
 			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
@@ -180,7 +182,8 @@ $(document).ready(function(){
 			    	if( !(row.id_pnt) || row.id_pnt === ""){ 
 			      		if(!data) return "<label class='btn'> <small> N/D </small></label>"
 			        	return data
-				    } else return "<input type='text' value='" + data + "'>" 
+				    //} else return "<input type='text' value='" + data + "'>" 
+				    } else return data
 			    }
 			}
 		]
@@ -225,19 +228,19 @@ $(document).ready(function(){
 		}
 
     	$.post(url, formato, function(res, error){
-    		if(res && res.success) {
+    		console.log(res, error)
+    		if(!res || !('success' in res) ) {
+    			console.log("No se pudo insertar el elemento correctamente")
+    			console.log(res, error)
+    			a.css("display", "block")
+    		} else {
     			tr.children("td").eq(1).text(res.id_pnt)
     			tr.children("td").eq(13).children("a.eliminar").removeClass("invisible")
     			tr.children("td").eq(13).children("img.check").removeClass("invisible")
     			tr.children("td").eq(13).children("a.crear").addClass("invisible")
-    		} else {
-    			console.log("No se pudo insertar el elemento correctamente")
-    			console.log(res, error)
-    			a.css("display", "block")
     		}
 
 			td.children("img.loading").remove("")
-			
 			if(tr.hasClass("odd")) tr.css("background-color", "#f9f9f9")
 			else tr.css("background-color", "#fff")
 
@@ -274,7 +277,7 @@ $(document).ready(function(){
 
 		var formato = {
 			"idFormato": 43322, 
-			"correoUnidadAdministrativa": "so.inai@inai.org.mx",
+			"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,
 			"token": token,
 			"registros":[ { "numeroRegistro":1, "idRegistro": data.id_pnt || id_pnt } ],
 			"id_pnt": data.id_pnt || id_pnt
@@ -283,23 +286,20 @@ $(document).ready(function(){
 		var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
 
     	$.post(url, formato, function(res, error){
-    		//if(res.success) location.reload(); 
-    		if(res && res.success) {
+    		if(!res || !('success' in res) ) {
+    			console.log("No se pudo eliminar el elemento correctamente")
+    			a.css("display", "block")
+    			a.siblings().css("display", "block")
+    		} else {
     			tr.children("td").eq(1).html("<label class='btn'> <small> SIN SUBIR </small></label>")
     			tr.children("td").eq(13).children("a.eliminar").addClass("invisible")
     			tr.children("td").eq(13).children("img.check").addClass("invisible")
     			tr.children("td").eq(13).children("a.crear").css("display", "block")
-    		} else {
-    			console.log("No se pudo eliminar el elemento correctamente")
-    			a.css("display", "block")
-    			a.siblings().css("display", "block")
     		}
 
 			td.children("img.loading").remove("")
-			if(tr.hasClass("odd"))
-				tr.css("background-color", "#f9f9f9")
-			else
-				tr.css("background-color", "#fff")
+			if(tr.hasClass("odd")) tr.css("background-color", "#f9f9f9")
+			else tr.css("background-color", "#fff")
     	})
     })
 })

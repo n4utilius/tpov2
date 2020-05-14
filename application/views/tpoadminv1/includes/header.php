@@ -98,7 +98,7 @@ header('Expires: 0'); // Proxies.
                                        class="btn btn-default btn-flat">Salir</a>
 
                                     <br>
-                                    <b> <center> Usuario PNT:  <?php //echo $_SESSION["user_pnt"]; ?> </center> </b>
+                                    <b> <center> Usuario PNT <?php echo $_SESSION["user_pnt"]; ?> </center> </b>
                                     <a type='submit' class='btn-group btn btn-danger btn-sm' 
                                        href='<?php //echo base_url(); ?>index.php/tpoadminv1/logo/logo/salir_pnt' 
                                        id='desconectar_pnt'> Desconectar PNT </a> 
