@@ -198,7 +198,9 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 				      	var response = ""
-			      		_row = row //HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
+			      		//_row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
+			      		_row = JSON.stringify(row)
+
 				      	if( !(row.id_pnt) || row.id_pnt === ""){ 
 				      		response += "<a class='tpo_btn crear' href='#' data='" + _row + "'>" 
 				      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
@@ -253,6 +255,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 		    tr.css("background-color", "rgba(0,255,0, 0.2)")
 		    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
 
+			var ids = $(this).siblings("a.ver_mas").attr("data").split("-")
+
 		    formato = {
 				"idFormato": 43320, //"Contratación de servicios de publicidad oficial"
 				"IdRegistro": "",
@@ -297,11 +301,13 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 						{"idCampo": 333966, "valor": data["nota"]}//
 				    ]
 				}],
-			  "_id_interno": data["id_factura"]
+			  "_id_interno": data["id_factura"],
+			  "id_factura": ids[1],
+			  "id_contrato": ids[3]
 			}
 
-
 	    	$.post(url, formato, function(res, error){
+	    		res = JSON.parse(res)
 	    		if(!res || !('success' in res) ){
 	    			console.log("No se pudo insertar el elemento correctamente")
 	    			a.css("display", "block")
@@ -317,6 +323,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
     			if(tr.hasClass("odd")) tr.css("background-color", "#f9f9f9")
     			else tr.css("background-color", "#fff")
 
+				/*
+				*/
 	    	})
 			
 	    });
@@ -327,25 +335,19 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 			var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros50";
 
 	    	$.get(url, { id_factura: ids[1], id_contrato: ids[3] },  function(res, error){
-    			var format_data = function(tag, data){
-    				var res = "<td><h3> Datos de " + tag + " </h3> <ul>"
+    			function get_subtables(tag, data){
+	    			var res = "<tr><td> <h3> Datos de " + tag + " </h3> "
 	 				for (var key in data){
 	 					if(data[key] == "") continue;
-	 					//$("#detalles").append(key, facturas[key])
-	 					res += "<li> <b>" + key.toUpperCase() + ":</b> " + data[key] + "</li>"
+	 					res += "<p> <b>" + key.toUpperCase() + ": </b>" + data[key] + "</p>"
 	 				}
-	    			res += "</ul><td>"
-	    			return res
+	    			return res + "</td></tr>";
     			}
-    			
-    			var facturas = res.facturas[0]
-    			 // , contratos = res.contratos[0]
 
-    			var html = "<table> <tr>"
-
-    			html += "</tr>"
-    			html += "</table>"
- 					console.log( html )
+				var	html = "<table>"
+    				html += get_subtables("Facturas", res.facturas[0])
+    			    html += get_subtables("Contratos", res.contratos[0])
+    				html += "</table>"
 
  				$.colorbox({html: html});
  				

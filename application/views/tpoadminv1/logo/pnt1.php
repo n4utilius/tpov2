@@ -102,9 +102,7 @@ $(document).ready(function(){
         return (year == ejercicio);
     });
 
-    $('#year').change( function() { table.draw(); });
-    
-    table = $('#grid1').DataTable({
+    var table = $('#grid1').DataTable({
     	ajax: {
     		url: "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros",
     		dataSrc: ''
@@ -152,7 +150,8 @@ $(document).ready(function(){
 			    data: "data",
 			    render: function ( data, type, row, meta ) {
 			      	var response = ""
-		      		_row = row //HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
+		      		//_row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
+		      		_row = JSON.stringify(row) 
 			      	if( !(row.id_pnt) || row.id_pnt === ""){ 
 			      		response += "<a class='tpo_btn crear' href='#' data='" + _row + "'>" 
 			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
@@ -188,6 +187,9 @@ $(document).ready(function(){
 			}
 		]
     });
+
+    $('#year').change( function() { table.draw(); });
+    
 
 	$(document).on("click","a.crear",function(e){
     	e.preventDefault();
@@ -226,9 +228,8 @@ $(document).ready(function(){
 			}],
 		  "_id_interno": data.id_presupuesto
 		}
-
     	$.post(url, formato, function(res, error){
-    		console.log(res, error)
+    		res = JSON.parse(res)
     		if(!res || !('success' in res) ) {
     			console.log("No se pudo insertar el elemento correctamente")
     			console.log(res, error)
@@ -243,7 +244,6 @@ $(document).ready(function(){
 			td.children("img.loading").remove("")
 			if(tr.hasClass("odd")) tr.css("background-color", "#f9f9f9")
 			else tr.css("background-color", "#fff")
-
     	})
     });
 

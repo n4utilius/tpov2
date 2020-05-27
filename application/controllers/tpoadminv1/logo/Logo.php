@@ -185,6 +185,84 @@ class Logo extends CI_Controller
     function agregar_pnt(){
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/agrega";
         
+        switch ($_POST["idFormato"]) {
+            case 43322:
+                $table = "rel_pnt_presupuesto";
+                $nombre_id_interno = "id_presupuesto";
+                break;
+            case 43320:
+                $table = "rel_pnt_factura";
+                $nombre_id_interno = "id_factura";
+                $data2 = $this->_subtabla2($_POST["id_contrato"], $_POST["id_factura"]);
+
+                //$con = ['idCampo' => "333959", 'valor' => $data2['contratos'][0] ];
+                //$fac = ['idCampo' => "333957", 'valor' => $data2['facturas'][0] ];
+
+
+                /*
+                ($data2['contratos'][0]["fecha_actualizacion"] != null )? 
+                    join("/", array_reverse( split('-', $data2['contratos'][0]["fecha_actualizacion"] ) ) ) : "" 
+                */
+                $con = array(
+                    "idCampo" => "333959", 
+                    "valor" => array(
+                        array(
+                            "numeroRegistro" => 1,
+                            "IdRegistro" => "",
+                            "campos" => array(
+                                array("idCampo" => "43282", "valor" => $data2['contratos'][0]["Fecha de inicio de los servicios contratados"] ),
+                                array("idCampo" => "43283", "valor" => $data2['contratos'][0]["Fecha de término de los servicios contratados"] ),
+                                array("idCampo" => "43278", "valor" => $data2['contratos'][0]["Hipervínculo al contrato firmado"] ),
+                                array("idCampo" => "43279", "valor" => $data2['contratos'][0]["Hipervínculo al convenio modificatorio en su caso"] ),
+                                array("idCampo" => "43281", "valor" => $data2['contratos'][0]["Monto pagado al periodo publicado"] ),
+                                array("idCampo" => "43280", "valor" => $data2['contratos'][0]["Monto total del contrato"] ),
+                                array("idCampo" => "333967", "valor" => $data2['contratos'][0]["area_responsable"] ),
+                                array("idCampo" => "333961", ($data2['contratos'][0]["fecha_actualizacion"] != null )? 
+                                    join("/", array_reverse( split('-', $data2['contratos'][0]["fecha_actualizacion"] ) ) ) : ""  ),
+                                array("idCampo" => "333954", "valor" => $data2['contratos'][0]["fecha_validacion"] ),
+                                array("idCampo" => "43285", "valor" => $data2['contratos'][0]["files_factura_pdf"] ),
+                                array("idCampo" => "333966", "valor" => $data2['contratos'][0]["nota"] ),
+                                array("idCampo" => "43276", "valor" => $data2['contratos'][0]["numero_contrato"] ),
+                                array("idCampo" => "43284", "valor" => $data2['contratos'][0]["numeros_factura"] ),
+                                array("idCampo" => "43277", "valor" => $data2['contratos'][0]["objeto_contrato"] )
+                            ) 
+                        ) 
+                    ) 
+                );
+                            /*
+                            array("idCampo" => "333961", "valor" => ($data2['contratos'][0]["fecha_actualizacion"] != null )? 
+                                join("/", array_reverse( split('-', $data2['contratos'][0]["fecha_actualizacion"] ) ) ) : ""  ),
+                            array("idCampo" => "43275", "valor" => ($data2['contratos'][0]["fecha_celebracion"] != null )? 
+                                join("/", array_reverse( split('-', $data2['contratos'][0]["fecha_celebracion"] ) ) ) : ""  ),
+                            */
+                
+                /*
+                */
+                $fac = array(
+                    "idCampo" => "333957", 
+                    "valor" => array(
+                        array(
+                            "numeroRegistro" => 1,
+                            "IdRegistro" => "",
+                            "campos" => array(
+                                array("idCampo" => "43256", "valor" => $data2['facturas'][0]['nombre_razon_social'] ),
+                                array("idCampo" => "43257", "valor" => $data2['facturas'][0]['nombres'] ),
+                                array("idCampo" => "43258", "valor" => $data2['facturas'][0]['primer_apellido'] ),
+                                array("idCampo" => "43259", "valor" => $data2['facturas'][0]['segundo_apellido'] ),
+                                array("idCampo" => "43260", "valor" => $data2['facturas'][0]['rfc'] ),
+                                array("idCampo" => "43261", "valor" => $data2['facturas'][0]['nombre_procedimiento'] ),
+                                array("idCampo" => "43262", "valor" => $data2['facturas'][0]['fundamento_juridico'] ),
+                                array("idCampo" => "43263", "valor" => $data2['facturas'][0]['descripcion_justificacion'] ),
+                                array("idCampo" => "43264", "valor" => $data2['facturas'][0]['nombre_comercial'] )
+                            ) 
+                        ) 
+                    ) 
+                );
+
+                array_push( $_POST["registros"][0]['campos'], $con, $fac );
+                break;
+        }
+
         $data = array(
             'idFormato' => $_POST["idFormato"], 
             'token' => $_POST["token"], 
@@ -193,6 +271,7 @@ class Logo extends CI_Controller
             'SujetoObligado' => $_POST["SujetoObligado"], 
             'registros' => $_POST["registros"]
         );
+
 
         $options = array(
             'http' => array(
@@ -203,8 +282,10 @@ class Logo extends CI_Controller
             )
         );
 
+
         $context  = stream_context_create( $options );
         $res = file_get_contents( $URL, false, $context );
+
         $result = json_decode( $res, true );
 
         if( $result["success"] ){
@@ -212,19 +293,10 @@ class Logo extends CI_Controller
 
             $table = "rel_pnt_presupuesto";
             $nombre_id_interno = "id_presupuesto";
-
-            switch ($_POST["idFormato"]) {
-                case 43322:
-                    $table = "rel_pnt_presupuesto";
-                    $nombre_id_interno = "id_presupuesto";
-                    break;
-                case 43320:
-                    $table = "rel_pnt_factura";
-                    $nombre_id_interno = "id_factura";
-                    break;
-            }
-
+            
             $post_data = array();
+
+
             $post_data[ $nombre_id_interno ] = $_POST["_id_interno"];
             $post_data['id_pnt'] = $pntid;
             $post_data['estatus_pnt'] ='SUBIDO';
@@ -237,7 +309,7 @@ class Logo extends CI_Controller
         
         $response = json_encode($result);
         header('Content-Type: application/json');
-        echo  $response; 
+        echo  json_encode($response);
     }
 
 
@@ -376,6 +448,71 @@ class Logo extends CI_Controller
         echo json_encode( $rows ); 
     }
 
+    private function _subtabla2($id_contrato, $id_factura){
+        $data = array();
+        //Datos de Factura
+        $cols = array("pnt.id_tpo", "pnt.id_proveedor id", "pnt.id_pnt", "con.descripcion_justificacion", 
+                      "e.ejercicio", "proc.nombre_procedimiento", "con.fundamento_juridico", 
+                      "prov.nombre_razon_social", "prov.nombres", "prov.primer_apellido", 
+                      "prov.segundo_apellido", "prov.nombre_comercial", "prov.rfc", "pnt.estatus_pnt");
+
+        foreach ($cols as &$col) {
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $col = $col_arr[0]; $tag = $col_arr[1];
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+
+
+        $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_facturas f
+                    JOIN tab_facturas_desglose fd ON fd.id_factura = f.id_factura
+                    JOIN tab_campana_aviso cam ON cam.id_campana_aviso = fd.id_campana_aviso
+                    JOIN cat_ejercicios e ON e.id_ejercicio = cam.id_ejercicio 
+                    JOIN tab_proveedores prov ON prov.id_proveedor = f.id_proveedor
+                    LEFT JOIN tab_contratos con ON con.id_proveedor = prov.id_proveedor
+                    LEFT JOIN cat_procedimientos proc ON proc.id_procedimiento = con.id_procedimiento
+                    LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor
+                    WHERE f.id_factura = " . $id_factura . ";");
+
+        $data["facturas"] = $query->result_array();
+
+        /**/
+        //Datos de Contrato
+        $cols = array("pnt.id_contrato id_tpo", "pnt.id_pnt id_pnt", "pnt.id", "ej.ejercicio", 
+                      "cont.fecha_celebracion", "cont.numero_contrato", "cont.objeto_contrato", 
+                      "f.numeros_factura", "f.files_factura_pdf", "cont.area_responsable", 
+                      "cont.fecha_validacion", "cont.fecha_actualizacion", "cont.nota", "pnt.estatus_pnt");
+
+        foreach ($cols as &$col) {
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $tag = array_pop($col_arr); $col = join(" ", $col_arr);
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+
+        $query = $this->db->query("SELECT " . join(", ", $cols) . ",
+                IFNULL(vcon.`Archivo contrato en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al contrato firmado',
+                IFNULL(vcmod.`Archivo convenio en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al convenio modificatorio en su caso',
+                IFNULL(vcon.`Monto original del contrato` , '') AS 'Monto total del contrato',
+                IFNULL(vcon.`Monto pagado a la fecha` , '') AS 'Monto pagado al periodo publicado',
+                IFNULL(vcon.`Fecha inicio` , '') AS 'Fecha de inicio de los servicios contratados',
+                IFNULL(vcon.`Fecha fin` , '') AS 'Fecha de término de los servicios contratados'
+            FROM tab_contratos cont
+            LEFT JOIN vout_contratos vcon ON vcon.`ID (Número de contrato)` = cont.id_contrato
+            LEFT JOIN vout_convenios_modificatorios vcmod ON vcmod.`ID (Número de contrato)` = cont.id_contrato
+            LEFT JOIN (SELECT f.id_contrato, f.numero_factura numeros_factura, 
+                       f.file_factura_pdf files_factura_pdf, f.id_ejercicio
+                       FROM tab_facturas f ) f ON f.id_contrato = cont.id_contrato
+            LEFT JOIN cat_ejercicios ej ON ej.id_ejercicio = f.id_ejercicio
+            LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato
+            WHERE cont.id_contrato = " . $id_contrato . ";");
+
+        $data["contratos"] = $query->result_array();
+        return $data;
+    }
+
     function registros(){ 
         $cols = array("pnt.id_tpo", "pnt.id_pnt", "p.id_presupuesto", "e.ejercicio", 
                       "p.fecha_inicio_periodo", "p.id_sujeto_obligado", "p.fecha_termino_periodo", "p.denominacion", 
@@ -409,8 +546,6 @@ class Logo extends CI_Controller
         echo json_encode( $rows ); 
     }
     
-
-
     function registros2(){
         $cols = array("pnt.id_tpo", "pnt.id_pnt", "f.id_factura", "e.ejercicio", 
                       "fd.area_administrativa",  "fd.id_servicio_clasificacion", 
@@ -535,106 +670,8 @@ class Logo extends CI_Controller
         echo json_encode( $rows ); 
     }
 
-    function registros42(){
-        //$id_factura = $_POST["id_factura"];
-        $id_factura = $_GET["id_factura"];
-
-        $cols = array("pnt.id_tpo", "pnt.id_proveedor id", "pnt.id_pnt", "con.descripcion_justificacion", 
-                      "e.ejercicio", "proc.nombre_procedimiento", "con.fundamento_juridico", 
-                      "prov.nombre_razon_social", "prov.nombres", "prov.primer_apellido", 
-                      "prov.segundo_apellido", "prov.nombre_comercial", "prov.rfc", "pnt.estatus_pnt");
-
-        foreach ($cols as &$col) {
-            $tag = $col;
-            if( strpos($col, " ") ) {
-                $col_arr = explode(" ", $col); $col = $col_arr[0]; $tag = $col_arr[1];
-            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
-            $col = "IFNULL(" . $col . ", '') AS $tag";
-        }
-
-
-        $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_facturas f
-                    JOIN tab_facturas_desglose fd ON fd.id_factura = f.id_factura
-                    JOIN tab_campana_aviso cam ON cam.id_campana_aviso = fd.id_campana_aviso
-                    JOIN cat_ejercicios e ON e.id_ejercicio = cam.id_ejercicio 
-                    JOIN tab_proveedores prov ON prov.id_proveedor = f.id_proveedor
-                    LEFT JOIN tab_contratos con ON con.id_proveedor = prov.id_proveedor
-                    LEFT JOIN cat_procedimientos proc ON proc.id_procedimiento = con.id_procedimiento
-                    LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor
-                    WHERE f.id_factura = " .  $id_factura .";");
-
-        $rows = $query->result_array();
-
-        header('Content-Type: application/json');
-        echo json_encode( $rows ); 
-    }
-
     function registros50(){
-        //$id_factura = $_POST["id_factura"];
-        $id_factura = $_GET["id_factura"];
-
-        //Datos de Factura
-        $cols = array("pnt.id_tpo", "pnt.id_proveedor id", "pnt.id_pnt", "con.descripcion_justificacion", 
-                      "e.ejercicio", "proc.nombre_procedimiento", "con.fundamento_juridico", 
-                      "prov.nombre_razon_social", "prov.nombres", "prov.primer_apellido", 
-                      "prov.segundo_apellido", "prov.nombre_comercial", "prov.rfc", "pnt.estatus_pnt");
-
-        foreach ($cols as &$col) {
-            $tag = $col;
-            if( strpos($col, " ") ) {
-                $col_arr = explode(" ", $col); $col = $col_arr[0]; $tag = $col_arr[1];
-            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
-            $col = "IFNULL(" . $col . ", '') AS $tag";
-        }
-
-
-        $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_facturas f
-                    JOIN tab_facturas_desglose fd ON fd.id_factura = f.id_factura
-                    JOIN tab_campana_aviso cam ON cam.id_campana_aviso = fd.id_campana_aviso
-                    JOIN cat_ejercicios e ON e.id_ejercicio = cam.id_ejercicio 
-                    JOIN tab_proveedores prov ON prov.id_proveedor = f.id_proveedor
-                    LEFT JOIN tab_contratos con ON con.id_proveedor = prov.id_proveedor
-                    LEFT JOIN cat_procedimientos proc ON proc.id_procedimiento = con.id_procedimiento
-                    LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor
-                    WHERE f.id_factura = " . $id_factura . ";");
-
-        $data = array( "facturas" => $query->result_array() );
-
-        //Datos de Contrato
-        $id_contrato = $_GET["id_contrato"];
-        $cols = array("pnt.id_contrato id_tpo", "pnt.id_pnt id_pnt", "pnt.id", "ej.ejercicio", 
-                      "cont.fecha_celebracion", "cont.numero_contrato", "cont.objeto_contrato", 
-                      "f.numeros_factura", "f.files_factura_pdf", "cont.area_responsable", 
-                      "cont.fecha_validacion", "cont.fecha_actualizacion", "cont.nota", "pnt.estatus_pnt");
-
-        foreach ($cols as &$col) {
-            $tag = $col;
-            if( strpos($col, " ") ) {
-                $col_arr = explode(" ", $col); $tag = array_pop($col_arr); $col = join(" ", $col_arr);
-            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
-            $col = "IFNULL(" . $col . ", '') AS $tag";
-        }
-
-        $query = $this->db->query("SELECT " . join(", ", $cols) . ",
-                IFNULL(vcon.`Archivo contrato en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al contrato firmado',
-                IFNULL(vcmod.`Archivo convenio en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al convenio modificatorio en su caso',
-                IFNULL(vcon.`Monto original del contrato` , '') AS 'Monto total del contrato',
-                IFNULL(vcon.`Monto pagado a la fecha` , '') AS 'Monto pagado al periodo publicado',
-                IFNULL(vcon.`Fecha inicio` , '') AS 'Fecha de inicio de los servicios contratados',
-                IFNULL(vcon.`Fecha fin` , '') AS 'Fecha de término de los servicios contratados'
-            FROM tab_contratos cont
-            LEFT JOIN vout_contratos vcon ON vcon.`ID (Número de contrato)` = cont.id_contrato
-            LEFT JOIN vout_convenios_modificatorios vcmod ON vcmod.`ID (Número de contrato)` = cont.id_contrato
-            LEFT JOIN (SELECT f.id_contrato, f.numero_factura numeros_factura, 
-                       f.file_factura_pdf files_factura_pdf, f.id_ejercicio
-                       FROM tab_facturas f ) f ON f.id_contrato = cont.id_contrato
-            LEFT JOIN cat_ejercicios ej ON ej.id_ejercicio = f.id_ejercicio
-            LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato
-            WHERE cont.id_contrato = " . $id_contrato . ";");
-
-        $data["contratos"] = $query->result_array();
-        /*
-        */
+        $data = $this->_subtabla2($_GET["id_contrato"], $_GET["id_factura"]);
         header('Content-Type: application/json');
         echo json_encode( $data ); 
     }
@@ -718,47 +755,6 @@ class Logo extends CI_Controller
             LEFT JOIN cat_ejercicios ej ON ej.id_ejercicio = f.id_ejercicio
             LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato
             WHERE cont.numero_contrato != 'Sin contrato'; ");
-
-        $rows = $query->result_array();
-
-        header('Content-Type: application/json');
-        echo json_encode( $rows ); 
-    }
-
-    function registros46(){
-        //$id_contrato = $_POST["id_contrato"];
-        $id_contrato = $_GET["id_contrato"];
-        
-        $cols = array("pnt.id_contrato id_tpo", "pnt.id_pnt id_pnt", "pnt.id", "ej.ejercicio", 
-                      "cont.fecha_celebracion", "cont.numero_contrato", "cont.objeto_contrato", 
-                      "f.numeros_factura", "f.files_factura_pdf", "cont.area_responsable", 
-                      "cont.fecha_validacion", "cont.fecha_actualizacion", "cont.nota", "pnt.estatus_pnt");
-
-        foreach ($cols as &$col) {
-            $tag = $col;
-            if( strpos($col, " ") ) {
-                $col_arr = explode(" ", $col); $tag = array_pop($col_arr); $col = join(" ", $col_arr);
-            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
-            $col = "IFNULL(" . $col . ", '') AS $tag";
-        }
-
-        $query = $this->db->query("SELECT " . join(", ", $cols) . ",
-                IFNULL(vcon.`Archivo contrato en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al contrato firmado',
-                IFNULL(vcmod.`Archivo convenio en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al convenio modificatorio en su caso',
-                IFNULL(vcon.`Monto original del contrato` , '') AS 'Monto total del contrato',
-                IFNULL(vcon.`Monto pagado a la fecha` , '') AS 'Monto pagado al periodo publicado',
-                IFNULL(vcon.`Fecha inicio` , '') AS 'Fecha de inicio de los servicios contratados',
-                IFNULL(vcon.`Fecha fin` , '') AS 'Fecha de término de los servicios contratados'
-            FROM tab_contratos cont
-            LEFT JOIN vout_contratos vcon ON vcon.`ID (Número de contrato)` = cont.id_contrato
-            LEFT JOIN vout_convenios_modificatorios vcmod ON vcmod.`ID (Número de contrato)` = cont.id_contrato
-            LEFT JOIN (SELECT f.id_contrato, f.numero_factura numeros_factura, 
-                       f.file_factura_pdf files_factura_pdf, f.id_ejercicio
-                       FROM tab_facturas f ) f ON f.id_contrato = cont.id_contrato
-            LEFT JOIN cat_ejercicios ej ON ej.id_ejercicio = f.id_ejercicio
-            LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato
-            WHERE cont.numero_contrato != 'Sin contrato'
-            AND cont.id_contrato = " .  $id_contrato .";");
 
         $rows = $query->result_array();
 

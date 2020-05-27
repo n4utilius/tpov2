@@ -1,0 +1,234 @@
+{
+	"SujetoObligado": "INAI",
+	"correoUnidadAdministrativa": "so.inai@inai.org.mx",
+	"token": "NWFkYzk0ODBlYzU5NDUyN3NvLmluYWlAaW5haS5vcmcubXhGcmkgTWF5IDI5IDE1OjIxOjQ4IENEVCAyMDIwc2lwb3RbQkAyMGE2N2YzYg==",
+	"unidadAdministrativa": "Dirección General de Comunicación Social y Difusión",
+	"idFormato": "43320",
+	"registros": [{
+		"numeroRegistro": 1,
+		"idRegistro": "",
+		"campos": [
+			{
+				"idCampo": 333943,
+				"valor": "2015"
+			}, {
+				"idCampo": 333963,
+				"valor": "01/10/2015"
+			}, {
+				"idCampo": 333964,
+				"valor": "31/12/2015"
+			}, {
+				"idCampo": 333962,
+				"valor": 2
+			}, {
+				"idCampo": 333950,
+				"valor": "Dirección General de Comunicación Social y Difusión"
+			}, {
+				"idCampo": 333968,
+				"valor": "1"
+			}, {
+				"idCampo": 333940,
+				"valor": "Internet"
+			}, {
+				"idCampo": 333969,
+				"valor": "2"
+			}, {
+				"idCampo": 333970,
+				"valor": "Banner"
+			}, {
+				"idCampo": 333956,
+				"valor": 0
+			},
+			{
+				"idCampo": 333947,
+				"valor": "Institucional 2015"
+			},
+			{
+				"idCampo": 333942,
+				"valor": "2016"
+			},
+			{
+				"idCampo": 333948,
+				"valor": "Acceso a la información, transparencia y rendición de ,cuentas"
+			},
+			{
+				"idCampo": 333951,
+				"valor": "Promover el pleno ejercicio de los derechos de acceso a ,la información pública y de protección de datos personales"
+			},
+			{
+				"idCampo": 333949,
+				"valor": "<p>Reforzar el conocimiento del nombre del Instituto y ,sus nuevas atribuciones, promover la cultura de la Transparencia y el Acceso a la Información Pública, promover la cultura de la Protección de Datos Personales en posesión de particulares</p>"
+			},
+			{
+				"idCampo": 333972,
+				"valor": "174000.00"
+			},
+			{
+				"idCampo": 333944,
+				"valor": ""
+			},
+			{
+				"idCampo": 333973,
+				"valor": ""
+			},
+			{
+				"idCampo": 333955,
+				"valor": 1
+			},
+			{
+				"idCampo": 333971,
+				"valor": "México"
+			},
+			{
+				"idCampo": 333952,
+				"valor": "20/11/2015"
+			},
+			{
+				"idCampo": 333953,
+				"valor": "31/12/2015"
+			},
+			{
+				"idCampo": 333965,
+				"valor": 2
+			},
+			{
+				"idCampo": 333946,
+				"valor": "Aguascalientes,Baja California,Baja California ,Sur,Campeche,Chiapas,Chihuahua,Coahuila de Zaragoza,Colima,Distrito Federal,Durango,Estado de México,Guanajuato,Guerrero,Hidalgo,Jalisco,Michoacán de Ocampo,Morelos,Nayarit,Nuevo León,Oaxaca,Puebla,Querétaro,Quintana Roo,San Luis Potosí,Sinaloa,Sonora,Tabasco,Tamaulipas,Tlaxcala,Veracruz de Ignacio de la Llave,Yucatán,Zacatecas"
+			},
+			{
+				"idCampo": 333941,
+				"valor": "Primaria,Secundaria,Media ,Superior,Superior,Maestria,Doctorado"
+			},
+			{
+				"idCampo": 333945,
+				"valor": "13 - 65"
+			},
+			{
+				"idCampo": 333974,
+				"valor": "AB Alta,C+ Media Alta,C Media,D+ Media Baja,D Baja,E ,Marginada"
+			},
+			{
+				"idCampo": 333967,
+				"valor": "Dirección General de Comunicación Social y Difusión"
+			},
+			{
+				"idCampo": 333954,
+				"valor": "05/12/2016"
+			},
+			{
+				"idCampo": 333961,
+				"valor": "05/12/2016"
+			},
+			{
+				"idCampo": "333959",
+				"valor": [{
+					"numeroRegistro": 1,
+					"idRegistro": "",
+					"campos": [
+						{
+							"idCampo": "43282",
+							"valor": ""
+						},
+						{
+							"idCampo": "43283",
+							"valor": ""
+						},
+						{
+							"idCampo": "43278",
+							"valor": ""
+						},
+						{
+							"idCampo": "43279",
+							"valor": ""
+						},
+						{
+							"idCampo": "43281",
+							"valor": ""
+						},
+						{
+							"idCampo": "43280",
+							"valor": ""
+						},
+						{
+							"idCampo": "333967",
+							"valor": ""
+						},
+						{
+							"idCampo": "333961",
+							"valor": ""
+						},
+						{
+							"idCampo": "333961",
+							"valor": "2015-12-10"
+						},
+						{
+							"idCampo": "333954",
+							"valor": ""
+						}
+					]
+				}]
+			},
+			{
+				"idCampo": "333957",
+				"valor": [{
+					"numeroRegistro": 1,
+					"idRegistro": "",
+					"campos": [
+						{
+							"idCampo": "43256",
+							"valor": "Publicaciones Comunitarias, S.A. de C.V."
+						},
+						{
+							"idCampo": "43258",
+							"valor": ""
+						},
+						{
+							"idCampo": "43259",
+							"valor": ""
+						},
+						{
+							"idCampo": "43260",
+							"valor": "PCO080603JS6"
+						},
+						{
+							"idCampo": "43261",
+							"valor": ""
+						},
+						{
+							"idCampo": "43262",
+							"valor": ""
+						},
+						{
+							"idCampo": "43263",
+							"valor": ""
+						},
+						{
+							"idCampo": "43264",
+							"valor": "http://lasillarota.com"
+						},
+						{
+							"idCampo": "43285",
+							"valor": ""
+						},
+						{
+							"idCampo": "333966",
+							"valor": ""
+						},
+						{
+							"idCampo": "43276",
+							"valor": "Sin contrato"
+						},
+						{
+							"idCampo": "43284",
+							"valor": "18"
+						},
+						{
+							"idCampo": "43277",
+							"valor": "<p>Sin contrato</p>"
+						}
+					]
+				}]
+			}
+		]
+	}]
+}
