@@ -308,6 +308,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 	    	$.post(url, formato, function(res, error){
 	    		res = JSON.parse(res)
+	    		console.log(res)
 	    		if(!res || !('success' in res) ){
 	    			console.log("No se pudo insertar el elemento correctamente")
 	    			a.css("display", "block")
@@ -347,6 +348,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				var	html = "<table>"
     				html += get_subtables("Facturas", res.facturas[0])
     			    html += get_subtables("Contratos", res.contratos[0])
+    			    html += get_subtables("Presupuestos", res.presupuestos[0])
     				html += "</table>"
 
  				$.colorbox({html: html});

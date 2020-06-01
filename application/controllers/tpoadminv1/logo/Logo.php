@@ -194,15 +194,7 @@ class Logo extends CI_Controller
                 $table = "rel_pnt_factura";
                 $nombre_id_interno = "id_factura";
                 $data2 = $this->_subtabla2($_POST["id_contrato"], $_POST["id_factura"]);
-
-                //$con = ['idCampo' => "333959", 'valor' => $data2['contratos'][0] ];
-                //$fac = ['idCampo' => "333957", 'valor' => $data2['facturas'][0] ];
-
-
-                /*
-                ($data2['contratos'][0]["fecha_actualizacion"] != null )? 
-                    join("/", array_reverse( split('-', $data2['contratos'][0]["fecha_actualizacion"] ) ) ) : "" 
-                */
+                
                 $con = array(
                     "idCampo" => "333959", 
                     "valor" => array(
@@ -229,15 +221,29 @@ class Logo extends CI_Controller
                         ) 
                     ) 
                 );
-                            /*
-                            array("idCampo" => "333961", "valor" => ($data2['contratos'][0]["fecha_actualizacion"] != null )? 
-                                join("/", array_reverse( split('-', $data2['contratos'][0]["fecha_actualizacion"] ) ) ) : ""  ),
-                            array("idCampo" => "43275", "valor" => ($data2['contratos'][0]["fecha_celebracion"] != null )? 
-                                join("/", array_reverse( split('-', $data2['contratos'][0]["fecha_celebracion"] ) ) ) : ""  ),
-                            */
-                
-                /*
-                */
+
+                $pro = array(
+                    "idCampo" => "333958", 
+                    "valor" => array(
+                        array(
+                            "numeroRegistro" => 1,
+                            "IdRegistro" => "",
+                            "campos" => array(
+                                array("idCampo" => "43265", "valor" => $data2['presupuestos'][0]['partida'] ), //Partida
+                                array("idCampo" => "43266", "valor" => $data2['presupuestos'][0]['concepto'] ), //Clave de Concepto
+                                array("idCampo" => "43267", "valor" => $data2['presupuestos'][0]['nombre_concepto'] ), //Nombre del concepto
+                                array("idCampo" => "43268", "valor" => $data2['presupuestos'][0]['presupuesto'] ), //Presupuesto asignado por concepto
+                                array("idCampo" => "43269", "valor" => $data2['presupuestos'][0]['total_ejercido'] ), //Presupuesto ejercido al periodo reportado de cada partida
+                                array("idCampo" => "43270", "valor" => $data2['presupuestos'][0]['modificado'] ), //presupuesto total ejercido por concepto
+                                array("idCampo" => "43271", "valor" => $data2['presupuestos'][0]['denominacion_partida'] ), //Denominación de cada partida
+                                array("idCampo" => "43272", "valor" => $data2['presupuestos'][0]['monto_presupuesto'] ), //Presupuesto total asignado a cada partida
+                                array("idCampo" => "43273", "valor" => $data2['presupuestos'][0]['monto_modificacion'] ), //Presupuesto modificado por partida
+                                array("idCampo" => "43274", "valor" => $data2['presupuestos'][0]['presupuesto'] ) //Presupuesto modificado por concepto
+                            ) 
+                        ) 
+                    ) 
+                );
+                            
                 $fac = array(
                     "idCampo" => "333957", 
                     "valor" => array(
@@ -259,7 +265,7 @@ class Logo extends CI_Controller
                     ) 
                 );
 
-                array_push( $_POST["registros"][0]['campos'], $con, $fac );
+                array_push( $_POST["registros"][0]['campos'], $con, $pro, $fac );
                 break;
         }
 
@@ -454,7 +460,8 @@ class Logo extends CI_Controller
         $cols = array("pnt.id_tpo", "pnt.id_proveedor id", "pnt.id_pnt", "con.descripcion_justificacion", 
                       "e.ejercicio", "proc.nombre_procedimiento", "con.fundamento_juridico", 
                       "prov.nombre_razon_social", "prov.nombres", "prov.primer_apellido", 
-                      "prov.segundo_apellido", "prov.nombre_comercial", "prov.rfc", "pnt.estatus_pnt");
+                      "prov.segundo_apellido", "prov.nombre_comercial", "prov.rfc", "pnt.estatus_pnt", 
+                      "fd.id_presupuesto_concepto");
 
         foreach ($cols as &$col) {
             $tag = $col;
@@ -463,7 +470,6 @@ class Logo extends CI_Controller
             } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
             $col = "IFNULL(" . $col . ", '') AS $tag";
         }
-
 
         $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_facturas f
                     JOIN tab_facturas_desglose fd ON fd.id_factura = f.id_factura
@@ -476,6 +482,53 @@ class Logo extends CI_Controller
                     WHERE f.id_factura = " . $id_factura . ";");
 
         $data["facturas"] = $query->result_array();
+
+        // Datos del presupuesto
+        $cols = array("pnt.id_presupuesto_desglose id_tpo", "pnt.id_pnt", "pnt.id", "ej.ejercicio", 
+                       "pcon.partida", "pcon.concepto", "pcon.nombre_concepto", "total.presupuesto", 
+                       "total.modificado", "pcon.denominacion_partida", "pdes.monto_presupuesto", 
+                       "pdes.monto_modificacion", "fact.total_ejercido", "pnt.estatus_pnt");
+
+        foreach ($cols as &$col) {
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $col = $col_arr[0]; $tag = $col_arr[1];
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+
+        $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_presupuestos_desglose pdes 
+                    JOIN tab_presupuestos pre ON pre.id_presupuesto = pdes.id_presupuesto
+                    JOIN cat_ejercicios ej ON ej.id_ejercicio = pre.id_ejercicio
+                    LEFT JOIN (SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', 
+                               p.partida, p.denominacion 'denominacion_partida'
+                          FROM (SELECT id_presupesto_concepto, concepto, partida, denominacion FROM cat_presupuesto_conceptos pc
+                              WHERE trim(coalesce(concepto, '')) <> '' AND trim(coalesce(partida, '')) <> '' ) p 
+                          JOIN (SELECT concepto, denominacion FROM cat_presupuesto_conceptos
+                              WHERE trim(coalesce(concepto, '')) <>'' AND trim(coalesce(partida, '')) = '') c
+                          ON c.concepto = p.concepto) pcon 
+                    ON pcon.id_presupesto_concepto = pdes.id_presupuesto_concepto
+                    LEFT JOIN (
+                        ( SELECT pcon.id_presupesto_concepto, pcon.concepto, 
+                                  SUM(pdes.monto_presupuesto) presupuesto, SUM(pdes.monto_modificacion) modificado
+                           FROM tab_presupuestos_desglose pdes
+                           JOIN (SELECT id_presupesto_concepto, p.concepto
+                                 FROM (SELECT id_presupesto_concepto, concepto FROM cat_presupuesto_conceptos pc
+                                     WHERE trim(coalesce(concepto, '')) <> '' AND trim(coalesce(partida, '')) <> '' ) p 
+                                 JOIN (SELECT concepto FROM cat_presupuesto_conceptos
+                                     WHERE trim(coalesce(concepto, '')) <>'' AND trim(coalesce(partida, '')) = '') c
+                                 ON c.concepto = p.concepto) pcon 
+                           ON pcon.id_presupesto_concepto = pdes.id_presupuesto_concepto
+                           GROUP BY pcon.concepto, pcon.id_presupesto_concepto)
+                    ) total ON total.id_presupesto_concepto = pdes.id_presupuesto_concepto
+                    LEFT JOIN (SELECT numero_partida, id_factura, SUM(cantidad) total_ejercido 
+                        FROM tab_facturas_desglose WHERE id_factura = " . $id_factura . " 
+                        GROUP BY numero_partida, id_factura 
+                    ) fact ON fact.numero_partida = pcon.partida 
+                    LEFT JOIN rel_pnt_presupuesto_desglose pnt ON pnt.id_presupuesto_desglose = pdes.id_presupuesto_desglose");
+
+        $rows = $query->result_array();
+        $data["presupuestos"] = $query->result_array();
 
         /**/
         //Datos de Contrato
@@ -493,21 +546,21 @@ class Logo extends CI_Controller
         }
 
         $query = $this->db->query("SELECT " . join(", ", $cols) . ",
-                IFNULL(vcon.`Archivo contrato en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al contrato firmado',
-                IFNULL(vcmod.`Archivo convenio en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al convenio modificatorio en su caso',
-                IFNULL(vcon.`Monto original del contrato` , '') AS 'Monto total del contrato',
-                IFNULL(vcon.`Monto pagado a la fecha` , '') AS 'Monto pagado al periodo publicado',
-                IFNULL(vcon.`Fecha inicio` , '') AS 'Fecha de inicio de los servicios contratados',
-                IFNULL(vcon.`Fecha fin` , '') AS 'Fecha de término de los servicios contratados'
-            FROM tab_contratos cont
-            LEFT JOIN vout_contratos vcon ON vcon.`ID (Número de contrato)` = cont.id_contrato
-            LEFT JOIN vout_convenios_modificatorios vcmod ON vcmod.`ID (Número de contrato)` = cont.id_contrato
-            LEFT JOIN (SELECT f.id_contrato, f.numero_factura numeros_factura, 
-                       f.file_factura_pdf files_factura_pdf, f.id_ejercicio
-                       FROM tab_facturas f ) f ON f.id_contrato = cont.id_contrato
-            LEFT JOIN cat_ejercicios ej ON ej.id_ejercicio = f.id_ejercicio
-            LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato
-            WHERE cont.id_contrato = " . $id_contrato . ";");
+                        IFNULL(vcon.`Archivo contrato en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al contrato firmado',
+                        IFNULL(vcmod.`Archivo convenio en PDF (Vinculo al archivo)` , '') AS 'Hipervínculo al convenio modificatorio en su caso',
+                        IFNULL(vcon.`Monto original del contrato` , '') AS 'Monto total del contrato',
+                        IFNULL(vcon.`Monto pagado a la fecha` , '') AS 'Monto pagado al periodo publicado',
+                        IFNULL(vcon.`Fecha inicio` , '') AS 'Fecha de inicio de los servicios contratados',
+                        IFNULL(vcon.`Fecha fin` , '') AS 'Fecha de término de los servicios contratados'
+                    FROM tab_contratos cont
+                    LEFT JOIN vout_contratos vcon ON vcon.`ID (Número de contrato)` = cont.id_contrato
+                    LEFT JOIN vout_convenios_modificatorios vcmod ON vcmod.`ID (Número de contrato)` = cont.id_contrato
+                    LEFT JOIN (SELECT f.id_contrato, f.numero_factura numeros_factura, 
+                                  f.file_factura_pdf files_factura_pdf, f.id_ejercicio
+                               FROM tab_facturas f ) f ON f.id_contrato = cont.id_contrato
+                    LEFT JOIN cat_ejercicios ej ON ej.id_ejercicio = f.id_ejercicio
+                    LEFT JOIN rel_pnt_contrato pnt ON pnt.id_contrato = cont.id_contrato
+                    WHERE cont.id_contrato = " . $id_contrato . ";");
 
         $data["contratos"] = $query->result_array();
         return $data;
