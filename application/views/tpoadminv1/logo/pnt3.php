@@ -246,6 +246,7 @@ $(document).ready(function(){
 
 		
     	$.post(url, formato, function(res, error){
+	    		res = JSON.parse(res)
 			if(!res || !('success' in res) ) {
     			console.log("No se pudo insertar el elemento correctamente")
     			a.css("display", "block")

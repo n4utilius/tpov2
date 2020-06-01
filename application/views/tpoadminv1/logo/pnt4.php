@@ -46,7 +46,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 	        <tr>
 	            <th>id_tpo</th>
 	            <th>id_pnt</th>
-	            <th>id</th>
+	            <th>id Campaña</th>
 	            <th>Ejercicio</th>
 	            <th>Fecha de inicio del periodo que se informa</th>
 				<th>Fecha de término del periodo que se informa</th>
@@ -128,7 +128,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				    data: "data",
 				    render: function ( data, type, row, meta ) {
 			      	var response = ""
-		      		_row = row //HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
+		      		_row = JSON.stringify(row) //HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
 			      	if( !(row.id_pnt) || row.id_pnt === ""){ 
 			      		response += "<a class='tpo_btn crear' href='#' data='" + _row + "'>" 
 			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
@@ -188,25 +188,23 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				"registros": [{
 				    "numeroRegistro": 1,
 				    "campos": [
-						{ "idCampo": 333975, "valor": data['id_tpo'] }, 
-						{ "idCampo": 333975, "valor": data['id_pnt'] }, 
-						{ "idCampo": 333975, "valor": data['id'] }, 
 						{ "idCampo": 333975, "valor": data['ejercicio'] }, 
-						{ "idCampo": 333975, "valor": data['fecha_inicio_periodo'] }, 
-						{ "idCampo": 333975, "valor": data['fecha_termino_periodo'] }, 
-						{ "idCampo": 333975, "valor": data['mensajeTO'] }, 
+						{ "idCampo": 333978, "valor": ( data['fecha_inicio_periodo'] != null )?  data["fecha_inicio_periodo"].split('-').reverse().join('/') : '' }, 
+						{ "idCampo": 333979, "valor": ( data['fecha_termino_periodo'] != null )?  data["fecha_termino_periodo"].split('-').reverse().join('/') : '' }, 
+						{ "idCampo": 333984, "valor": data['mensajeTO'] }, 
 						//"idCampo": 333975, "valor": { da[: 'Hipervínculo'] }, 
-						{ "idCampo": 333975, "valor": data['fecha_validacion'] }, 
-						{ "idCampo": 333975, "valor": data['fecha_actualizacion'] }, 
-						{ "idCampo": 333975, "valor": data['area_responsable'] }, 
-						{ "idCampo": 333975, "valor": data['nota'] }, 
-						{ "idCampo": 333975, "valor": data['estatus_pnt'] }
+						{ "idCampo": 333976, "valor": ( data['fecha_validacion'] != null )?  data["fecha_validacion"].split('-').reverse().join('/') : '' }, 
+						{ "idCampo": 333981, "valor": ( data['fecha_actualizacion'] != null )?  data["fecha_actualizacion"].split('-').reverse().join('/') : '' }, 
+						{ "idCampo": 333983, "valor": data['area_responsable'] }, 
+						{ "idCampo": 333982, "valor": data['nota'] }, 
 				    ]
 				}],
-			  "_id_interno": data['id_campana_aviso']
+			  "_id_interno": data['id']
 			}
 
 	    	$.post(url, formato, function(res, error){
+	    		res = JSON.parse(res)
+	    		console.log(res)
 				if(!res || !('success' in res) ) {
 	    			console.log("No se pudo insertar el elemento correctamente")
 	    			a.css("display", "block")
@@ -248,13 +246,16 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 				"correoUnidadAdministrativa": "so.inai@inai.org.mx",
 				"token": token,
 				"registros":[ { "numeroRegistro":1, "idRegistro": data.id_pnt || id_pnt } ],
-				"id_pnt": data.id_pnt || id_pnt
+				"id_pnt": data.id_pnt || id_pnt,
+				"_id_interno": data.id_pnt || id_pnt,
 			}
 
 			var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
 
 	    	$.post(url, formato, function(res, error){
 	    		//if(res.success) location.reload(); 
+	    		res = JSON.parse(res)
+	    		console.log(res)
 				if(!res || !('success' in res) ) {
 	    			console.log(res, error)
 	    			console.log("No se pudo eliminar el elemento correctamente")

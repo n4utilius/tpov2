@@ -267,6 +267,16 @@ class Logo extends CI_Controller
 
                 array_push( $_POST["registros"][0]['campos'], $con, $pro, $fac );
                 break;
+
+            case 43360:
+                $table = "rel_pnt_campana_aviso2";
+                $nombre_id_interno = "id_campana_aviso";
+                break;
+
+            case 43321:
+                $table = "rel_pnt_campana_aviso";
+                $nombre_id_interno = "id_campana_aviso";
+                break;
         }
 
         $data = array(
@@ -296,12 +306,7 @@ class Logo extends CI_Controller
 
         if( $result["success"] ){
             $pntid = $result["mensaje"]["registros"][0]["idRegistro"]; 
-
-            $table = "rel_pnt_presupuesto";
-            $nombre_id_interno = "id_presupuesto";
-            
             $post_data = array();
-
 
             $post_data[ $nombre_id_interno ] = $_POST["_id_interno"];
             $post_data['id_pnt'] = $pntid;
@@ -348,7 +353,15 @@ class Logo extends CI_Controller
             case 43320:
                 $table = "rel_pnt_factura";
                 break;
+            case 43360:
+                $table = "rel_pnt_campana_aviso2";
+                break;
+             case 43321:
+                $table = "rel_pnt_campana_aviso";
+                break;
         }
+
+
 
         if( $result["success"] ){
             $stm  = "DELETE FROM " . $table . " WHERE id_pnt = '" . $_POST["id_pnt"] . "'";
@@ -816,7 +829,7 @@ class Logo extends CI_Controller
     }
 
     function registros3(){
-        $cols = array("pnt.id_campana_aviso id_tpo", "pnt.id_pnt", "pnt.id", "ej.ejercicio", "cam.autoridad", 
+        $cols = array("pnt.id_campana_aviso id_tpo", "pnt.id_pnt", "cam.id_campana_aviso id", "ej.ejercicio", "cam.autoridad", 
                       "cam.fecha_inicio_periodo", "cam.fecha_termino_periodo", "so.nombre_sujeto_obligado", 
                       "ctip.nombre_campana_tipoTO", "cscat.nombre_servicio_categoria", "cam.clave_campana", 
                       "csun.nombre_servicio_unidad", "cam.nombre_campana_aviso", "cam.campana_ambito_geo", 
@@ -910,9 +923,9 @@ class Logo extends CI_Controller
         header('Content-Type: application/json');
         echo json_encode( $rows ); 
     }
-
+//"pnt.id_tpo", "pnt.id_pnt", "f.id_factura"
     function registros4(){
-        $cols = array("pnt.id_campana_aviso id_tpo", "pnt.id_pnt", "pnt.id", "pnt.estatus_pnt", "ej.ejercicio", 
+        $cols = array("pnt.id_campana_aviso id_tpo", "pnt.id_pnt", "cam.id_campana_aviso id", "pnt.estatus_pnt", "ej.ejercicio", 
                       "cam.fecha_inicio_periodo", "cam.fecha_termino_periodo", "cam.mensajeTO", 
                       "cam.fecha_validacion", "cam.fecha_actualizacion", "cam.area_responsable", "cam.nota");
 
