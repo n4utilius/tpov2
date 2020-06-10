@@ -150,8 +150,8 @@ $(document).ready(function(){
 			    data: "data",
 			    render: function ( data, type, row, meta ) {
 			      	var response = ""
-		      		//_row = HtmlSanitizer.SanitizeHtml(JSON.stringify(row)) 
 		      		_row = JSON.stringify(row) 
+		      		_row = HtmlSanitizer.SanitizeHtml(_row) 
 			      	if( !(row.id_pnt) || row.id_pnt === ""){ 
 			      		response += "<a class='tpo_btn crear' href='#' data='" + _row + "'>" 
 			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
@@ -205,7 +205,7 @@ $(document).ready(function(){
 	    td.prepend("<img class='loading' src='<?php echo base_url(); ?>plugins/img/loading.gif'>")
 
 	    var formato = {
-			"idFormato": 43322, // Programa Anual de Comunicación Social o equivalente
+			"idFormato": "43322", // Programa Anual de Comunicación Social o equivalente
 			"IdRegistro": "",
 			"token": '<?php echo $_SESSION["pnt"]["token"]["token"]; ?>',
 			"correoUnidadAdministrativa": '<?php echo $_SESSION["user_pnt"]; ?>' ,

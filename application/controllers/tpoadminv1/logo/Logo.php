@@ -184,7 +184,199 @@ class Logo extends CI_Controller
 
     function agregar_pnt(){
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/agrega";
+        $table = "rel_pnt_presupuesto";
+        $nombre_id_interno = "id_presupuesto";
+
+        switch ($_POST["idFormato"]) {
+            case "43322":
+                $table = "rel_pnt_presupuesto";
+                $nombre_id_interno = "id_presupuesto";
+                break;
+            case "43320":
+                $table = "rel_pnt_factura";
+                $nombre_id_interno = "id_factura";
+                $data2 = $this->_subtabla2($_POST["id_contrato"], $_POST["id_factura"]);
+
+                $d1 = $data2['contratos'][0];
+                $d2 = $data2['presupuestos'][0];
+                $d3 = $data2['facturas'][0];
+                
+                if ( isset( $d1["fecha_validacion"]) ){
+                    try {
+                        $d1["fecha_validacion"] = explode('-', (string)$d1["fecha_validacion"] );  
+                        $d1["fecha_validacion"] =  array_reverse( $d1["fecha_validacion"] );  
+                        $d1["fecha_validacion"] =  implode("/",  $d1["fecha_validacion"] );  
+                    } catch (Exception $e) {  $d1["fecha_validacion"] = ""; }
+                }else{ $d1["fecha_validacion"] = "";}
+
+                if ( isset( $d1["fecha_actualizacion"]) ){
+                    try {
+                        $d1["fecha_actualizacion"] = explode('-', (string)$d1["fecha_actualizacion"] );  
+                        $d1["fecha_actualizacion"] =  array_reverse( $d1["fecha_actualizacion"] );  
+                        $d1["fecha_actualizacion"] =  implode("/",  $d1["fecha_actualizacion"] );  
+                    } catch (Exception $e) {  $d1["fecha_actualizacion"] = ""; }
+                }else{ $d1["fecha_actualizacion"] = "";}
+
+                if ( isset( $d1["Fecha de inicio de los servicios contratados"]) ){
+                    try {
+                        $d1["Fecha de inicio de los servicios contratados"] = explode('-', (string)$d1["Fecha de inicio de los servicios contratados"] );  
+                        $d1["Fecha de inicio de los servicios contratados"] =  array_reverse( $d1["Fecha de inicio de los servicios contratados"] );  
+                        $d1["Fecha de inicio de los servicios contratados"] =  implode("/",  $d1["Fecha de inicio de los servicios contratados"] );  
+                    } catch (Exception $e) {  $d1["Fecha de inicio de los servicios contratados"] = ""; }
+                }else{ $d1["Fecha de inicio de los servicios contratados"] = "";}
+
+                /*
+                    array("idCampo" => "43282", "valor" => $data2['contratos'][0]["Fecha de inicio de los servicios contratados"] ),
+                    array("idCampo" => "43283", "valor" => $data2['contratos'][0]["Fecha de término de los servicios contratados"] ),
+                                
+                */
+                $con = array(
+                    "idCampo" => "333959", 
+                    "valor" => array(
+                        array(
+                            "numeroRegistro" => 1,
+                            "IdRegistro" => "",
+                            "campos" => array(
+                                array("idCampo" => "43275", "valor" => $d1["Fecha de inicio de los servicios contratados"] ),
+                                array("idCampo" => "43276", "valor" => $d1["numero_contrato"] ),
+                                array("idCampo" => "43277", "valor" => $d1["objeto_contrato"] ),
+                                array("idCampo" => "43278", "valor" => $d1["Hipervínculo al contrato firmado"] ),
+                                array("idCampo" => "43279", "valor" => $d1["Hipervínculo al convenio modificatorio en su caso"] ),
+                                array("idCampo" => "43280", "valor" => $d1["Monto total del contrato"] ),
+                                array("idCampo" => "43281", "valor" => $d1["Monto pagado al periodo publicado"] ),
+                                array("idCampo" => "43282", "valor" => $d1["Fecha de inicio de los servicios contratados"] ),
+                                array("idCampo" => "43283", "valor" => $d1["Fecha de término de los servicios contratados"] ),
+                                array("idCampo" => "43284", "valor" => $d1["numeros_factura"] ),
+                                array("idCampo" => "43285", "valor" => $d1["files_factura_pdf"] )/*,
+                                array("idCampo" => "333967", "valor" => $d1["area_responsable"] ),
+                                array("idCampo" => "333961", "valor" => $d1["fecha_actualizacion"] ),
+                                array("idCampo" => "333954", "valor" => $d1["fecha_validacion"] ),
+                                array("idCampo" => "333966", "valor" => $d1["nota"] )*/
+                            ) 
+                        ) 
+                    ) 
+                );
+
+                $pro = array(
+                    "idCampo" => "333958", 
+                    "valor" => array(
+                        array(
+                            "numeroRegistro" => 1,
+                            "IdRegistro" => "",
+                            "campos" => array(
+                                array("idCampo" => "43265", "valor" => $d2['partida'] ), //Partida
+                                array("idCampo" => "43266", "valor" => $d2['concepto'] ), //Clave de Concepto
+                                array("idCampo" => "43267", "valor" => $d2['nombre_concepto'] ), //Nombre del concepto
+                                array("idCampo" => "43268", "valor" => $d2['presupuesto'] ), //Presupuesto asignado por concepto
+                                array("idCampo" => "43269", "valor" => $d2['total_ejercido'] ), //Presupuesto ejercido al periodo reportado de cada partida
+                                array("idCampo" => "43270", "valor" => $d2['modificado'] ), //presupuesto total ejercido por concepto
+                                array("idCampo" => "43271", "valor" => $d2['denominacion_partida'] ), //Denominación de cada partida
+                                array("idCampo" => "43272", "valor" => $d2['monto_presupuesto'] ), //Presupuesto total asignado a cada partida
+                                array("idCampo" => "43273", "valor" => $d2['monto_modificacion'] ), //Presupuesto modificado por partida
+                                array("idCampo" => "43274", "valor" => $d2['presupuesto'] ) //Presupuesto modificado por concepto
+                            ) 
+                        ) 
+                    ) 
+                );
+
+                switch( $d3['nombre_procedimiento'] ) {
+                    case "Licitación pública": $d3['nombre_procedimiento'] = 0;
+                        break;
+                    case "Adjudicación directa": $d3['nombre_procedimiento'] = 1;
+                        break;
+                    case "Invitación restringida": $d3['nombre_procedimiento'] = 2;
+                        break;
+                    default: break;
+                }
+                            
+                $fac = array(
+                    "idCampo" => "333957", 
+                    "valor" => array(
+                        array(
+                            "numeroRegistro" => 1,
+                            "IdRegistro" => "",
+                            "campos" => array(
+                                array("idCampo" => "43256", "valor" => $d3['nombre_razon_social'] ),
+                                array("idCampo" => "43257", "valor" => $d3['nombres'] ),
+                                array("idCampo" => "43258", "valor" => $d3['primer_apellido'] ),
+                                array("idCampo" => "43259", "valor" => $d3['segundo_apellido'] ),
+                                array("idCampo" => "43260", "valor" => $d3['rfc'] ),
+                                array("idCampo" => "43261", "valor" => $d3['nombre_procedimiento'] ), //AQUI
+                                array("idCampo" => "43262", "valor" => $d3['fundamento_juridico'] ),
+                                array("idCampo" => "43263", "valor" => $d3['descripcion_justificacion'] ),
+                                array("idCampo" => "43264", "valor" => $d3['nombre_comercial'] )
+                            ) 
+                        ) 
+                    ) 
+                );
+
+                array_push( $_POST["registros"][0]['campos'], $con, $pro, $fac );
+                break;
+
+            case "43360":
+                $table = "rel_pnt_campana_aviso2";
+                $nombre_id_interno = "id_campana_aviso";
+                break;
+
+            case "43321":
+                $table = "rel_pnt_campana_aviso";
+                $nombre_id_interno = "id_campana_aviso";
+                break;
+        }
+
+        $data = array(
+            'idFormato' => $_POST["idFormato"], 
+            'token' => $_POST["token"], 
+            'correoUnidadAdministrativa' => $_POST["correoUnidadAdministrativa"], 
+            'unidadAdministrativa' => $_POST["unidadAdministrativa"], 
+            'SujetoObligado' => $_POST["SujetoObligado"], 
+            'registros' => $_POST["registros"]
+        );
+
+        $options = array(
+            'http' => array(
+                'method'  => 'POST',
+                'content' => json_encode( $data ),
+                'header'=>  "Content-Type: application/json\r\n" .
+                            "Accept: application/json\r\n"
+            )
+        );
+
+        $context  = stream_context_create( $options );
+        $res = file_get_contents( $URL, false, $context );
+
+        $result = json_decode( $res, true );
+
+        if( $result["success"] ){
+            $pntid = $result["mensaje"]["registros"][0]["idRegistro"]; 
+
+            //$table = "rel_pnt_presupuesto";
+            //$nombre_id_interno = "id_presupuesto";
+            $post_data = array();
+
+            $post_data[ $nombre_id_interno ] = $_POST["_id_interno"];
+            $post_data['id_pnt'] = $pntid;
+            $post_data['estatus_pnt'] ='SUBIDO';
+
+            $this->db->insert($table, $post_data);
+            $result['id_tpo'] =  $this->db->insert_id();
+            $result['id_pnt'] =   $pntid;
+
+        }
+
+        $response = json_encode($result);
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
+
+    function agregar_pnt1(){
+        $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/agrega";
         
+        $table = "rel_pnt_presupuesto";
+        $nombre_id_interno = "id_presupuesto";
+        
+
         switch ($_POST["idFormato"]) {
             case 43322:
                 $table = "rel_pnt_presupuesto";
@@ -209,9 +401,11 @@ class Logo extends CI_Controller
                                 array("idCampo" => "43281", "valor" => $data2['contratos'][0]["Monto pagado al periodo publicado"] ),
                                 array("idCampo" => "43280", "valor" => $data2['contratos'][0]["Monto total del contrato"] ),
                                 array("idCampo" => "333967", "valor" => $data2['contratos'][0]["area_responsable"] ),
-                                array("idCampo" => "333961", ($data2['contratos'][0]["fecha_actualizacion"] != null )? 
+                                array("idCampo" => "333961", "valor" => ($data2['contratos'][0]["fecha_actualizacion"] != null )? 
                                     join("/", array_reverse( split('-', $data2['contratos'][0]["fecha_actualizacion"] ) ) ) : ""  ),
-                                array("idCampo" => "333954", "valor" => $data2['contratos'][0]["fecha_validacion"] ),
+                                //array("idCampo" => "333954", "valor" => $data2['contratos'][0]["fecha_validacion"] ),
+                                array("idCampo" => "333954", "valor" => ($data2['contratos'][0]["fecha_validacion"] != null )? 
+                                    join("/", array_reverse( split('-', $data2['contratos'][0]["fecha_validacion"] ) ) ) : ""  ),
                                 array("idCampo" => "43285", "valor" => $data2['contratos'][0]["files_factura_pdf"] ),
                                 array("idCampo" => "333966", "valor" => $data2['contratos'][0]["nota"] ),
                                 array("idCampo" => "43276", "valor" => $data2['contratos'][0]["numero_contrato"] ),
@@ -288,7 +482,6 @@ class Logo extends CI_Controller
             'registros' => $_POST["registros"]
         );
 
-
         $options = array(
             'http' => array(
                 'method'  => 'POST',
@@ -318,7 +511,8 @@ class Logo extends CI_Controller
 
         }
         
-        $response = json_encode($result);
+        $response = json_encode($data);
+        //$response = json_encode($result);
         header('Content-Type: application/json');
         echo  json_encode($response);
     }
