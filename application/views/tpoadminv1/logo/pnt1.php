@@ -144,7 +144,7 @@ $(document).ready(function(){
 				     //} else return "<input type='text' value='" + data + "'>" 
 				    } else return data
 			    }
-			},
+			}/*,
 			{
 			    targets: 13,
 			    data: "data",
@@ -184,7 +184,7 @@ $(document).ready(function(){
 				    //} else return "<input type='text' value='" + data + "'>" 
 				    } else return data
 			    }
-			}
+			}*/
 		]
     });
 
