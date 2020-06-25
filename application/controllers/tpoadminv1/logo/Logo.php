@@ -780,6 +780,46 @@ class Logo extends CI_Controller
         return $data;
     }
 
+
+    private function _subtabla3($id_factura_desglose){
+        $data = array();
+        //Datos de Factura
+        $cols = array("pnt.id_presupuesto_desglose id_tpo", "pnt.id_pnt", "pnt.id", "ej.ejercicio", 
+                      "pcon.denominacion_partida", "pdes.monto_presupuesto", "fact.total_ejercido", 
+                      "pnt.estatus_pnt");
+
+        foreach ($cols as &$col) {
+            $tag = $col;
+            if( strpos($col, " ") ) {
+                $col_arr = explode(" ", $col); $col = $col_arr[0]; $tag = $col_arr[1];
+            } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
+            $col = "IFNULL(" . $col . ", '') AS $tag";
+        }
+
+        $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_presupuestos_desglose pdes
+                JOIN (SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', 
+                           p.partida, p.denominacion 'denominacion_partida'
+                      FROM (SELECT id_presupesto_concepto, concepto, partida, denominacion FROM cat_presupuesto_conceptos pc
+                          WHERE trim(coalesce(concepto, '')) <> '' AND trim(coalesce(partida, '')) <> '' ) p 
+                      JOIN (SELECT concepto, denominacion FROM cat_presupuesto_conceptos
+                          WHERE trim(coalesce(concepto, '')) <>'' AND trim(coalesce(partida, '')) = '') c
+                      ON c.concepto = p.concepto
+                ) pcon ON pcon.id_presupesto_concepto = pdes.id_presupuesto_concepto
+                LEFT JOIN (
+                    SELECT numero_partida, id_factura_desglose, SUM(cantidad) total_ejercido 
+                    FROM tab_facturas_desglose fdes 
+                    GROUP BY numero_partida, id_factura_desglose
+                ) fact ON fact.numero_partida = pcon.partida
+                JOIN tab_presupuestos pre ON pre.id_presupuesto = pdes.id_presupuesto
+                JOIN cat_ejercicios ej ON ej.id_ejercicio = pre.id_ejercicio
+                LEFT JOIN rel_pnt_presupuesto_desglose2 pnt 
+                    ON pnt.id_presupuesto_desglose = pdes.id_presupuesto_desglose
+                WHERE fact.id_factura_desglose =" . $id_factura_desglose);
+
+        $data["presupuesto_desglose"] = $query->result_array();
+        return $data;
+    }
+
     function registros(){ 
         $cols = array("pnt.id_tpo", "pnt.id_pnt", "p.id_presupuesto", "e.ejercicio", 
                       "p.fecha_inicio_periodo", "p.id_sujeto_obligado", "p.fecha_termino_periodo", "p.denominacion", 
@@ -943,6 +983,12 @@ class Logo extends CI_Controller
         echo json_encode( $data ); 
     }
 
+    function registros51(){
+        $data = $this->_subtabla3($_GET["id_factura_desglose"]);
+        header('Content-Type: application/json');
+        echo json_encode( $data ); 
+    }
+
     function registros22(){
         $cols = array("pnt.id_presupuesto_desglose id_tpo", "pnt.id_pnt", "pnt.id", "ej.ejercicio", 
                        "pcon.partida", "pcon.concepto", "pcon.nombre_concepto", "total.presupuesto", 
@@ -1037,7 +1083,7 @@ class Logo extends CI_Controller
                       "ccob.nombre_campana_cobertura", "sex.nombre_poblacion_sexo", "lug.poblacion_lugar", 
                       "edu.nombre_poblacion_nivel_educativo", "eda.nombre_poblacion_grupo_edad", 
                       "niv.nombre_poblacion_nivel", "prov.nombre_razon_social", "prov.nombre_comercial", 
-                      "ord.descripcion_justificacion", "cam.monto_tiempo", "cam.area_responsable", 
+                      "ord.descripcion_justificacion", "cam.monto_tiempo", "cam.area_responsable", "fdes.id_factura_desglose",
                       "cam.fecha_inicio", "cam.fecha_termino", "fac.id_factura", "fac.numero_factura", "fac.area_responsable", 
                       "cam.fecha_validacion", "cam.fecha_actualizacion", "pnt.estatus_pnt", "cam.nota");
 

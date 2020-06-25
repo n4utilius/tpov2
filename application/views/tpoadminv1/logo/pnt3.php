@@ -9,6 +9,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 
 <link href="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url(); ?>plugins/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
   body { transition: background-color ease-in 3s; /* tweak to your liking */ }
   .invisible { display: none; }
@@ -55,6 +56,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
         <th> ID PNT </th>
         <th> ID </th>
         <th> Id Factura </th>
+        <th> Factura Desglose </th>
         <th> Ejercicio </th>
         <th> Fecha de inicio del periodo que se informa </th>
         <th> Fecha de termino del periodo que se informa </th>
@@ -91,8 +93,12 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
   </table>
 </section>
 
+<!--script type="text/javascript" src="<?php echo base_url(); ?>plugins/jQuery/jQuery-3.3.1.js"></script-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
 
-<script type="text/javascript" src="<?php echo base_url(); ?>plugins/jQuery/jQuery-3.3.1.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>plugins/sanitizer/sanitizer.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>plugins/colorbox/jquery.colorbox.js"></script>
+
 <link href="<?php echo base_url(); ?>plugins/DataTables2/datatables.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.js" type="text/javascript" ></script>
 
@@ -131,6 +137,7 @@ $(document).ready(function(){
       { data: 'id_pnt' },
       { data: 'id' },
       { data: 'id_factura' },
+      { data: 'id_factura_desglose' },
       { data: 'ejercicio' },
       { data: 'fecha_inicio_periodo' },
       { data: 'fecha_termino_periodo' },
@@ -172,7 +179,7 @@ $(document).ready(function(){
           }
       },
       {
-          targets: 33,
+          targets: 34,
           data: "data",
           render: function ( data, type, row, meta ) {
               var response = ""
@@ -200,11 +207,15 @@ $(document).ready(function(){
                 response += "<a class='tpo_btn editar' href='#' data='" + _row + "'>" 
                 response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  </span></a>"
               }
+
+              response += "<a class='tpo_btn ver_mas' href='#' data='" + row.id_factura_desglose + "'>" 
+              response += "<span class='btn btn-warning btn-sm'> <i class='fa fa-edit'></i>  Ver más información </span></a>"
+
               return response
         }
       },
       {
-          targets: [3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32],
+          targets: [3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],
           data: "data",
           render: function ( data, type, row, meta ) {
             if( !(row.id_pnt) || row.id_pnt === ""){ 
@@ -217,14 +228,43 @@ $(document).ready(function(){
     ]
     });
 
-  $(document).on("click","a.crear",function(e){ 
+  $(document).on("click","a.ver_mas",function(e){ 
+        e.preventDefault();
+        var id = $(this).attr("data")
+        var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros51";
+
+        $.get(url, { id_factura_desglose: id },  function(res, error){
+            function get_subtables(tag, data){
+                var res = "<tr><td> <h3> Datos de " + tag + " </h3> "
+
+                if (data.length != 0){
+                  for (var key in data[0]){
+                      if(data[0][key] == "") continue;
+                      res += "<p> <b>" + key.toUpperCase() + ": </b>" + data[0][key] + "</p>"
+                  }
+                }
+                
+                return res + "</td></tr>";
+            }
+
+            var html = "<table>"
+                html += get_subtables("Presupuestos", res.presupuesto_desglose)
+                html += "</table>"
+
+            $.colorbox({html: html});
+            console.log(html)
+            
+        })
+    })
+
+    $(document).on("click","a.crear",function(e){ 
       e.preventDefault();
       var data = JSON.parse( $(this).attr("data") )
       , url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/agregar_pnt";
     
-    var a = $(this)
-        , tr = a.parents("tr")
-        , td = a.parents("td")
+      var a = $(this)
+         , tr = a.parents("tr")
+         , td = a.parents("td")
 
       a.css("display", "none")
       tr.css("background-color", "rgba(0,255,0, 0.2)")
@@ -267,9 +307,9 @@ $(document).ready(function(){
           a.css("display", "block")
         } else {
           tr.children("td").eq(1).text( res["mensaje"]["registros"][0]["idRegistro"] )
-          tr.children("td").eq(33).children("a.eliminar").removeClass("invisible")
-          tr.children("td").eq(33).children("img.check").removeClass("invisible")
-          tr.children("td").eq(33).children("a.crear").addClass("invisible")
+          tr.children("td").eq(34).children("a.eliminar").removeClass("invisible")
+          tr.children("td").eq(34).children("img.check").removeClass("invisible")
+          tr.children("td").eq(34).children("a.crear").addClass("invisible")
         }
 
       td.children("img.loading").remove("")
