@@ -181,11 +181,19 @@ class Logo extends CI_Controller
 
     }
 
+    private function date_format($dstring){
+        if ( !isset( $dstring ) OR $dstring == "" ) return $dstring;
+
+        try {
+            $dstring = explode("-", (string)$dstring );  
+            $dstring =  array_reverse( $dstring );  
+            $dstring =  implode("/",  $dstring );  
+            return $dstring;
+        } catch (Exception $e) {  return ""; }
+    } 
 
     function agregar_pnt(){
         $URL = "http://devcarga.inai.org.mx:8080/sipot-web/spring/mantenimiento/agrega";
-        $table = "rel_pnt_presupuesto";
-        $nombre_id_interno = "id_presupuesto";
 
         switch ($_POST["idFormato"]) {
             case "43322":
@@ -200,7 +208,12 @@ class Logo extends CI_Controller
                 $d1 = $data2['contratos'][0];
                 $d2 = $data2['presupuestos'][0];
                 $d3 = $data2['facturas'][0];
+
+                $d1["fecha_validacion"] = $this->date_format($d1["fecha_validacion"]);
+                $d1["fecha_actualizacion"] = $this->date_format($d1["fecha_actualizacion"]);
+                $d1["Fecha de inicio de los servicios contratados"] = $this->date_format($d1["Fecha de inicio de los servicios contratados"]);
                 
+                /*
                 if ( isset( $d1["fecha_validacion"]) ){
                     try {
                         $d1["fecha_validacion"] = explode('-', (string)$d1["fecha_validacion"] );  
@@ -224,12 +237,8 @@ class Logo extends CI_Controller
                         $d1["Fecha de inicio de los servicios contratados"] =  implode("/",  $d1["Fecha de inicio de los servicios contratados"] );  
                     } catch (Exception $e) {  $d1["Fecha de inicio de los servicios contratados"] = ""; }
                 }else{ $d1["Fecha de inicio de los servicios contratados"] = "";}
-
-                /*
-                    array("idCampo" => "43282", "valor" => $data2['contratos'][0]["Fecha de inicio de los servicios contratados"] ),
-                    array("idCampo" => "43283", "valor" => $data2['contratos'][0]["Fecha de término de los servicios contratados"] ),
-                                
                 */
+
                 $con = array(
                     "idCampo" => "333959", 
                     "valor" => array(
@@ -316,6 +325,11 @@ class Logo extends CI_Controller
             case "43360":
                 $table = "rel_pnt_campana_aviso2";
                 $nombre_id_interno = "id_campana_aviso";
+
+                $_POST["registros"][0]["campos"][1]["valor"] = $this->date_format($_POST["registros"][0]["campos"][1]["valor"]);
+                $_POST["registros"][0]["campos"][2]["valor"] = $this->date_format($_POST["registros"][0]["campos"][2]["valor"]);
+                $_POST["registros"][0]["campos"][5]["valor"] = $this->date_format($_POST["registros"][0]["campos"][5]["valor"]);
+                $_POST["registros"][0]["campos"][6]["valor"] = $this->date_format($_POST["registros"][0]["campos"][6]["valor"]);
                 break;
 
             case "43321":
@@ -347,21 +361,14 @@ class Logo extends CI_Controller
 
         $result = json_decode( $res, true );
 
+        $post_data = array();
+        $post_data[$nombre_id_interno] = $_POST["_id_interno"];
+        $post_data['id_pnt'] = $result['mensaje']['registros'][0]['idRegistro'];
+        $post_data['estatus_pnt'] ='SUBIDO';
+        
         if( $result["success"] ){
-            $pntid = $result["mensaje"]["registros"][0]["idRegistro"]; 
-
-            //$table = "rel_pnt_presupuesto";
-            //$nombre_id_interno = "id_presupuesto";
-            $post_data = array();
-
-            $post_data[ $nombre_id_interno ] = $_POST["_id_interno"];
-            $post_data['id_pnt'] = $pntid;
-            $post_data['estatus_pnt'] ='SUBIDO';
-
             $this->db->insert($table, $post_data);
             $result['id_tpo'] =  $this->db->insert_id();
-            $result['id_pnt'] =   $pntid;
-
         }
 
         $response = json_encode($result);
@@ -1031,7 +1038,7 @@ class Logo extends CI_Controller
                       "edu.nombre_poblacion_nivel_educativo", "eda.nombre_poblacion_grupo_edad", 
                       "niv.nombre_poblacion_nivel", "prov.nombre_razon_social", "prov.nombre_comercial", 
                       "ord.descripcion_justificacion", "cam.monto_tiempo", "cam.area_responsable", 
-                      "cam.fecha_inicio", "cam.fecha_termino", "fac.numero_factura", "fac.area_responsable", 
+                      "cam.fecha_inicio", "cam.fecha_termino", "fac.id_factura", "fac.numero_factura", "fac.area_responsable", 
                       "cam.fecha_validacion", "cam.fecha_actualizacion", "pnt.estatus_pnt", "cam.nota");
 
         foreach ($cols as &$col) {
