@@ -695,6 +695,8 @@ class Logo extends CI_Controller
                     LEFT JOIN rel_pnt_proveedor pnt ON pnt.id_proveedor = prov.id_proveedor
                     WHERE f.id_factura = " . $id_factura . ";");
 
+
+
         $data["facturas"] = $query->result_array();
 
         // Datos del presupuesto
@@ -711,7 +713,7 @@ class Logo extends CI_Controller
             $col = "IFNULL(" . $col . ", '') AS $tag";
         }
 
-        $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_presupuestos_desglose pdes 
+            $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_presupuestos_desglose pdes 
                     JOIN tab_presupuestos pre ON pre.id_presupuesto = pdes.id_presupuesto
                     JOIN cat_ejercicios ej ON ej.id_ejercicio = pre.id_ejercicio
                     LEFT JOIN (SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', 
@@ -740,7 +742,7 @@ class Logo extends CI_Controller
                         GROUP BY numero_partida, id_factura 
                     ) fact ON fact.numero_partida = pcon.partida 
                     LEFT JOIN rel_pnt_presupuesto_desglose pnt ON pnt.id_presupuesto_desglose = pdes.id_presupuesto_desglose");
-
+        
         $rows = $query->result_array();
         $data["presupuestos"] = $query->result_array();
 
@@ -795,6 +797,7 @@ class Logo extends CI_Controller
             } else if ( strpos($col, ".") ) $tag = explode(".", $col)[1];
             $col = "IFNULL(" . $col . ", '') AS $tag";
         }
+        /*
 
         $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_presupuestos_desglose pdes
                 JOIN (SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', 
@@ -815,6 +818,31 @@ class Logo extends CI_Controller
                 LEFT JOIN rel_pnt_presupuesto_desglose2 pnt 
                     ON pnt.id_presupuesto_desglose = pdes.id_presupuesto_desglose
                 WHERE fact.id_factura_desglose =" . $id_factura_desglose);
+
+        */
+        $query = $this->db->query("SELECT " . join(", ", $cols) . " FROM tab_presupuestos_desglose pdes 
+            JOIN ( SELECT p.id_presupesto_concepto, c.concepto, c.denominacion 'nombre_concepto', p.partida, p.denominacion 'denominacion_partida' 
+                FROM (SELECT id_presupesto_concepto, concepto, partida, denominacion 
+                      FROM cat_presupuesto_conceptos pc 
+                      WHERE trim(coalesce(concepto, '')) <> '' 
+                      AND trim(coalesce(partida, '')) <> '' ) p 
+                JOIN (SELECT concepto, denominacion FROM cat_presupuesto_conceptos 
+                      WHERE trim(coalesce(concepto, '')) <>'' 
+                      AND trim(coalesce(partida, '')) = '') c 
+                ON c.concepto = p.concepto 
+            ) pcon ON pcon.id_presupesto_concepto = pdes.id_presupuesto_concepto 
+            JOIN tab_presupuestos pre ON pre.id_presupuesto = pdes.id_presupuesto 
+            JOIN cat_ejercicios ej ON ej.id_ejercicio = pre.id_ejercicio 
+            JOIN ( SELECT  fdes.id_factura_desglose, pc.partida partida, ej.ejercicio, SUM(fdes.cantidad) total_ejercido
+                    FROM tab_facturas_desglose fdes 
+                    JOIN tab_facturas f ON f.id_factura = fdes.id_factura
+                    JOIN cat_ejercicios ej ON ej.id_ejercicio = f.id_ejercicio 
+                    JOIN cat_presupuesto_conceptos pc ON pc.id_presupesto_concepto = fdes.id_presupuesto_concepto
+                    WHERE fdes.id_factura_desglose = " . $id_factura_desglose . "
+                  ) fact ON fact.partida = pcon.partida AND fact.ejercicio = ej.ejercicio
+            LEFT JOIN rel_pnt_presupuesto_desglose2 pnt ON pnt.id_presupuesto_desglose = pdes.id_presupuesto_desglose;");
+
+        
 
         $data["presupuesto_desglose"] = $query->result_array();
         return $data;
