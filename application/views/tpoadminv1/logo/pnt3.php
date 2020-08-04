@@ -232,6 +232,7 @@ $(document).ready(function(){
         e.preventDefault();
         var id = $(this).attr("data")
         var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros51";
+        
 
         $.get(url, { id_factura_desglose: id },  function(res, error){
             function get_subtables(tag, data){

@@ -841,10 +841,8 @@ class Logo extends CI_Controller
                     WHERE fdes.id_factura_desglose = " . $id_factura_desglose . "
                   ) fact ON fact.partida = pcon.partida AND fact.ejercicio = ej.ejercicio
             LEFT JOIN rel_pnt_presupuesto_desglose2 pnt ON pnt.id_presupuesto_desglose = pdes.id_presupuesto_desglose;");
-
-        
-
         $data["presupuesto_desglose"] = $query->result_array();
+        
         return $data;
     }
 

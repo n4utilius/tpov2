@@ -331,6 +331,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
             e.preventDefault();
             var ids= $(this).attr("data").split("-")
             var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/registros50";
+            
 
             $.get(url, { id_factura: ids[1], id_contrato: ids[3] },  function(res, error){
                 function get_subtables(tag, data){
