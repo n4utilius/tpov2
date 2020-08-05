@@ -77,12 +77,12 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 
 <script type="text/javascript" src="<?php echo base_url(); ?>plugins/jQuery/jQuery-3.3.1.js"></script>
 <script src="<?php echo base_url(); ?>plugins/DataTables2/datatables.min.js" type="text/javascript" ></script>
-
 <script type="text/javascript">
 
 
 
 $(document).ready(function(){
+	$.fn.dataTable.ext.errMode = 'none';
 	var ejercicios_url =  "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/ejercicios"
 	
 	$.post(ejercicios_url, function(res, error){
@@ -101,6 +101,8 @@ $(document).ready(function(){
     	if (year == "") return true
         return (year == ejercicio);
     });
+
+
 
     var table = $('#grid1').DataTable({
     	ajax: {
@@ -144,14 +146,16 @@ $(document).ready(function(){
 				     //} else return "<input type='text' value='" + data + "'>" 
 				    } else return data
 			    }
-			}/*,
+			}
+			/**/
+			,
 			{
 			    targets: 13,
 			    data: "data",
 			    render: function ( data, type, row, meta ) {
 			      	var response = ""
 		      		_row = JSON.stringify(row) 
-		      		_row = HtmlSanitizer.SanitizeHtml(_row) 
+		      		//_row = HtmlSanitizer.SanitizeHtml(_row) 
 			      	if( !(row.id_pnt) || row.id_pnt === ""){ 
 			      		response += "<a class='tpo_btn crear' href='#' data='" + _row + "'>" 
 			      		response += "<span class='btn btn-success'><i class='fa fa-plus-circle'></i>  </span> </a>"
@@ -184,7 +188,8 @@ $(document).ready(function(){
 				    //} else return "<input type='text' value='" + data + "'>" 
 				    } else return data
 			    }
-			}*/
+			}
+			/**/
 		]
     });
 
@@ -239,6 +244,7 @@ $(document).ready(function(){
     			tr.children("td").eq(13).children("a.eliminar").removeClass("invisible")
     			tr.children("td").eq(13).children("img.check").removeClass("invisible")
     			tr.children("td").eq(13).children("a.crear").addClass("invisible")
+				location.reload(); 
     		}
 
 			td.children("img.loading").remove("")
