@@ -234,7 +234,10 @@ $(document).ready(function(){
 		  "_id_interno": data.id_presupuesto
 		}
     	$.post(url, formato, function(res, error){
+    		console.log(res, error)
     		res = JSON.parse(res)
+    		console.log(res, error)
+
     		if(!res || !('success' in res) ) {
     			console.log("No se pudo insertar el elemento correctamente")
     			console.log(res, error)
@@ -301,6 +304,7 @@ $(document).ready(function(){
     			tr.children("td").eq(13).children("a.eliminar").addClass("invisible")
     			tr.children("td").eq(13).children("img.check").addClass("invisible")
     			tr.children("td").eq(13).children("a.crear").css("display", "block")
+    			location.reload();
     		}
 
 			td.children("img.loading").remove("")

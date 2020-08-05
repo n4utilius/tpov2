@@ -117,6 +117,8 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
 <script type="text/javascript">
 
     $(document).ready(function(){
+    $.fn.dataTable.ext.errMode = 'none';
+
         var ejercicios_url =  "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/ejercicios"
     
     $.post(ejercicios_url, function(res, error){
@@ -306,7 +308,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
             }
 
             $.post(url, formato, function(res, error){
-                res = JSON.parse(res); console.log(res)
+                res = JSON.parse(res); console.log(res, error)
                 if(!res || !('success' in res) ){
                     console.log("No se pudo insertar el elemento correctamente")
                     a.css("display", "block")
@@ -315,6 +317,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
                     tr.children("td").eq(35).children("a.eliminar").removeClass("invisible")
                     tr.children("td").eq(35).children("img.check").removeClass("invisible")
                     tr.children("td").eq(35).children("a.crear").addClass("invisible")
+                    location.reload();
                 }
 
                 td.children("img.loading").remove("")
@@ -382,7 +385,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
             var url = "<?php echo base_url(); ?>index.php/tpoadminv1/logo/logo/eliminar_pnt"
 
             $.post(url, formato, function(res, error){
-                if(res && ('success' in res) ) location.reload(); 
+                if(res && ('success' in res) )  
                 if(!res || !('success' in res) ){
                     console.log("No se pudo eliminar el elemento correctamente")
                     a.css("display", "block")
@@ -392,6 +395,7 @@ if( !( isset($_SESSION['pnt']) ) or !( isset($_SESSION["pnt"]["success"]) ) or !
                     tr.children("td").eq(35).children("a.eliminar").addClass("invisible")
                     tr.children("td").eq(35).children("img.check").addClass("invisible")
                     tr.children("td").eq(35).children("a.crear").css("display", "block")
+                    location.reload();
                 }
 
                 td.children("img.loading").remove("")

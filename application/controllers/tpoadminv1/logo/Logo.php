@@ -502,7 +502,7 @@ class Logo extends CI_Controller
         $context  = stream_context_create( $options );
         $res = file_get_contents( $URL, false, $context );
 
-        $result = json_decode( $res, true );
+        $result = json_decode( $res, true, 4 );
 
         if( $result["success"] ){
             $pntid = $result["mensaje"]["registros"][0]["idRegistro"]; 
@@ -518,10 +518,10 @@ class Logo extends CI_Controller
 
         }
         
-        $response = json_encode($data);
+        $response = json_encode($result);
         //$response = json_encode($result);
         header('Content-Type: application/json');
-        echo  json_encode($response);
+        echo $response;
     }
 
 
@@ -965,7 +965,7 @@ class Logo extends CI_Controller
                     JOIN cat_poblacion_nivel pn ON pn.id_poblacion_nivel = cn.id_poblacion_nivel
                     GROUP BY cn.id_campana_aviso) neco ON neco.id_campana_aviso = cam.id_campana_aviso
                 LEFT JOIN rel_pnt_factura pnt ON pnt.id_factura = f.id_factura
-                ORDER BY pnt.id_pnt");
+                ORDER BY pnt.id_pnt DESC");
 
         $rows = $query->result_array();
 
